@@ -4,7 +4,11 @@
 \alias{metagam}
 \title{Meta analyze GAMs}
 \usage{
-metagam(models, random_effects = FALSE, probs = seq(0, 1, 0.25))
+metagam(
+  models,
+  random_effects = FALSE,
+  probs = c(0.01, 0.025, 0.05, 0.95, 0.975, 0.99)
+)
 }
 \arguments{
 \item{models}{list of models}

@@ -4,7 +4,7 @@
 \alias{singlegam}
 \title{Prepare a single GAM/GAMM fit for meta analysis}
 \usage{
-singlegam(model, grid = NULL, nmc = 100)
+singlegam(model, grid = NULL, nmc = 100, freq = FALSE, unconditional = FALSE)
 }
 \arguments{
 \item{model}{Fitted gam object.}
@@ -12,6 +12,10 @@ singlegam(model, grid = NULL, nmc = 100)
 \item{grid}{Grid over which to compute posterior.}
 
 \item{nmc}{Number of Monte Carlo samples.}
+
+\item{freq}{Logical}
+
+\item{unconditional}{Logical}
 }
 \value{
 An object of class \code{singlegam}.

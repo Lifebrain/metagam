@@ -3,17 +3,17 @@
 #' @param model Fitted gam object.
 #' @param grid Grid over which to compute posterior.
 #' @param nmc Number of Monte Carlo samples.
+#' @param freq Logical
+#' @param unconditional Logical
 #'
 #' @return An object of class \code{singlegam}.
 #' @export
 #'
-singlegam <- function(model, grid = NULL, nmc = 100) {
+singlegam <- function(model, grid = NULL, nmc = 100, freq = FALSE, unconditional = FALSE) {
 
   # Extract variables
   response <- as.character(model$formula)[[2]]
   predictors <- colnames(model$model)[colnames(model$model) != response]
-
-  stopifnot(do.call(all, lapply(names(grid), function(x) x %in% predictors)))
 
   X <- model$model[, predictors, drop = FALSE]
 
@@ -34,7 +34,7 @@ singlegam <- function(model, grid = NULL, nmc = 100) {
   Xp <- stats::predict(model, newdata = grid, type = "lpmatrix")
 
   # Sample regression coefficients from posterior
-  betas <- mgcv::rmvn(n = nmc, mu = stats::coef(model), V = stats::vcov(model))
+  betas <- mgcv::rmvn(n = nmc, mu = stats::coef(model), V = stats::vcov(model, freq = freq, unconditional = unconditional))
 
   # Compute posterior fits
   posterior_sample <- t(betas %*% t(Xp))

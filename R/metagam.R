@@ -28,9 +28,13 @@ metagam <- function(models, random_effects = FALSE, probs = c(.01, .025, .05, .9
 
     # Grids for each model
     x_grids <- lapply(models, function(m){
-      rows_comp <- lapply(x_comp, function(z) m$grid[1, z] == m$grid[, z])
-      rows_comp <- do.call(cbind, rows_comp)
-      rows_comp <- apply(rows_comp, 1, all)
+      if(length(x_comp) > 0){
+        rows_comp <- lapply(x_comp, function(z) m$grid[1, z] == m$grid[, z])
+        rows_comp <- do.call(cbind, rows_comp)
+        rows_comp <- apply(rows_comp, 1, all)
+      } else {
+        rows_comp <- TRUE
+      }
 
       x_grid <- m$grid[rows_comp, , drop = FALSE]
       range <- if(x_class == "numeric") range(x_grid[, x]) else unique(x_grid[, x])
