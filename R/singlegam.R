@@ -5,11 +5,12 @@
 #' @param nmc Number of Monte Carlo samples.
 #' @param freq Logical
 #' @param unconditional Logical
+#' @param grid_length length
 #'
 #' @return An object of class \code{singlegam}.
 #' @export
 #'
-singlegam <- function(model, grid = NULL, nmc = 100, freq = FALSE, unconditional = FALSE) {
+singlegam <- function(model, grid = NULL, nmc = 100, grid_length = 30, freq = FALSE, unconditional = FALSE) {
 
   # Extract variables
   response <- as.character(model$formula)[[2]]
@@ -20,8 +21,7 @@ singlegam <- function(model, grid = NULL, nmc = 100, freq = FALSE, unconditional
   # Create a grid from the variables
   grid <- lapply(X, function(x) {
     if(is.numeric(x)){
-      r <- range(x)
-      seq(from = r[[1]], to = r[[2]], length.out = 30)
+      quantile(x, probs = seq(from = 0, to = 1, length.out = grid_length), names = FALSE)
       } else {
         unique(x)
       }
