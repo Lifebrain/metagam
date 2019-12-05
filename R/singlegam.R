@@ -7,16 +7,27 @@
 #' @return An object of class \code{singlegam}.
 #' @export
 #'
-singlegam <- function(model, grid, nmc = 100) {
-
-  stopifnot(do.call(all, lapply(names(grid), function(x) x %in% predictors)))
+singlegam <- function(model, grid = NULL, nmc = 100) {
 
   # Extract variables
   response <- as.character(model$formula)[[2]]
   predictors <- colnames(model$model)[colnames(model$model) != response]
+
+  stopifnot(do.call(all, lapply(names(grid), function(x) x %in% predictors)))
+
   X <- model$model[, predictors, drop = FALSE]
 
-  # Construct grid based on the provided list
+  # Create a grid from the variables
+  grid <- lapply(X, function(x) {
+    if(is.numeric(x)){
+      r <- range(x)
+      seq(from = r[[1]], to = r[[2]], length.out = 30)
+      } else {
+        unique(x)
+      }
+    })
+
+  # Expand combinatorially
   grid <- expand.grid(grid)
 
   # Get the linear predictor matrix at grid

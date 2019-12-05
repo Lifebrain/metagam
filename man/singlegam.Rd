@@ -4,7 +4,7 @@
 \alias{singlegam}
 \title{Prepare a single GAM/GAMM fit for meta analysis}
 \usage{
-singlegam(model, grid, nmc = 100)
+singlegam(model, grid = NULL, nmc = 100)
 }
 \arguments{
 \item{model}{Fitted gam object.}

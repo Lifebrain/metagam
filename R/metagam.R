@@ -7,44 +7,92 @@
 #' @return An object of class \code{metagam}
 #' @export
 #'
-metagam <- function(models, random_effects = FALSE, probs = seq(0, 1, .25)){
+metagam <- function(models, random_effects = FALSE, probs = c(.01, .025, .05, .95, .975, .99)){
 
   stopifnot(do.call(all, lapply(models, inherits, what = "singlegam")))
   stopifnot(do.call(all, lapply(models, function(m) nrow(m$grid) == nrow(m$posterior_sample))))
   stopifnot(length(unique(lapply(models, function(m) m$predictors))) == 1)
 
   predictors <- models[[1]]$predictors
-  grid <- models[[1]]$grid
   predictor_classes <- do.call(c, lapply(models[[1]]$grid, class))
 
-  # Create a joint dataframe
-  posteriors <- Map(function(m, i){
-    cbind(m$grid, fit = c(m$posterior_sample), sample = i)
-  }, models, seq(from = 1, to = length(models), by = 1))
+  # Create a univariate grid per function
+  # If numeric, interpolate to a common grid.
+  all_posteriors <- lapply(predictors, function(x){
+    # The other predictors, "comp" stands for "complement"
+    x_comp <- setdiff(predictors, x)
+    x_class <- predictor_classes[[x]]
+    # Indices of rows to use for the other predictors
+    # Simply take the first value of all other numeric predictors
+    # TODO: Take midpoint of other variables and interpolate
 
-  posteriors <- do.call(rbind, posteriors)
-  posteriors <- split(posteriors, f = posteriors[, predictors, drop = FALSE])
-  posterior_quantiles <- Map(function(p, i) {
-    qts <- stats::quantile(p$fit, probs = probs)
-    data.frame(
-      quantity = c("mean", "median", names(qts)),
-      value = c(mean(p$fit), stats::median(p$fit), qts),
-      row_number = i,
-      stringsAsFactors = FALSE
-    )
-  }, posteriors, seq(from = 1, to = length(posteriors), by = 1))
+    # Grids for each model
+    x_grids <- lapply(models, function(m){
+      rows_comp <- lapply(x_comp, function(z) m$grid[1, z] == m$grid[, z])
+      rows_comp <- do.call(cbind, rows_comp)
+      rows_comp <- apply(rows_comp, 1, all)
+
+      x_grid <- m$grid[rows_comp, , drop = FALSE]
+      range <- if(x_class == "numeric") range(x_grid[, x]) else unique(x_grid[, x])
+
+      list(x_grid = x_grid, rows_comp = rows_comp, range = range)
+    })
+
+    # Find the total range
+    if(x_class == "numeric"){
+      range <- do.call("range", lapply(x_grids, function(z) z$range))
+      common_x_grid <- seq(from = range[[1]], to = range[[2]], length.out = 40)
+    } else if(x_class %in% c("logical", "factor", "character")) {
+      common_x_grid <- do.call("unique", lapply(x_grids, function(z) z$range))
+    }
+
+    # Interpolate posterior over grid
+    posterior_samples <- Map(function(m, g, i){
+      # Extract the posterior samples at the grid
+      posterior_sample <- m$posterior_sample[g$rows_comp, , drop = FALSE]
+      # Interpolate each posterior curve
+      if(x_class == "numeric"){
+        posterior_sample <- lapply(as.data.frame(posterior_sample), function(y){
+          approx(x = as.numeric(g$x_grid[, x]), y = as.numeric(y), xout = common_x_grid)$y
+        })
+        posterior_sample <- unlist(posterior_sample, use.names = FALSE)
+      } else {
+        posterior_sample <- c(posterior_sample)
+      }
+
+      posterior_sample <- as.data.frame(cbind(common_x_grid, posterior_sample))
+      colnames(posterior_sample) <- c(x, "value")
+      posterior_sample$sample <- i
+
+      return(posterior_sample)
+    }, models, x_grids, seq(from = 1, to = length(models), by = 1))
 
 
-  posterior_quantiles <- do.call(rbind, posterior_quantiles)
-  rownames(posterior_quantiles) <- NULL
+    posterior_samples <- do.call(rbind, posterior_samples)
 
-  grid$row_number = seq(from = 1, to = nrow(grid), by = 1)
+    # Compute the posterior quantities of interest
+    posterior_samples <- split(posterior_samples, posterior_samples[, x])
 
-  posterior_quantiles <- merge(posterior_quantiles, grid, by = "row_number")
+    posterior_quantities <- lapply(posterior_samples, function(p){
+      qts <- stats::quantile(p$value, probs = probs, na.rm = TRUE)
+      data.frame(
+        quantity = c("posterior_samples", "mean", "median", names(qts)),
+        value = c(sum(!is.na(p$value)), mean(p$value, na.rm = TRUE), median(p$value, na.rm = TRUE), qts),
+        predictor = x,
+        predictor_value = unique(p[, x]),
+        stringsAsFactors = FALSE
+      )
+    })
+
+    posterior_quantities <- do.call("rbind", posterior_quantities)
+    rownames(posterior_quantities) <- NULL
+    return(posterior_quantities)
+  })
+  names(all_posteriors) <- predictors
 
   result <- list(
     predictors = predictors,
-    posterior_quantiles = posterior_quantiles
+    all_posteriors = all_posteriors
   )
   class(result) <- "metagam"
 
