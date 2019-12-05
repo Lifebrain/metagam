@@ -10,12 +10,14 @@ dat3 <- dat[501:1000, ]
 
 models <- lapply(list(dat1, dat2, dat3), function(d){
   model <- mgcv::gam(y ~ s(x2), data = d, method = "REML")
-  singlegam(model, nmc = 100, freq = FALSE, unconditional = FALSE)
+  singlegam(model, nmc = 100, grid_length = 100, freq = FALSE, unconditional = FALSE)
 })
-metafit <- metagam(models)
+metafit <- metagam(models, grid_length = 100)
 
 library(tidyverse)
 metafit$all_posteriors$x2 %>%
   filter(quantity == "mean") %>%
-  ggplot(aes(x = predictor_value, y = value)) + geom_line()
+  ggplot(aes(x = predictor_value, y = value)) +
+  geom_line() +
+  geom_point()
 

@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^testdata\.R$
 ^oversmoothing_experiment\.R$
+^\.travis\.yml$
+^README\.Rmd$

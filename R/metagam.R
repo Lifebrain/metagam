@@ -1,13 +1,13 @@
 #' Meta analyze GAMs
 #'
 #' @param models list of models
-#' @param random_effects logical
 #' @param probs posterior quantiles to return
+#' @param grid_length lenght of grid
 #'
 #' @return An object of class \code{metagam}
 #' @export
 #'
-metagam <- function(models, random_effects = FALSE, probs = c(.01, .025, .05, .95, .975, .99)){
+metagam <- function(models, grid_length = 40, probs = c(.01, .025, .05, .95, .975, .99)){
 
   stopifnot(do.call(all, lapply(models, inherits, what = "singlegam")))
   stopifnot(do.call(all, lapply(models, function(m) nrow(m$grid) == nrow(m$posterior_sample))))
@@ -27,28 +27,9 @@ metagam <- function(models, random_effects = FALSE, probs = c(.01, .025, .05, .9
     # TODO: Take midpoint of other variables and interpolate
 
     # Grids for each model
-    x_grids <- lapply(models, function(m){
-      if(length(x_comp) > 0){
-        rows_comp <- lapply(x_comp, function(z) m$grid[1, z] == m$grid[, z])
-        rows_comp <- do.call(cbind, rows_comp)
-        rows_comp <- apply(rows_comp, 1, all)
-      } else {
-        rows_comp <- TRUE
-      }
-
-      x_grid <- m$grid[rows_comp, , drop = FALSE]
-      range <- if(x_class == "numeric") range(x_grid[, x]) else unique(x_grid[, x])
-
-      list(x_grid = x_grid, rows_comp = rows_comp, range = range)
-    })
-
-    # Find the total range
-    if(x_class == "numeric"){
-      range <- do.call("range", lapply(x_grids, function(z) z$range))
-      common_x_grid <- seq(from = range[[1]], to = range[[2]], length.out = 40)
-    } else if(x_class %in% c("logical", "factor", "character")) {
-      common_x_grid <- do.call("unique", lapply(x_grids, function(z) z$range))
-    }
+    grid_list <- create_common_grid(x, models, x_comp, x_class, grid_length)
+    x_grids <- grid_list$x_grids
+    common_x_grid <- grid_list$common_x_grid
 
     # Interpolate posterior over grid
     posterior_samples <- Map(function(m, g, i){
@@ -57,7 +38,7 @@ metagam <- function(models, random_effects = FALSE, probs = c(.01, .025, .05, .9
       # Interpolate each posterior curve
       if(x_class == "numeric"){
         posterior_sample <- lapply(as.data.frame(posterior_sample), function(y){
-          approx(x = as.numeric(g$x_grid[, x]), y = as.numeric(y), xout = common_x_grid)$y
+          stats::approx(x = as.numeric(g$x_grid[, x]), y = as.numeric(y), xout = common_x_grid)$y
         })
         posterior_sample <- unlist(posterior_sample, use.names = FALSE)
       } else {
@@ -81,7 +62,7 @@ metagam <- function(models, random_effects = FALSE, probs = c(.01, .025, .05, .9
       qts <- stats::quantile(p$value, probs = probs, na.rm = TRUE)
       data.frame(
         quantity = c("posterior_samples", "mean", "median", names(qts)),
-        value = c(sum(!is.na(p$value)), mean(p$value, na.rm = TRUE), median(p$value, na.rm = TRUE), qts),
+        value = c(sum(!is.na(p$value)), mean(p$value, na.rm = TRUE), stats::median(p$value, na.rm = TRUE), qts),
         predictor = x,
         predictor_value = unique(p[, x]),
         stringsAsFactors = FALSE

@@ -6,14 +6,14 @@
 \usage{
 metagam(
   models,
-  random_effects = FALSE,
+  grid_length = 40,
   probs = c(0.01, 0.025, 0.05, 0.95, 0.975, 0.99)
 )
 }
 \arguments{
 \item{models}{list of models}
 
-\item{random_effects}{logical}
+\item{grid_length}{lenght of grid}
 
 \item{probs}{posterior quantiles to return}
 }

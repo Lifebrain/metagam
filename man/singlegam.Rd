@@ -6,7 +6,6 @@
 \usage{
 singlegam(
   model,
-  grid = NULL,
   nmc = 100,
   grid_length = 30,
   freq = FALSE,
@@ -15,8 +14,6 @@ singlegam(
 }
 \arguments{
 \item{model}{Fitted gam object.}
-
-\item{grid}{Grid over which to compute posterior.}
 
 \item{nmc}{Number of Monte Carlo samples.}
 
