@@ -2,24 +2,24 @@
 % Please edit documentation in R/metagam.R
 \name{metagam}
 \alias{metagam}
-\title{Meta analyze GAMs}
+\title{Meta analyze nonlinear models}
 \usage{
-metagam(
-  models,
-  grid_length = 40,
-  probs = c(0.01, 0.025, 0.05, 0.95, 0.975, 0.99)
-)
+metagam(fits, grid, type = "terms", terms = NULL, method = "fixed")
 }
 \arguments{
-\item{models}{list of models}
+\item{fits}{List of GAM or GAMM fits of class metagam.}
 
-\item{grid_length}{lenght of grid}
+\item{grid}{Grid over which to predict.}
 
-\item{probs}{posterior quantiles to return}
+\item{type}{defaults to "terms"}
+
+\item{terms}{Character vector of terms, smooth or parametric.}
+
+\item{method}{Method of meta analysis. Defaults to "fixed".}
 }
 \value{
-An object of class \code{metagam}
+An object of type metagam.
 }
 \description{
-Meta analyze GAMs
+Meta analyze nonlinear models
 }

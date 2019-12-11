@@ -9,5 +9,10 @@ Description: More about what it does (maybe more than one line)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: mgcv, dplyr
-RoxygenNote: 7.0.1
+Imports: dplyr (>= 0.8.3),
+  mgcv (>= 1.8-31),
+  mvmeta (>= 1.0.2),
+  purrr (>= 0.3.3), 
+  rlang (>= 0.4.2),
+  tidyr (>= 1.0.0)
+RoxygenNote: 7.0.2
