@@ -52,6 +52,8 @@ prepare_meta <- function(fit, path = NULL){
     Vp = fit$Vp,
     Vc = fit$Vc
   )
+  # Add a check to make sure Xu is gone
+  # Something like obj$smooth <- map(obj$smooth, function(x) {x$Xu <- NULL; return(x)})
   class(obj) <- c("metagam", class(fit))
 
   if(!is.null(path)) saveRDS(obj, file = path)

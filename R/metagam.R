@@ -14,19 +14,21 @@ metagam <- function(fits, grid, type = "terms", terms = NULL, method = "fixed"){
     pred <- stats::predict(fit, newdata = grid, type = type, se.fit = TRUE,
                            terms = terms, newdata.guaranteed = TRUE)
 
-    tidyr::pivot_longer(dplyr::as_tibble(pred$fit), tidyr::everything(),
-                        names_to = "term", values_to = "fit")
-
     # Fix column names of fit
-    colnames(pred$fit) <- paste0("fit.", colnames(pred$fit))
-    colnames(pred$se.fit) <- paste0("se.", colnames(pred$se.fit))
-
-    dat <- dplyr::bind_cols(grid, dplyr::as_tibble(pred$fit), dplyr::as_tibble(pred$se.fit))
-    tidyr::pivot_longer(dat,
-                        cols = union(dplyr::starts_with("fit."), dplyr::starts_with("se.")),
-                        names_to = c(".value", "term"),
-                        names_pattern = "([[:alnum:]]+)\\.([[:alnum:]\\(\\)0-9]+)"
-                        )
+    if(type %in% c("iterms", "terms")){
+      colnames(pred$fit) <- paste0("fit.", colnames(pred$fit))
+      colnames(pred$se.fit) <- paste0("se.", colnames(pred$se.fit))
+      dat <- dplyr::bind_cols(grid, dplyr::as_tibble(pred$fit), dplyr::as_tibble(pred$se.fit))
+      tidyr::pivot_longer(dat,
+                          cols = union(dplyr::starts_with("fit."), dplyr::starts_with("se.")),
+                          names_to = c(".value", "term"),
+                          names_pattern = "([[:alnum:]]+)\\.([[:alnum:]\\(\\)0-9]+)"
+      )
+    } else {
+      dplyr::mutate(grid, fit = as.numeric(pred$fit),
+                    se = as.numeric(pred$se),
+                    term = type)
+    }
 
     # Deal with intercept later
     #attr(pred, "constant")
@@ -50,16 +52,12 @@ metagam <- function(fits, grid, type = "terms", terms = NULL, method = "fixed"){
   } else {
     fit_comb <- dplyr::summarise(
       fit_comb,
-      fit = dplyr::coalesce(sum(rlang::.data$fit * rlang::.data$se^(-2)) /
-                              sum(rlang::.data$se ^ (-2)), mean(rlang::.data$fit)),
-      se = sum(rlang::.data$se ^ (-2)) ^ (-1/2)
+      fit = dplyr::coalesce(sum(.data$fit * .data$se^(-2)) /
+                              sum(.data$se ^ (-2)), mean(.data$fit)),
+      se = sum(.data$se ^ (-2)) ^ (-1/2)
     )
-    dplyr::ungroup(fit_comb)
+    fit_comb <- dplyr::ungroup(fit_comb)
   }
-
-
-
-
 
   result <- list(
     prediction = fit_comb
