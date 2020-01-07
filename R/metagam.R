@@ -5,12 +5,31 @@
 #' @param type defaults to "terms"
 #' @param method Method of meta analysis. Defaults to "fixed".
 #' @param terms Character vector of terms, smooth or parametric.
+#' @param restrict_max char
+#' @param restrict_min char
 #'
 #' @return An object of type metagam.
 #' @export
 #'
-metagam <- function(fits, grid, type = "terms", terms = NULL, method = "fixed"){
+metagam <- function(fits, grid, type = "terms", terms = NULL, method = "fixed",
+                    restrict_max = NULL, restrict_min = NULL){
   fit_comb <- purrr::map_dfr(fits, function(fit){
+    # Reduce grid to be within the range
+    if(!is.null(restrict_min)){
+      for(var in restrict_min){
+        inds <- grid[, restrict_min] > fit$var_ranges[[restrict_min]]$min
+        grid <- grid[inds, ]
+      }
+    }
+
+    if(!is.null(restrict_max)){
+      for(var in restrict_max){
+        inds <- grid[, restrict_max] < fit$var_ranges[[restrict_max]]$max
+        grid <- grid[inds, ]
+      }
+    }
+
+
     pred <- stats::predict(fit, newdata = grid, type = type, se.fit = TRUE,
                            terms = terms, newdata.guaranteed = TRUE)
 
@@ -34,10 +53,10 @@ metagam <- function(fits, grid, type = "terms", terms = NULL, method = "fixed"){
     #attr(pred, "constant")
   }, .id = "cohort")
 
-  fit_comb <- dplyr::group_by_at(fit_comb, dplyr::vars(-"fit", -"se", -"cohort"))
+  fit_meta <- dplyr::group_by_at(fit_comb, dplyr::vars(-"fit", -"se", -"cohort"))
 
   if(method != "fixed"){
-    fit_comb <- purrr::pmap_dfr(tidyr::nest(fit_comb), function(...){
+    fit_meta <- purrr::pmap_dfr(tidyr::nest(fit_meta), function(...){
       args <- list(...)
       m <- mvmeta::mvmeta(formula = args$data$fit, S = args$data$se^2, method = method)
 
@@ -50,17 +69,18 @@ metagam <- function(fits, grid, type = "terms", terms = NULL, method = "fixed"){
       )
     })
   } else {
-    fit_comb <- dplyr::summarise(
-      fit_comb,
+    fit_meta <- dplyr::summarise(
+      fit_meta,
       fit = dplyr::coalesce(sum(.data$fit * .data$se^(-2)) /
                               sum(.data$se ^ (-2)), mean(.data$fit)),
       se = sum(.data$se ^ (-2)) ^ (-1/2)
     )
-    fit_comb <- dplyr::ungroup(fit_comb)
+    fit_meta <- dplyr::ungroup(fit_meta)
   }
 
   result <- list(
-    prediction = fit_comb
+    prediction = fit_meta,
+    cohort_fits = fit_comb
   )
   class(result) <- "metagam"
 

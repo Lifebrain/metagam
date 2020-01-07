@@ -4,7 +4,15 @@
 \alias{metagam}
 \title{Meta analyze nonlinear models}
 \usage{
-metagam(fits, grid, type = "terms", terms = NULL, method = "fixed")
+metagam(
+  fits,
+  grid,
+  type = "terms",
+  terms = NULL,
+  method = "fixed",
+  restrict_max = NULL,
+  restrict_min = NULL
+)
 }
 \arguments{
 \item{fits}{List of GAM or GAMM fits of class metagam.}
@@ -16,6 +24,10 @@ metagam(fits, grid, type = "terms", terms = NULL, method = "fixed")
 \item{terms}{Character vector of terms, smooth or parametric.}
 
 \item{method}{Method of meta analysis. Defaults to "fixed".}
+
+\item{restrict_max}{char}
+
+\item{restrict_min}{char}
 }
 \value{
 An object of type metagam.

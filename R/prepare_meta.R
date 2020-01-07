@@ -8,6 +8,16 @@
 #'
 prepare_meta <- function(fit, path = NULL){
 
+  # Find the minimum and maximum of each variable
+  var_ranges <- purrr::map(fit$model, function(x){
+    if(is.numeric(x) | is.integer(x)){
+      list(class = class(x), min = min(x), max = max(x))
+    } else {
+      list(class = class(x), unique = unique(x))
+    }
+    })
+
+
   # Save only the parts of the fit which contain aggregated data
   obj <- list(
     aic = fit$aic,
@@ -50,7 +60,8 @@ prepare_meta <- function(fit, path = NULL){
     var.summary = fit$var.summary,
     Ve = fit$Ve,
     Vp = fit$Vp,
-    Vc = fit$Vc
+    Vc = fit$Vc,
+    var_ranges = var_ranges
   )
   # Add a check to make sure Xu is gone
   # Something like obj$smooth <- map(obj$smooth, function(x) {x$Xu <- NULL; return(x)})

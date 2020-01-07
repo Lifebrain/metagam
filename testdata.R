@@ -15,26 +15,27 @@ dat <- tibble(
   y = f1 + f2 + rnorm(1000)
 )
 
-dat1 <- dat[1:300, ]
+dat1 <- dat[dat$x2 < .5, ]
 dat2 <- dat[301:500, ]
 dat3 <- dat[501:1000, ]
 
+form <- as.formula(y ~ z + s(x1, bs = 'cr', pc = 0) + s(x2, k = 30, bs = 'cr', pc = 0))
 # Fit a model
 fits <- lapply(list(dat1, dat2, dat3), function(d){
-  fit <- mgcv::gam(y ~ z + s(x1, bs = 'cr', pc = 0) + s(x2, k = 30, bs = 'cr', pc = 0), data = d, method = "REML")
+  fit <- mgcv::gam(form, data = d, method = "REML")
   metagam::prepare_meta(fit)
 })
 
 #grid <- expand.grid(replicate(3, seq(from = 0, to = 1, by = .01), simplify = FALSE))
 #colnames(grid) <- c("x0", "x1", "x2")
-grid <- tibble(x0 = 0, x1 = 0, x2 = seq(from = 0, to = 1, by = .01), z = factor(1, levels = c(1, 2)))
+grid <- tibble(x0 = 0, x1 = 0, x2 = seq(from = .05, to = .95, by = .1), z = factor(1, levels = c(1, 2)))
 
 fit <- fits[[1]]
 terms <- "s(x2)"
-metafit <- metagam(fits, grid, type = "iterms")
+metafit <- metagam(fits, grid, type = "iterms", restrict_max = "x2")
 
 # Compare with using all data at once
-fullfit <- metagam(list(gam(y ~ sx0 + s(x1) + s(x2), data = dat, method = "REML")), grid, type = "iterms")
+fullfit <- metagam(list(gam(form, data = dat, method = "REML")), grid, type = "iterms")
 
 bind_rows(
   meta = metafit$prediction,
@@ -46,3 +47,4 @@ bind_rows(
              group = type, color = type)) +
   geom_line() +
   geom_ribbon(alpha = .2)
+
