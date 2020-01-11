@@ -11,7 +11,8 @@ metagam(
   terms = NULL,
   method = "fixed",
   restrict_max = NULL,
-  restrict_min = NULL
+  restrict_min = NULL,
+  intercept = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ metagam(
 \item{restrict_max}{char}
 
 \item{restrict_min}{char}
+
+\item{intercept}{logical defining whether or not to shift the output values
+by the intercept. Only applies when \code{type = "terms"} or \code{type = "iterms"}.}
 }
 \value{
 An object of type metagam.
