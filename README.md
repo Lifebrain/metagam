@@ -9,18 +9,19 @@
 status](https://travis-ci.org/osorensen/metagam.svg?branch=master)](https://travis-ci.org/osorensen/metagam)
 <!-- badges: end -->
 
-The goal of metagam is to …
+`metagam` is an R-package for flexible meta-analysis of generalized
+additive (mixed) models (GAMs/GAMMs).
+
+The package is under development, so changes to the interface can be
+expected. Suggestions for improvements and bug reports are warmly
+welcome, either by filing an
+[Issue](https://github.com/osorensen/metagam/issues) or opening a [Pull
+Request](https://github.com/osorensen/metagam/pulls).
 
 ## Installation
 
-You can install the released version of metagam from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("metagam")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+Install the current development version of `metagam` from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -29,33 +30,58 @@ devtools::install_github("osorensen/metagam")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+`metagam` has two main functions: `prepare_meta` and `metagam`. To
+illustrate them, we start by simulating three datasets. We need the to
+load the `mgcv` package in order to fit GAMs.
 
 ``` r
 library(metagam)
-## basic example code
+library(mgcv)
+#> Loading required package: nlme
+#> This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.
+## simulate three datasets
+set.seed(123)
+datasets <- lapply(1:3, function(x) gamSim(scale = 3, verbose = FALSE))
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+First we fit a separate GAM to each dataset. In the typical application
+of `metagam`, this will be done separately in the location of each
+dataset. The function `prepare_meta` removes all subject-specific data
+from the model object, so that it can be shared to a common location
+while protecting privacy.
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+## fit a generalized additive model to each dataset separately
+fits <- lapply(datasets, function(dat){
+  ## Full fit using mgcv
+  gamfit <- gam(y ~ s(x0) + s(x1) + s(x2), data = dat)
+  ## Extract the necessary components for performing a meta-analysis
+  ## This removes all subject-specific data
+  prepare_meta(gamfit)
+})
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
+Finally we meta-analyze the fits. To this end, we need to define a grid
+over which to make predictions. In this case, we are interested in
+inference for the term `s(x2)`.
 
-You can also embed plots, for example:
+``` r
+grid <- data.frame(x0 = 0, x1 = 0, x2 = seq(from = 0, to = 1, by = .01))
+meta_analysis <- metagam(fits, grid = grid, terms = "s(x2)", intercept = FALSE)
+```
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+Methods for visualizing and summarizing `metagam` objects will be added
+during further package development. At the moment, scripts for plotting
+have to be supplied by the user. The code chunk below plots the
+meta-analytic fit as a solid line and the separate fits as dashed lines.
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+``` r
+plot_data <- meta_analysis$prediction
+
+plot(plot_data$x2, plot_data$fit, type = "l", xlab = "x2", ylab = "fit", ylim = c(-6, 6))
+for(fit in fits){
+  lines(plot_data$x2, predict(fit, newdata = grid, type = "iterms", terms = "s(x2)"), lty = 2)  
+}
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

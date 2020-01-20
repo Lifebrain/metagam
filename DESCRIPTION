@@ -11,9 +11,12 @@ Encoding: UTF-8
 LazyData: true
 Imports: dplyr,
   mgcv,
+  metap,
   mvmeta,
   purrr, 
   rlang,
+  stringr,
+  tibble,
   tidyr
 RoxygenNote: 7.0.2
 Suggests: 

@@ -12,14 +12,15 @@ dat <- tibble(
   z = factor(sample(2, 1000, replace = TRUE)),
   f1 = f1(x1),
   f2 = f2(x2),
-  y = f1 + f2 + rnorm(1000)
+  y = f1 + f2 + rnorm(1000, sd =30)
 )
 
-dat1 <- dat[dat$x2 < .5, ]
-dat2 <- dat[301:500, ]
+dat2 <- dat[dat$x2 < .5, ]
+dat1 <- dat[301:500, ]
 dat3 <- dat[501:1000, ]
 
-form <- as.formula(y ~ z + s(x1, bs = 'cr', pc = 0) + s(x2, k = 30, bs = 'cr', pc = 0))
+form <- as.formula(y ~ z + s(x1, bs = 'cr', pc = 0) + s(x2, k = 6, bs = 'cr', pc = 0))
+
 # Fit a model
 fits <- lapply(list(dat1, dat2, dat3), function(d){
   fit <- mgcv::gam(form, data = d, method = "REML")
@@ -28,14 +29,20 @@ fits <- lapply(list(dat1, dat2, dat3), function(d){
 
 #grid <- expand.grid(replicate(3, seq(from = 0, to = 1, by = .01), simplify = FALSE))
 #colnames(grid) <- c("x0", "x1", "x2")
-grid <- tibble(x0 = 0, x1 = 0, x2 = seq(from = .05, to = .95, by = .1), z = factor(1, levels = c(1, 2)))
+grid <- tibble(x0 = 0, x1 = 0, x2 = seq(from = .0, to = 1, by = .1), z = factor(1, levels = c(1, 2)))
 
 fit <- fits[[1]]
 terms <- "s(x2)"
-metafit <- metagam(fits, grid, type = "iterms", restrict_max = "x2")
+sig_level <- NULL
+nmc_sig_test <- NULL
+type <- "iterms"
+restrict_max = NULL; restrict_min = NULL; intercept = TRUE
+method <- "fixed"
+
+metafit <- metagam(fits, grid, type = "iterms", terms = "s(x2)")
 
 # Compare with using all data at once
-fullfit <- metagam(list(gam(form, data = dat, method = "REML")), grid, type = "iterms")
+#fullfit <- metagam(list(gam(form, data = dat, method = "REML")), grid, type = "iterms")
 
 bind_rows(
   meta = metafit$prediction,

@@ -7,7 +7,7 @@
 metagam(
   fits,
   grid,
-  type = "terms",
+  type = "iterms",
   terms = NULL,
   method = "fixed",
   restrict_max = NULL,
@@ -20,7 +20,7 @@ metagam(
 
 \item{grid}{Grid over which to predict.}
 
-\item{type}{defaults to "terms"}
+\item{type}{defaults to "iterms"}
 
 \item{terms}{Character vector of terms, smooth or parametric.}
 
