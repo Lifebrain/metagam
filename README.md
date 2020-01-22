@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/osorensen/metagam.svg?branch=master)](https://travis-ci.org/osorensen/metagam)
+status](https://travis-ci.org/lifebrain/metagam.svg?branch=master)](https://travis-ci.org/lifebrain/metagam)
 <!-- badges: end -->
 
 `metagam` is an R-package for flexible meta-analysis of generalized
@@ -15,8 +15,8 @@ additive (mixed) models (GAMs/GAMMs).
 The package is under development, so changes to the interface can be
 expected. Suggestions for improvements and bug reports are warmly
 welcome, either by filing an
-[Issue](https://github.com/osorensen/metagam/issues) or opening a [Pull
-Request](https://github.com/osorensen/metagam/pulls).
+[Issue](https://github.com/lifebrain/metagam/issues) or opening a [Pull
+Request](https://github.com/lifebrain/metagam/pulls).
 
 ## Installation
 
@@ -25,7 +25,7 @@ Install the current development version of `metagam` from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("osorensen/metagam")
+devtools::install_github("lifebrain/metagam")
 ```
 
 ## Example
