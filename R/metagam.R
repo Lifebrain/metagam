@@ -24,7 +24,8 @@ metagam <- function(fits, grid, type = "iterms", terms = NULL, method = "fixed",
         grid <- grid[inds, ]
       }
     }
-
+  
+    
     if(!is.null(restrict_max)){
       for(var in restrict_max){
         inds <- grid[, restrict_max] < fit$var_ranges[[restrict_max]]$max
@@ -62,19 +63,33 @@ metagam <- function(fits, grid, type = "iterms", terms = NULL, method = "fixed",
   }, .id = "cohort")
 
   fit_meta <- dplyr::group_by_at(fit_comb, dplyr::vars(-"fit", -"se", -"cohort"))
-
+  
   fit_meta <- purrr::pmap_dfr(tidyr::nest(fit_meta), function(...){
     args <- list(...)
     m <- mvmeta::mvmeta(formula = args$data$fit, S = args$data$se^2, method = method)
-
-    dplyr::bind_cols(
+    
+    res <- dplyr::bind_cols(
       dplyr::as_tibble(args[names(args) != "data"]),
       dplyr:: tibble(
         fit = as.numeric(m$coefficients),
         se = sqrt(as.numeric(m$vcov))
       )
     )
+    
+    
   })
+  
+  #browser()
+  
+  res <- purrr::pmap_dfr(tidyr::nest(fit_meta), function(...){
+    args <- list(...)
+    m <- mvmeta::mvmeta(formula = args$data$fit, S = args$data$se^2, method = method)
+    print(m)
+    dplyr::tibble( res=residuals(m) )
+  })
+  
+  
+  #browser()
 
   pvals <- purrr::map_dfr(fits, function(fit){
     dat <- suppressWarnings(summary(fit))$s.table[terms, "p-value", drop = FALSE]
@@ -91,11 +106,14 @@ metagam <- function(fits, grid, type = "iterms", terms = NULL, method = "fixed",
                     c(f(x$pval)$p)
                   })
   }, .id = "term")
+  
+  #browser()
 
   result <- list(
     prediction = fit_meta,
     cohort_fits = fit_comb,
-    pvals = pvals
+    pvals = pvals,
+    residuals = residuals
   )
   class(result) <- "metagam"
 

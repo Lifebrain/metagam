@@ -1,0 +1,76 @@
+---
+title: "Domination Plots"
+author: "Andreas M. Brandmaier and Øystein Sørensen"
+date: "1/26/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+```
+
+## R Markdown
+
+```{r}
+library("metagam")
+```
+
+Create 8 datasets from standard gam example #1. The noise parameter is scaled, such that the first GAM has lowest noise and eights has highest noise. In a domination plot, we plot the relative contributions of each dataset on the prediction. By the way we generated the data, we expect largest influence by dataset #1 and lowest by dataset #8.
+
+```{r cars}
+## simulate three datasets
+set.seed(123)
+datasets <- lapply(1:8, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
+```
+
+Now, delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (ie., zero) contribution of the first dataset on low values of dimensions `x2`.
+
+```{r}
+df <- datasets[[1]]
+df[df$x2<0.2,]<-NA
+datasets[[1]] <- df
+```
+
+Next, delete all values of the first
+
+```{r}
+df <- datasets[[2]]
+df[df$x2>0.8,]<-NA
+datasets[[2]] <- df
+
+```
+
+## Fit GAMs
+
+Next, we fit the indivial GAMs for each of the eight datasets.
+
+```{r pressure, echo=FALSE}
+
+## fit a generalized additive model to each dataset separately
+fits <- lapply(datasets, function(dat){
+  ## Full fit using mgcv
+  gamfit <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2), data = dat)
+  ## Extract the necessary components for performing a meta-analysis
+  ## This removes all subject-specific data
+  prepare_meta(gamfit)
+})
+
+```
+
+Then, we create a grid running over axis `x2` and run a meta-analysis over these values:
+
+```{r}
+
+grid <- data.frame(x0 = 0, x1 = 0, x2 = seq(from = 0, to = 1, by = .01))
+meta_analysis <- metagam(fits, grid = grid, terms = "s(x2)", intercept = FALSE)
+
+```
+
+Finally, we create a domination plot that tells us how much the points on axis `x2` are 
+influenced by the eight data sets.
+
+```{r}
+domination.plot(meta_analysis, "x2")
+```

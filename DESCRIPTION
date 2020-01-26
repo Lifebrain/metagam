@@ -17,7 +17,11 @@ Imports: dplyr,
   rlang,
   stringr,
   tibble,
-  tidyr
+  tidyr,
+  viridis
 RoxygenNote: 7.0.2
 Suggests: 
-    roxygen2
+    roxygen2,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
