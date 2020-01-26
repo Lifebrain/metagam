@@ -14,6 +14,10 @@ build:
 	cd ..;\
 	R CMD build $(PKGSRC)
 
+install:
+	cd ..;\
+	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
+
 
 check: build
 	cd ..;\

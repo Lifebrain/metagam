@@ -1,8 +1,12 @@
 ---
 title: "Domination Plots"
 author: "Andreas M. Brandmaier and Øystein Sørensen"
-date: "1/26/2020"
-output: pdf_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{domination}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
@@ -72,5 +76,5 @@ Finally, we create a domination plot that tells us how much the points on axis `
 influenced by the eight data sets.
 
 ```{r}
-domination.plot(meta_analysis, "x2")
+plot_domination(meta_analysis, "x2")
 ```
