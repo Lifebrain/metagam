@@ -12,24 +12,24 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-
+num.datasets <- 5
 ```
 
-## R Markdown
+## Simulation
 
 ```{r}
 library("metagam")
 ```
 
-Create 8 datasets from standard gam example #1. The noise parameter is scaled, such that the first GAM has lowest noise and eights has highest noise. In a domination plot, we plot the relative contributions of each dataset on the prediction. By the way we generated the data, we expect largest influence by dataset #1 and lowest by dataset #8.
+Create `r num.datasets` datasets from standard gam example #1. The noise parameter is scaled, such that the first GAM has lowest noise and eights has highest noise. In a domination plot, we plot the relative contributions of each dataset on the prediction. By the way we generated the data, we expect largest influence by dataset #1 and lowest by dataset #8.
 
 ```{r cars}
-## simulate three datasets
+## simulate datasets
 set.seed(123)
-datasets <- lapply(1:8, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
+datasets <- lapply(1:num.datasets, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
 ```
 
-Now, delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (ie., zero) contribution of the first dataset on low values of dimensions `x2`.
+Delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (ie., zero) contribution of the first dataset on low values of dimensions `x2`.
 
 ```{r}
 df <- datasets[[1]]
@@ -73,8 +73,9 @@ meta_analysis <- metagam(fits, grid = grid, terms = "s(x2)", intercept = FALSE)
 ```
 
 Finally, we create a domination plot that tells us how much the points on axis `x2` are 
-influenced by the eight data sets.
+influenced by the eight data sets. 
 
 ```{r}
 plot_domination(meta_analysis, "x2")
 ```
+
