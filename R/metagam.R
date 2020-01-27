@@ -72,24 +72,23 @@ metagam <- function(fits, grid, type = "iterms", terms = NULL, method = "fixed",
       dplyr::as_tibble(args[names(args) != "data"]),
       dplyr:: tibble(
         fit = as.numeric(m$coefficients),
-        se = sqrt(as.numeric(m$vcov))
+        se = sqrt(as.numeric(m$vcov)),
+        q = as.numeric(mvmeta::qtest(m)$Q),
+        qp = as.numeric(mvmeta::qtest(m)$p)
       )
     )
     
     
   })
-  
-  #browser()
+
   
   res <- purrr::pmap_dfr(tidyr::nest(fit_meta), function(...){
     args <- list(...)
     m <- mvmeta::mvmeta(formula = args$data$fit, S = args$data$se^2, method = method)
-    print(m)
     dplyr::tibble( res=residuals(m) )
   })
   
-  
-  #browser()
+
 
   pvals <- purrr::map_dfr(fits, function(fit){
     dat <- suppressWarnings(summary(fit))$s.table[terms, "p-value", drop = FALSE]

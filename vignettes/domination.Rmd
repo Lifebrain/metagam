@@ -37,7 +37,7 @@ df[df$x2<0.2,]<-NA
 datasets[[1]] <- df
 ```
 
-Next, delete all values of the first
+Next, delete all values of the second dataset for large values (`x2`>.8).
 
 ```{r}
 df <- datasets[[2]]
@@ -63,6 +63,8 @@ fits <- lapply(datasets, function(dat){
 
 ```
 
+## Meta-Analysis
+
 Then, we create a grid running over axis `x2` and run a meta-analysis over these values:
 
 ```{r}
@@ -72,10 +74,15 @@ meta_analysis <- metagam(fits, grid = grid, terms = "s(x2)", intercept = FALSE)
 
 ```
 
+## Domination Analysis
+
 Finally, we create a domination plot that tells us how much the points on axis `x2` are 
-influenced by the eight data sets. 
+influenced by the individual GAMs. We see that the influence of the GAMs is graded 
+according to the simulated noise levels. Second, we see that on the left-hand side, the influence of the
+first dataset is almost zero whereas the influence of the second dataset is almost zero
+on the righthand side.
 
 ```{r}
-plot_domination(meta_analysis, "x2")
+plot_domination(meta_analysis, axis="x2")
 ```
 
