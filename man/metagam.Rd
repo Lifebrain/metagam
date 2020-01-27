@@ -12,7 +12,7 @@ metagam(
   method = "fixed",
   restrict_max = NULL,
   restrict_min = NULL,
-  intercept = TRUE
+  intercept = FALSE
 )
 }
 \arguments{

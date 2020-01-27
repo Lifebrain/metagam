@@ -14,7 +14,7 @@
 #' @export
 #'
 metagam <- function(fits, grid, type = "iterms", terms = NULL, method = "fixed",
-                    restrict_max = NULL, restrict_min = NULL, intercept = TRUE){
+                    restrict_max = NULL, restrict_min = NULL, intercept = FALSE){
 
   fit_comb <- purrr::map_dfr(fits, function(fit){
     # Reduce grid to be within the range
