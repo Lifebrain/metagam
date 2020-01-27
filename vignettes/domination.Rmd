@@ -1,0 +1,88 @@
+---
+title: "Domination Plots"
+author: "Andreas M. Brandmaier and Øystein Sørensen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{domination}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+num.datasets <- 5
+```
+
+## Simulation
+
+```{r}
+library("metagam")
+```
+
+Create `r num.datasets` datasets from standard gam example #1. The noise parameter is scaled, such that the first GAM has lowest noise and eights has highest noise. In a domination plot, we plot the relative contributions of each dataset on the prediction. By the way we generated the data, we expect largest influence by dataset #1 and lowest by dataset #8.
+
+```{r cars}
+## simulate datasets
+set.seed(123)
+datasets <- lapply(1:num.datasets, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
+```
+
+Delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (ie., zero) contribution of the first dataset on low values of dimensions `x2`.
+
+```{r}
+df <- datasets[[1]]
+df[df$x2<0.2,]<-NA
+datasets[[1]] <- df
+```
+
+Next, delete all values of the second dataset for large values (`x2`>.8).
+
+```{r}
+df <- datasets[[2]]
+df[df$x2>0.8,]<-NA
+datasets[[2]] <- df
+
+```
+
+## Fit GAMs
+
+Next, we fit the indivial GAMs for each of the eight datasets.
+
+```{r pressure, echo=FALSE}
+
+## fit a generalized additive model to each dataset separately
+fits <- lapply(datasets, function(dat){
+  ## Full fit using mgcv
+  gamfit <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2), data = dat)
+  ## Extract the necessary components for performing a meta-analysis
+  ## This removes all subject-specific data
+  prepare_meta(gamfit)
+})
+
+```
+
+## Meta-Analysis
+
+Then, we create a grid running over axis `x2` and run a meta-analysis over these values:
+
+```{r}
+
+grid <- data.frame(x0 = 0, x1 = 0, x2 = seq(from = 0, to = 1, by = .01))
+meta_analysis <- metagam(fits, grid = grid, terms = "s(x2)", intercept = FALSE)
+
+```
+
+## Domination Analysis
+
+Finally, we create a domination plot that tells us how much the points on axis `x2` are 
+influenced by the individual GAMs. We see that the influence of the GAMs is graded 
+according to the simulated noise levels. Second, we see that on the left-hand side, the influence of the
+first dataset is almost zero whereas the influence of the second dataset is almost zero
+on the righthand side.
+
+```{r}
+plot_domination(meta_analysis, axis="x2")
+```
+

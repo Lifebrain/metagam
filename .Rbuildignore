@@ -4,3 +4,4 @@
 ^oversmoothing_experiment\.R$
 ^\.travis\.yml$
 ^README\.Rmd$
+Makefile

@@ -27,6 +27,8 @@ fits <- lapply(list(dat1, dat2, dat3), function(d){
   metagam::prepare_meta(fit)
 })
 
+predict(fits[[1]], newdata = tibble(x1 = .5, z = factor(1, levels=1:2)), type = "terms", terms = "s(x1)", newdata.guaranteed = TRUE)
+
 #grid <- expand.grid(replicate(3, seq(from = 0, to = 1, by = .01), simplify = FALSE))
 #colnames(grid) <- c("x0", "x1", "x2")
 grid <- tibble(x0 = 0, x1 = 0, x2 = seq(from = .0, to = 1, by = .1), z = factor(1, levels = c(1, 2)))
