@@ -10,24 +10,28 @@ dat <- tibble(
   x1 = runif(1000),
   x2 = runif(1000),
   z = factor(sample(2, 1000, replace = TRUE)),
+  z2 = as.ordered(z),
   f1 = f1(x1),
   f2 = f2(x2),
-  y = f1 + f2 + rnorm(1000, sd =30)
+  y = f1 + f2 + rnorm(1000, sd =30),
+  x3=rnorm(1000)
 )
 
 dat2 <- dat[dat$x2 < .5, ]
 dat1 <- dat[301:500, ]
 dat3 <- dat[501:1000, ]
 
-form <- as.formula(y ~ z + s(x1, bs = 'cr', pc = 0) + s(x2, k = 6, bs = 'cr', pc = 0))
+form <- as.formula(y ~ z + s(x1,bs="cr") + s(x2, bs="cr"))
+
+#model <- mgcv::gam(form, data = dat1, method = "REML")
 
 # Fit a model
-fits <- lapply(list(dat1, dat2, dat3), function(d){
+models <- lapply(list(dat1, dat2, dat3), function(d){
   fit <- mgcv::gam(form, data = d, method = "REML")
-  metagam::prepare_meta(fit)
+  metagam::strip_rawdata(fit)
 })
 
-predict(fits[[1]], newdata = tibble(x1 = .5, z = factor(1, levels=1:2)), type = "terms", terms = "s(x1)", newdata.guaranteed = TRUE)
+#predict(fits[[1]], newdata = tibble(x1 = .5, z = factor(1, levels=1:2)), type = "terms", terms = "s(x1)", newdata.guaranteed = TRUE)
 
 #grid <- expand.grid(replicate(3, seq(from = 0, to = 1, by = .01), simplify = FALSE))
 #colnames(grid) <- c("x0", "x1", "x2")

@@ -11,6 +11,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = FALSE)
 
 num.datasets <- 5
 ```
@@ -55,10 +56,10 @@ Next, we fit the indivial GAMs for each of the eight datasets.
 ## fit a generalized additive model to each dataset separately
 fits <- lapply(datasets, function(dat){
   ## Full fit using mgcv
-  gamfit <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2), data = dat)
+  gamfit <- mgcv::gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), data = dat)
   ## Extract the necessary components for performing a meta-analysis
   ## This removes all subject-specific data
-  prepare_meta(gamfit)
+  strip_rawdata(gamfit)
 })
 
 ```

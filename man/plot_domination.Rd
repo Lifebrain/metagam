@@ -4,7 +4,13 @@
 \alias{plot_domination}
 \title{Domination plot}
 \usage{
-plot_domination(x, axis, relative = TRUE, title = "Domination Plot")
+plot_domination(
+  x,
+  axis,
+  relative = TRUE,
+  title = "Domination Plot",
+  width = 0.01
+)
 }
 \arguments{
 \item{x}{Object returned by \code{metagam}}
@@ -14,6 +20,8 @@ plot_domination(x, axis, relative = TRUE, title = "Domination Plot")
 \item{relative}{Default to TRUE.}
 
 \item{title}{Title of plot.}
+
+\item{width}{Width of bars.}
 }
 \description{
 Plots the (relative) contribution of the individual GAMs to each data point
