@@ -12,7 +12,6 @@
 #' @return plot
 #' @export
 #'
-#' @importFrom Rdpack reprompt
 #'
 #' @references
 #' \insertAllCited{}

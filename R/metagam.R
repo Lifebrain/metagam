@@ -166,7 +166,11 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
     cohort_estimates = cohort_estimates,
     meta_estimates = meta_estimates,
     pvals = pvals,
-    meta_pvals = meta_pvals
+    meta_pvals = meta_pvals,
+    terms = terms,
+    method = method,
+    intercept = intercept,
+    cohorts = length(models)
   )
   class(result) <- "metagam"
 
