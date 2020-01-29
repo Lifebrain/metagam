@@ -21,15 +21,12 @@ Imports: dplyr,
   metafor,
   metap,
   purrr,
-  Rdpack,
   rlang,
   stringr,
   tibble,
   tidyr,
   viridis
-RdMacros: Rdpack
 RoxygenNote: 7.0.2
-Suggests: 
-    roxygen2,
+Suggests: roxygen2,
     rmarkdown
 VignetteBuilder: knitr

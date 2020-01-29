@@ -23,8 +23,5 @@ plot_heterogeneity(x, axis = NULL, term = NULL, type = "Q", alpha = 0.05, ...)
 plot
 }
 \description{
-The computation of confidence intervals is based on \insertCite{Altman2011}{metagam}.
-}
-\references{
-\insertAllCited{}
+Title
 }

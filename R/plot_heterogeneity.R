@@ -1,6 +1,5 @@
 #' Title
 #'
-#' The computation of confidence intervals is based on \insertCite{Altman2011}{metagam}.
 #'
 #' @param x metagam object
 #' @param axis Which axis
@@ -13,8 +12,6 @@
 #' @export
 #'
 #'
-#' @references
-#' \insertAllCited{}
 #'
 plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = .05, ...)
 {

@@ -16,5 +16,5 @@
 #'
 #' @docType package
 #' @name metagam-package
-#' @importFrom Rdpack reprompt
+#'
 NULL
