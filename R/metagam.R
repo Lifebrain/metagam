@@ -14,7 +14,7 @@
 #' since it may result in estimated zero standard deviation for smooth terms.
 #' @param terms Character vector of terms, smooth or parametric, to be included in function estimate.
 #' Only used if \code{type="iterms"}. Defaults to \code{NULL}, which means
-#' that all smooth terms are computed.
+#' that the first smooth term when listed in alphabetic order is taken.
 #' @param method Method of meta analysis, passed on to \code{metafor::rma.uni}. Defaults to \code{"FE"}. See the documentation to
 #' \code{metafor::rma} for all available options.
 #' @param intercept logical defining whether or not to include the intercept in each smooth
@@ -42,13 +42,27 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
     stop('type must be one of "iterms", "link", and "response"\n')
   }
 
+  # Find the terms from each model
+  model_terms <- purrr::map_dfr(models, function(x) x$term_df)
+
+  if(!is.null(terms) && !all(ind <- terms %in% model_terms$term)){
+    stop("Unknown term ", paste(terms[!ind], collapse = " and "), " requested.\n")
+  }
+
   # If terms are not supplied, find the smooth terms
   if(type == "iterms" && is.null(terms)){
-    terms <- unlist(unique(purrr::map(models, function(x) x$smooth_labels)))
+    terms <- dplyr::arrange(model_terms, .data$term)
+    terms <- dplyr::slice(terms, 1)
+    terms <- terms$term
   }
+
+  # Find the variables corresponding to terms
+  xvars <- dplyr::filter(model_terms, .data$term == terms)
+  xvars <- unlist(unique(purrr::pmap(xvars, function(term, variables) variables)))
 
   # Create grid if not supplied by user
   if(is.null(grid)){
+
     # Find the minimum and maximum from each model
     grid <- purrr::map_dfr(models, function(x){
       purrr::map_dfr(x$var.summary, function(vs){
@@ -60,9 +74,12 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
       })
     })
     # Combine to get overall minimum and maximum
-    grid <- purrr::map(grid, function(x) {
-      if(is.numeric(x)) seq(from = min(x), to = max(x), length.out = grid_size)
-      else sort(x)[[1]]
+    grid <- purrr::imap(grid, function(x, nm) {
+      if(is.numeric(x) && nm %in% xvars) {
+        seq(from = min(x), to = max(x), length.out = grid_size)
+      } else {
+        sort(x)[[1]]
+      }
     })
 
     # Expand
@@ -80,7 +97,7 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
     } else if(type %in% c("link", "response")){
       dplyr::tibble(!!type := pred$fit)
     }
-    estimate <- dplyr::rename_all(estimate, function(x) paste0("est_", x))
+    estimate <- dplyr::rename_all(estimate, function(x) paste0("estimate_", x))
 
     standard_error <- if(type %in% c("iterms", "terms")){
       dplyr::as_tibble(pred$se.fit)
@@ -96,20 +113,20 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
   # Now do the meta-analysis. First reshape the dataframe.
   cohort_estimates <- tidyr::pivot_longer(
     cohort_estimates,
-    cols = union(dplyr::starts_with("est_"), dplyr::starts_with("se_")),
+    cols = union(dplyr::starts_with("estimate_"), dplyr::starts_with("se_")),
     names_to = c(".value", "term"),
     names_pattern = "([[:alpha:]]+)\\_(.*)")
 
 
   # Now nest the estimates at each grid point
   meta_estimates <- dplyr::group_by_at(cohort_estimates,
-                                       dplyr::vars(-"model", -"est", -"se"))
+                                       dplyr::vars(-"model", -"estimate", -"se"))
   meta_estimates <- tidyr::nest(meta_estimates)
 
   meta_estimates <- dplyr::mutate(
     meta_estimates,
     meta_model = purrr::map(.data$data, function(x){
-      metafor::rma(yi = x$est, sei = x$se, method = method)
+      metafor::rma(yi = x$estimate, sei = x$se, method = method)
     })
     )
 
@@ -130,9 +147,10 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
   # Move this to strip_rawdata
   pvals <- purrr::map_dfr(models, function(x) {
     dat <- x$s.table
-    terms <- rownames(dat)
+    tmp_terms <- rownames(dat)
     dat <- dplyr::as_tibble(dat)
-    dat <- dplyr::mutate(dat, term = terms)
+    dat <- dplyr::mutate(dat, term = tmp_terms)
+    dat <- dplyr::filter(dat, .data$term %in% terms)
     dat <- dplyr::select(dat, .data$term, dplyr::everything())
     dat
   }, .id = "model")
@@ -169,6 +187,7 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
     meta_pvals = meta_pvals,
     terms = terms,
     method = method,
+    xvars = xvars,
     intercept = intercept,
     cohorts = length(models)
   )

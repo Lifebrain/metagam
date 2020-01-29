@@ -21,7 +21,7 @@ dat2 <- dat[dat$x2 < .5, ]
 dat1 <- dat[301:500, ]
 dat3 <- dat[501:1000, ]
 
-form <- as.formula(y ~ z + s(x1,bs="cr") + s(x2, bs ="cr") )
+form <- as.formula(y ~ z + s(x1, bs = "cr")+ s(x2,bs="cr") )
 
 #model <- mgcv::gam(form, data = dat1, method = "REML")
 
@@ -31,9 +31,9 @@ models <- lapply(list(dat1, dat2, dat3), function(d){
   metagam::strip_rawdata(fit)
 })
 
-grid <- tibble(x1 = seq(0,1,.1), x2 = 0, z = factor(1, levels = 1:2))
+#grid <- tibble(x1 = seq(0,1,.1), x2 = 0, z = factor(1, levels = 1:2))
 
-object <- metagam(models, grid = grid)
+object <- metagam(models)
 
 
 #predict(fits[[1]], newdata = tibble(x1 = .5, z = factor(1, levels=1:2)), type = "terms", terms = "s(x1)", newdata.guaranteed = TRUE)

@@ -50,13 +50,11 @@ strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
     }
   })
 
-  # Find the smooth terms, what="term" gives the name of the explanatory
-  # variable ("x1") while what="label" gives the smooth ("s(x1)")
-  find_smooth <- function(model, what){
-    unique(purrr::flatten_chr(
-      purrr::map(model$smooth, function(x) x[[what]])
-    ))
-  }
+  # Terms with respective variables
+  term_tab <- purrr::map_dfr(model$smooth, function(x) {
+    dplyr::tibble(term = x[["label"]], variables = list(x[["term"]]))
+    })
+
 
   # Find p-values of smooth terms
   s.table <- summary(model)$s.table
@@ -105,8 +103,8 @@ strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
     Vp = model$Vp,
     Vc = model$Vc,
     n = nrow(model$model),
-    smooth_terms = find_smooth(model, "term"),
-    smooth_labels = find_smooth(model, "label"),
+    smooth_terms = term_tab$term,
+    term_df = term_tab,
     s.table = s.table
   )
 

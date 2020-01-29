@@ -34,7 +34,7 @@ since it may result in estimated zero standard deviation for smooth terms.}
 
 \item{terms}{Character vector of terms, smooth or parametric, to be included in function estimate.
 Only used if \code{type="iterms"}. Defaults to \code{NULL}, which means
-that all smooth terms are computed.}
+that the first smooth term when listed in alphabetic order is taken.}
 
 \item{method}{Method of meta analysis, passed on to \code{metafor::rma.uni}. Defaults to \code{"FE"}. See the documentation to
 \code{metafor::rma} for all available options.}
