@@ -1,19 +1,24 @@
 Package: metagam
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Flexible meta-analysis of generalized additive models
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Oystein Sorensen, Andreas Brandmaier
+Maintainer: Oystein Sorensen <oystein.sorensen.1985@gmail.com>
+Description: This package performs meta-analysis of generalized additive
+    models and generalized additive mixed models. A typical use case is
+    when data cannot be shared across locations, and an overall meta-analytic
+    fit is sought. metagam provides functionality for removing individual
+    participant data from models computed using the mgcv and gamm4 packages such
+    that the model objects can be shared without exposing individual data.
+    Furthermore, methods for meta-analysing these fits are provided.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: dplyr,
   ggplot2,
   mgcv,
+  metafor,
   metap,
-  mvmeta,
   purrr, 
   rlang,
   stringr,

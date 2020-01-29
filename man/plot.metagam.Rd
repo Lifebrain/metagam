@@ -6,6 +6,13 @@
 \usage{
 \method{plot}{metagam}(x, type = 1, ...)
 }
+\arguments{
+\item{x}{metagam object}
+
+\item{type}{Type of plot}
+
+\item{...}{Other arguments to plot.}
+}
 \description{
 Generic plotting function with S3 dispatch
 }

@@ -2,40 +2,59 @@
 % Please edit documentation in R/metagam.R
 \name{metagam}
 \alias{metagam}
-\title{Meta analyze nonlinear models}
+\title{Meta-analysis of generalized additive models}
 \usage{
 metagam(
-  fits,
-  grid,
+  models,
+  grid = NULL,
+  grid_size = 10,
   type = "iterms",
   terms = NULL,
-  method = "fixed",
-  restrict_max = NULL,
-  restrict_min = NULL,
-  intercept = TRUE
+  method = "FE",
+  intercept = FALSE,
+  restrict_range = NULL
 )
 }
 \arguments{
-\item{fits}{List of GAM or GAMM fits of class metagam.}
+\item{models}{List of generalized additive models, each of which has been returned
+by \code{\link{strip_rawdata}}. If the list is named, the names will be used in the output.}
 
-\item{grid}{Grid over which to predict.}
+\item{grid}{Grid of values of the explanatory variables over which to compute the
+estimated smooth terms. Defaults to \code{NULL}, which means that a grid is set up
+for the smooth terms defined by the \code{terms} argument, with length given by
+\code{grid_size} for numeric variables and a single value of each factor variable.}
 
-\item{type}{defaults to "iterms"}
+\item{grid_size}{Numeric value giving the number of elements to use in the grid of explanatory
+variables when \code{grid=NULL}.}
 
-\item{terms}{Character vector of terms, smooth or parametric.}
+\item{type}{Type of prediction to use. Defaults to \code{"iterms"}. Available options
+are \code{"iterms"}, \code{"link"}, and \code{"response"}. See the documentation
+of \code{mgcv::predict.gam} for details. Note that \code{type="terms"} is not supported,
+since it may result in estimated zero standard deviation for smooth terms.}
 
-\item{method}{Method of meta analysis. Defaults to "fixed".}
+\item{terms}{Character vector of terms, smooth or parametric, to be included in function estimate.
+Only used if \code{type="iterms"}. Defaults to \code{NULL}, which means
+that all smooth terms are computed.}
 
-\item{restrict_max}{char}
+\item{method}{Method of meta analysis, passed on to \code{metafor::rma.uni}. Defaults to \code{"FE"}. See the documentation to
+\code{metafor::rma} for all available options.}
 
-\item{restrict_min}{char}
+\item{intercept}{logical defining whether or not to include the intercept in each smooth
+term. Only applies when \code{type = "iterms"}.}
 
-\item{intercept}{logical defining whether or not to shift the output values
-by the intercept. Only applies when \code{type = "terms"} or \code{type = "iterms"}.}
+\item{restrict_range}{Character vector of explanatory variables to restrict such that only
+values within the range for each cohort contribute to the meta-analysis. Default to \code{NULL},
+which means that each model contributes across the whole range specified by \code{grid}. Currently
+not implemented.}
 }
 \value{
 An object of type metagam.
 }
 \description{
-Meta analyze nonlinear models
+Meta-analysis of generalized additive models
+}
+\details{
+It is currently assumed that all models have been fit with the same smooth terms,
+although they do not need to have the same basis functions or knot placement. Future versions
+will also include meta-analysis of parametric terms in the models.
 }
