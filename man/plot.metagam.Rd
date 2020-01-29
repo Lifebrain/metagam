@@ -7,10 +7,13 @@
 \method{plot}{metagam}(x, ...)
 }
 \arguments{
-\item{x}{metagam object}
+\item{x}{Object returned by \code{\link{metagam}}.}
 
 \item{...}{Other arguments to plot.}
 }
+\value{
+A ggplot object.
+}
 \description{
-Plot estimated smooth terms
+Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
 }

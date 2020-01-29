@@ -4,7 +4,7 @@
 #' @param digits Number of digits to print for meta-analytic p-values
 #' @param ... Other arguments
 #'
-#' @return Invisibly returns its input argument \code{x}.
+#' @return The function invisibly returns its input argument \code{x}.
 #' @export
 #'
 print.summary.metagam <- function(x, digits = 4, ...){

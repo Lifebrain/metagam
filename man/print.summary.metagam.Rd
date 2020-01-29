@@ -14,7 +14,7 @@
 \item{...}{Other arguments}
 }
 \value{
-Invisibly returns its input argument \code{x}.
+The function invisibly returns its input argument \code{x}.
 }
 \description{
 Print output from summary of metagam fit.

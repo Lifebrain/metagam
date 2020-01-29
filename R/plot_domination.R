@@ -16,6 +16,8 @@
 #' @param width Width of bars. Default to \code{NULL}, which means it is automatically
 #' determined based on the minimum grid spacing in \code{x}.
 #'
+#' @return A ggplot object.
+#'
 #' @export
 #'
 plot_domination <- function(x, axis = NULL, term = NULL, relative = TRUE, title = "Dominance Plot",

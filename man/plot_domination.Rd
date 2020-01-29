@@ -31,6 +31,9 @@ Defaults to \code{TRUE}.}
 \item{width}{Width of bars. Default to \code{NULL}, which means it is automatically
 determined based on the minimum grid spacing in \code{x}.}
 }
+\value{
+A ggplot object.
+}
 \description{
 Plots the (relative) contribution of the individual GAMs to each data point
 on a given axis. It shows whether and how parts of the axis are dominated

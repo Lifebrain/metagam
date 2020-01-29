@@ -24,7 +24,7 @@ model object, while keeping aggregated quantities. The resulting object can be
 shared without exposing individual participant data.
 }
 \details{
-If \code{model} is of class \code{"gamm"}, only the \code{"gamm"} part of the
+If \code{model} is of class \code{"gamm"}, only the \code{"gam"} part of the
 model will be kept.
 
 Thin plate regression splines (\code{bs='tp'} and \code{bs='ts'}) and Duchon splines \code{bs='ds'}

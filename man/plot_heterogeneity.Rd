@@ -2,26 +2,33 @@
 % Please edit documentation in R/plot_heterogeneity.R
 \name{plot_heterogeneity}
 \alias{plot_heterogeneity}
-\title{Title}
+\title{Heterogeneity Plot}
 \usage{
 plot_heterogeneity(x, axis = NULL, term = NULL, type = "Q", alpha = 0.05, ...)
 }
 \arguments{
-\item{x}{metagam object}
+\item{x}{Object returned by \code{\link{metagam}}.}
 
-\item{axis}{Which axis}
+\item{axis}{Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
+fitted with a single term, the explanatory variable corresponding to this term
+is selected.}
 
-\item{term}{Which term}
+\item{term}{Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
+was fitted with a single term, this one is taken.}
 
-\item{type}{Character specifying which type of plot}
+\item{type}{Character specifying which type of plot. Either \code{"Q"} for the test statistic
+or \code{"p"} for the p-value. Defaults to \code{"Q"}.}
 
-\item{alpha}{Significance level}
+\item{alpha}{Significance level. Defaults to \code{.05}.}
 
 \item{...}{Other arguments to plot.}
 }
 \value{
-plot
+A ggplot object.
 }
 \description{
-Title
+Heterogeneity Plot
+}
+\details{
+This plot visualizes the heterogeneity along the given axis, using Cochrane's Q test.
 }

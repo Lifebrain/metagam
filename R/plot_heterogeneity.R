@@ -1,17 +1,21 @@
-#' Title
+#' Heterogeneity Plot
 #'
 #'
-#' @param x metagam object
-#' @param axis Which axis
-#' @param term Which term
-#' @param type Character specifying which type of plot
-#' @param alpha Significance level
+#' @param x Object returned by \code{\link{metagam}}.
+#' @param axis Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
+#' fitted with a single term, the explanatory variable corresponding to this term
+#' is selected.
+#' @param term Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
+#' was fitted with a single term, this one is taken.
+#' @param type Character specifying which type of plot. Either \code{"Q"} for the test statistic
+#' or \code{"p"} for the p-value. Defaults to \code{"Q"}.
+#' @param alpha Significance level. Defaults to \code{.05}.
 #' @param ... Other arguments to plot.
 #'
-#' @return plot
+#' @return A ggplot object.
 #' @export
 #'
-#'
+#' @details This plot visualizes the heterogeneity along the given axis, using Cochrane's Q test.
 #'
 plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = .05, ...)
 {

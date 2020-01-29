@@ -10,7 +10,7 @@
 #' variable used by the model. For numeric variables this amounts to the minimum
 #' and maximum, and for factors all levels are saved.
 #'
-#' @details If \code{model} is of class \code{"gamm"}, only the \code{"gamm"} part of the
+#' @details If \code{model} is of class \code{"gamm"}, only the \code{"gam"} part of the
 #' model will be kept.
 #'
 #' Thin plate regression splines (\code{bs='tp'} and \code{bs='ts'}) and Duchon splines \code{bs='ds'}

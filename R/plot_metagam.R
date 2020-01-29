@@ -1,9 +1,13 @@
 #' Plot estimated smooth terms
 #'
-#' @param x metagam object
+#' Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
+#'
+#' @param x Object returned by \code{\link{metagam}}.
 #' @param ... Other arguments to plot.
 #'
+#' @return A ggplot object.
 #' @export
+#'
 plot.metagam <- function(x, ...)
 {
   if(length(x$terms) > 1){
