@@ -4,13 +4,17 @@
 #' on a given axis. It shows whether and how parts of the axis are dominated
 #' by certain individual GAMs.
 #'
-#' @param x Object returned by \code{metagam}
-#' @param axis Which variable to plot
-#' @param term Which term to plot
-#' @param relative Default to TRUE.
+#' @param x Object returned by \code{\link{metagam}}.
+#' @param axis Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
+#' fitted with a single term, the explanatory variable corresponding to this term
+#' is selected.
+#' @param term Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
+#' was fitted with a single term, this one is taken.
+#' @param relative Logical specifying whether to have relative or absolute scales.
+#' Defaults to \code{TRUE}.
 #' @param title Title of plot.
 #' @param width Width of bars. Default to \code{NULL}, which means it is automatically
-#' determined based on the minimum grid spacing.
+#' determined based on the minimum grid spacing in \code{x}.
 #'
 #' @export
 #'

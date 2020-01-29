@@ -14,18 +14,22 @@ plot_domination(
 )
 }
 \arguments{
-\item{x}{Object returned by \code{metagam}}
+\item{x}{Object returned by \code{\link{metagam}}.}
 
-\item{axis}{Which variable to plot}
+\item{axis}{Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
+fitted with a single term, the explanatory variable corresponding to this term
+is selected.}
 
-\item{term}{Which term to plot}
+\item{term}{Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
+was fitted with a single term, this one is taken.}
 
-\item{relative}{Default to TRUE.}
+\item{relative}{Logical specifying whether to have relative or absolute scales.
+Defaults to \code{TRUE}.}
 
 \item{title}{Title of plot.}
 
 \item{width}{Width of bars. Default to \code{NULL}, which means it is automatically
-determined based on the minimum grid spacing.}
+determined based on the minimum grid spacing in \code{x}.}
 }
 \description{
 Plots the (relative) contribution of the individual GAMs to each data point

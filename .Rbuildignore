@@ -1,7 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^testdata\.R$
-^oversmoothing_experiment\.R$
 ^\.travis\.yml$
 ^README\.Rmd$
 Makefile
+^misc/testdata\.R$
