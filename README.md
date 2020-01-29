@@ -150,24 +150,5 @@ plot(metafit)
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;" />
 
-The `plot_heterogeneity()` function visualizes the heterogeneity of the
-separate fits as measured by the Q-statistic of Cochrane’s Q
-test:
-
-``` r
-plot_heterogeneity(metafit)
-```
-
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;" />
-
-The `plot_domination()` function measures the relative contribution of
-each dataset along the
-x-axis:
-
-``` r
-plot_domination(metafit)
-```
-
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" />
-
-The other smooth terms can be analyzed similarly.
+For further documentation and vignettes, please visit the [package
+website](https://lifebrain.github.io/metagam/).

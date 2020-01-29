@@ -105,17 +105,4 @@ The default plotting function shows the fits on the separate datasets together w
 plot(metafit)
 ```
 
-The `plot_heterogeneity()` function visualizes the heterogeneity of the separate fits as measured by the Q-statistic of Cochrane's Q test:
-
-```{r out.width="60%", fig.align="center"}
-plot_heterogeneity(metafit)
-```
-
-
-The `plot_domination()` function measures the relative contribution of each dataset along the x-axis:
-
-```{r out.width="60%", fig.align="center"}
-plot_domination(metafit)
-```
-
-The other smooth terms can be analyzed similarly.
+For further documentation and vignettes, please visit the [package website](https://lifebrain.github.io/metagam/).
