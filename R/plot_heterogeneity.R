@@ -16,8 +16,16 @@
 #' @references
 #' \insertAllCited{}
 #'
-plot_heterogeneity <- function(x, axis, term, type = "Q", alpha = .05, ...)
+plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = .05, ...)
 {
+
+  if(is.null(axis)){
+    axis <- x$xvars
+  }
+
+  if(is.null(term)){
+    term <- x$terms
+  }
 
   dat <- x$meta_estimates
   dat <- dplyr::filter(dat, .data$term == !!term)

@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-plot_domination <- function(x, axis, term, relative = TRUE, title = "Dominance Plot",
+plot_domination <- function(x, axis = NULL, term = NULL, relative = TRUE, title = "Dominance Plot",
                             width = NULL)
 {
 
@@ -24,6 +24,14 @@ plot_domination <- function(x, axis, term, relative = TRUE, title = "Dominance P
     position = "fill"
   } else {
     position = "stacked"
+  }
+
+  if(is.null(axis)){
+    axis <- x$xvars
+  }
+
+  if(is.null(term)){
+    term <- x$terms
   }
 
   dat <- dplyr::filter(x$cohort_estimates, .data$term == !!term)

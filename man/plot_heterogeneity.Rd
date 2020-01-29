@@ -4,7 +4,7 @@
 \alias{plot_heterogeneity}
 \title{Title}
 \usage{
-plot_heterogeneity(x, axis, term, type = "Q", alpha = 0.05, ...)
+plot_heterogeneity(x, axis = NULL, term = NULL, type = "Q", alpha = 0.05, ...)
 }
 \arguments{
 \item{x}{metagam object}

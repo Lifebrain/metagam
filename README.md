@@ -141,30 +141,33 @@ summary(metafit)
 ```
 
 The default plotting function shows the fits on the separate datasets
-together with the meta-analytic fit.
+together with the meta-analytic
+fit.
 
 ``` r
 plot(metafit)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;" />
 
 The `plot_heterogeneity()` function visualizes the heterogeneity of the
-separate fits as measured by the Q-statistic of Cochrane’s Q test:
+separate fits as measured by the Q-statistic of Cochrane’s Q
+test:
 
 ``` r
-plot_heterogeneity(metafit, axis = "x0", term = "s(x0)")
+plot_heterogeneity(metafit)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;" />
 
 The `plot_domination()` function measures the relative contribution of
-each dataset along the x-axis:
+each dataset along the
+x-axis:
 
 ``` r
-plot_domination(metafit, axis = "x0", term = "s(x0)")
+plot_domination(metafit)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" />
 
 The other smooth terms can be analyzed similarly.

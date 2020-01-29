@@ -6,8 +6,8 @@
 \usage{
 plot_domination(
   x,
-  axis,
-  term,
+  axis = NULL,
+  term = NULL,
   relative = TRUE,
   title = "Dominance Plot",
   width = NULL

@@ -2,17 +2,15 @@
 % Please edit documentation in R/plot_metagam.R
 \name{plot.metagam}
 \alias{plot.metagam}
-\title{Generic plotting function with S3 dispatch}
+\title{Plot estimated smooth terms}
 \usage{
-\method{plot}{metagam}(x, type = 1, ...)
+\method{plot}{metagam}(x, ...)
 }
 \arguments{
 \item{x}{metagam object}
 
-\item{type}{Type of plot}
-
 \item{...}{Other arguments to plot.}
 }
 \description{
-Generic plotting function with S3 dispatch
+Plot estimated smooth terms
 }
