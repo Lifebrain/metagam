@@ -4,3 +4,6 @@
 ^README\.Rmd$
 Makefile
 ^misc/testdata\.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
