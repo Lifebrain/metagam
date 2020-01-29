@@ -7,15 +7,18 @@
 plot_domination(
   x,
   axis,
+  term,
   relative = TRUE,
-  title = "Domination Plot",
+  title = "Dominance Plot",
   width = 0.01
 )
 }
 \arguments{
 \item{x}{Object returned by \code{metagam}}
 
-\item{axis}{Axis}
+\item{axis}{Which variable to plot}
+
+\item{term}{Which term to plot}
 
 \item{relative}{Default to TRUE.}
 

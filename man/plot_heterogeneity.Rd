@@ -4,12 +4,14 @@
 \alias{plot_heterogeneity}
 \title{Title}
 \usage{
-plot_heterogeneity(x, axis, ...)
+plot_heterogeneity(x, axis, term, ...)
 }
 \arguments{
 \item{x}{metagam object}
 
 \item{axis}{Which axis}
+
+\item{term}{Which term}
 
 \item{...}{Other arguments to plot.}
 }

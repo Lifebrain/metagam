@@ -119,8 +119,7 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
         estimate = pred$pred,
         se = pred$se,
         ci.lb = pred$ci.lb,
-        ci.ub = pred$ci.ub,
-        res = list(stats::residuals(x))
+        ci.ub = pred$ci.ub
       )
       }))
 
