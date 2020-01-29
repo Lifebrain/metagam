@@ -9,12 +9,13 @@
 #' @param term Which term to plot
 #' @param relative Default to TRUE.
 #' @param title Title of plot.
-#' @param width Width of bars.
+#' @param width Width of bars. Default to \code{NULL}, which means it is automatically
+#' determined based on the minimum grid spacing.
 #'
 #' @export
 #'
-plot_domination <- function(x, axis, term, relative=TRUE, title="Dominance Plot",
-                            width = .01)
+plot_domination <- function(x, axis, term, relative = TRUE, title = "Dominance Plot",
+                            width = NULL)
 {
 
   # position = fill gives percent stacked bar,
@@ -29,14 +30,22 @@ plot_domination <- function(x, axis, term, relative=TRUE, title="Dominance Plot"
   dat <- dplyr::rename_at(dat, dplyr::vars(axis), ~ "x")
   dat <- dplyr::mutate(dat, y = 1 / .data$se^2)
 
+  if(is.null(width)){
+    width <- min(abs(diff(dat[["x"]])))
+  }
+
+
   # TODO: determine width parameter automatically
-  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = .data$x, y = .data$y, fill = .data$model),
-                        width = width)+
+  gp <- ggplot2::ggplot(dat,
+                        ggplot2::aes(x = .data$x, y = .data$y,
+                                     fill = .data$model, width = width)) +
     ggplot2::geom_bar(position=position,stat="identity")+
     ggplot2::theme_minimal()+
     viridis::scale_fill_viridis(discrete = T) +
     ggplot2::ggtitle(title)+
-    ggplot2::ylab("Relative Influence")
+    ggplot2::ylab("Relative Influence") +
+    ggplot2::xlab(axis) +
+    ggplot2::labs(fill = "Cohort")
 
   return(gp)
 

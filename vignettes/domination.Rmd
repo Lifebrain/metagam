@@ -11,7 +11,6 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(eval = FALSE)
 
 num.datasets <- 5
 ```
@@ -54,7 +53,7 @@ Next, we fit the indivial GAMs for each of the eight datasets.
 ```{r pressure, echo=FALSE}
 
 ## fit a generalized additive model to each dataset separately
-fits <- lapply(datasets, function(dat){
+models <- lapply(datasets, function(dat){
   ## Full fit using mgcv
   gamfit <- mgcv::gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), data = dat)
   ## Extract the necessary components for performing a meta-analysis
@@ -71,7 +70,7 @@ Then, we create a grid running over axis `x2` and run a meta-analysis over these
 ```{r}
 
 grid <- data.frame(x0 = 0, x1 = 0, x2 = seq(from = 0, to = 1, by = .01))
-meta_analysis <- metagam(fits, grid = grid, terms = "s(x2)", intercept = FALSE)
+meta_analysis <- metagam(models, grid = grid, terms = "s(x2)", intercept = TRUE)
 
 ```
 
@@ -84,6 +83,6 @@ first dataset is almost zero whereas the influence of the second dataset is almo
 on the righthand side.
 
 ```{r}
-plot_domination(meta_analysis, axis="x2")
+plot_domination(meta_analysis, axis = "x2", term = "s(x2)")
 ```
 

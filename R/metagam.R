@@ -28,6 +28,10 @@
 #' although they do not need to have the same basis functions or knot placement. Future versions
 #' will also include meta-analysis of parametric terms in the models.
 #'
+#' p-values are truncated below at 1e-16 before computing meta-analytic p-values
+#' to ensure that no values are identically zero, which would imply that the
+#' alternative hypothesis be true with no uncertainty.
+#'
 #' @return An object of type metagam.
 #' @export
 #'
@@ -150,7 +154,7 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
         sumlog = metap::sumlog
         ),
       function(f, n){
-        dplyr::tibble(!!n := list(f(!!data$`p-value`)))
+        dplyr::tibble(!!n := list(f(pmax(!!data$`p-value`, 1e-16))))
       })
     df <- dplyr::mutate_all(df, list(pval = ~ as.numeric(.[[1]]$p)))
     df <- dplyr::mutate(df, term = term)

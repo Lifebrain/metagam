@@ -19,12 +19,14 @@ Imports: dplyr,
   mgcv,
   metafor,
   metap,
-  purrr, 
+  purrr,
+  Rdpack,
   rlang,
   stringr,
   tibble,
   tidyr,
   viridis
+RdMacros: Rdpack
 RoxygenNote: 7.0.2
 Suggests: 
     roxygen2,

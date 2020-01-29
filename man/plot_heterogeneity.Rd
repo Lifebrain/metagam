@@ -4,7 +4,7 @@
 \alias{plot_heterogeneity}
 \title{Title}
 \usage{
-plot_heterogeneity(x, axis, term, ...)
+plot_heterogeneity(x, axis, term, type = "Q", alpha = 0.05, ...)
 }
 \arguments{
 \item{x}{metagam object}
@@ -13,11 +13,18 @@ plot_heterogeneity(x, axis, term, ...)
 
 \item{term}{Which term}
 
+\item{type}{Character specifying which type of plot}
+
+\item{alpha}{Significance level}
+
 \item{...}{Other arguments to plot.}
 }
 \value{
 plot
 }
 \description{
-Title
+The computation of confidence intervals is based on \insertCite{Altman2011}{metagam}.
+}
+\references{
+\insertAllCited{}
 }

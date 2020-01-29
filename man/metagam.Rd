@@ -57,4 +57,8 @@ Meta-analysis of generalized additive models
 It is currently assumed that all models have been fit with the same smooth terms,
 although they do not need to have the same basis functions or knot placement. Future versions
 will also include meta-analysis of parametric terms in the models.
+
+p-values are truncated below at 1e-16 before computing meta-analytic p-values
+to ensure that no values are identically zero, which would imply that the
+alternative hypothesis be true with no uncertainty.
 }
