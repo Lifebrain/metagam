@@ -33,4 +33,6 @@ Imports: dplyr,
 RoxygenNote: 7.0.2
 Suggests: roxygen2,
     rmarkdown
+URL: https://github.com/Lifebrain/metagam
+BugReports: https://github.com/Lifebrain/metagam/issues
 VignetteBuilder: knitr
