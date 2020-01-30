@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_dominance.R
 \name{plot_dominance}
 \alias{plot_dominance}
-\title{Domination plot}
+\title{Dominance plot}
 \usage{
 plot_dominance(
   x,
@@ -42,6 +42,6 @@ by certain individual GAMs.
 \examples{
 # See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/dominance.html
 # or by typing the following in the console:
-# vignette("domination")
+# vignette("Dominance")
 
 }

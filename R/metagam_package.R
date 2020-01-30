@@ -11,7 +11,7 @@
 #' \code{\link{strip_rawdata}} and computes meta-analytic fits.
 #'
 #' @section Plotting:
-#' The functions \code{\link{plot_domination}} and \code{\link{plot_heterogeneity}}
+#' The functions \code{\link{plot_dominance}} and \code{\link{plot_heterogeneity}}
 #' can be used to study the meta-analytic fit computed by \code{\link{strip_rawdata}}.
 #'
 #' @docType package
