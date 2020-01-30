@@ -2,11 +2,11 @@ Package: metagam
 Type: Package
 Title: Flexible meta-analysis of generalized additive models
 Version: 0.1.0
-Authors@R: c(person("Sørensen", "Øystein", 
+Authors@R: c(person("Øystein", "Sørensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0003-0724-3542")),
-            person("Brandmaier", "Andreas", 
+            person("Andreas", "Brandmaier", 
                     role = c("aut")),
             person("Athanasia Mo", "Mowinckel", 
                     email = "a.m.mowinckel@psykologi.uio.no", 
