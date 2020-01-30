@@ -4,7 +4,14 @@
 \alias{plot_heterogeneity}
 \title{Heterogeneity Plot}
 \usage{
-plot_heterogeneity(x, axis = NULL, term = NULL, type = "Q", alpha = 0.05, ...)
+plot_heterogeneity(
+  x,
+  axis = x$xvars,
+  term = NULL,
+  type = "Q",
+  alpha_thresh = 0.05,
+  ...
+)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
@@ -19,9 +26,9 @@ was fitted with a single term, this one is taken.}
 \item{type}{Character specifying which type of plot. Either \code{"Q"} for the test statistic
 or \code{"p"} for the p-value. Defaults to \code{"Q"}.}
 
-\item{alpha}{Significance level. Defaults to \code{.05}.}
+\item{alpha_thresh}{Significance level. Defaults to \code{.05}.}
 
-\item{...}{Other arguments to plot.}
+\item{...}{Other arguments to ggplot.}
 }
 \value{
 A ggplot object.

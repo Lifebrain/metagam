@@ -29,13 +29,6 @@ strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
   supported_smooths <- c("pspline.smooth", "tensor.smooth", "Bspline.smooth",
                          "cp.smooth", "cr.smooth", "cyclic.smooth", "t2.smooth")
 
-  check_smooths <- function(x, supported_smooths){
-    if(!inherits(x, supported_smooths))
-      stop(paste0("metagam currently supports the following splines:\n",
-                  paste(supported_smooths, collapse = "\n"),
-                  "\n\nSee the Details section in the documentation for strip_rawdata()."))
-  }
-
   # Validation
   if(!(inherits(model, "gam") | inherits(model, "gamm"))){
     stop('model must be of class "gam" or "gamm".\n')
@@ -119,4 +112,12 @@ strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
   }
 
   return(obj)
+}
+
+
+check_smooths <- function(x, supported_smooths){
+  if(!inherits(x, supported_smooths))
+    stop(paste0("metagam currently supports the following splines:\n",
+                paste(supported_smooths, collapse = "\n"),
+                "\n\nSee the Details section in the documentation for strip_rawdata()."))
 }

@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+# loads all new features
+devtools::load_all(".")
 ```
 
 The metagam package offers a way to visualize the heterogeneity of the estimated smooth functions over the range of explanatory variables. This will be illustrated here.
@@ -22,15 +24,15 @@ The metagam package offers a way to visualize the heterogeneity of the estimated
 ## Simulation
 
 
-```{r setup}
+```{r setup, eval=FALSE}
 library(metagam)
-library(mgcv)
 ```
 
 
 We start by simulating 5 datasets using the `gamSim()` function from mgcv. We use the response $y$ and the explanatory variable $x_{2}$, but add an additional shift $\beta x_{2}^{2}$ where $\beta_{2}$ differs between datasets, yielding heterogenous data.
 
 ```{r}
+library(mgcv)
 set.seed(1233)
 shifts <- c(0, .5, 1, 0, -1)
 datasets <- lapply(shifts, function(x) {
@@ -66,6 +68,13 @@ Next, we plot the separate estimates together with the meta-analytic fit. We cle
 
 ```{r}
 plot(meta_analysis)
+```
+
+The plotting function for the meta-analysis object is a ggplot2-object, and can thus be altered using standard ggplot syntax. To learn more about customization of ggplot2-objects, please [see the ggplot2 documentation](https://ggplot2.tidyverse.org/).
+
+```{r}
+plot(meta_analysis) + 
+  ggplot2::scale_colour_brewer(palette = "Set1")
 ```
 
 

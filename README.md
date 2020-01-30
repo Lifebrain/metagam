@@ -7,6 +7,14 @@
 
 [![Travis build
 status](https://travis-ci.org/lifebrain/metagam.svg?branch=master)](https://travis-ci.org/lifebrain/metagam)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/Lifebrain/metagam?branch=master&svg=true)](https://ci.appveyor.com/project/Lifebrain/metagam)
+[![Codecov test
+coverage](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam?branch=master)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.org/package=metagam)
 <!-- badges: end -->
 
 ## Overview
@@ -87,3 +95,10 @@ summary(meta_analysis)
 
 For further documentation and vignettes, please visit the [package
 website](https://lifebrain.github.io/metagam/).
+
+## Code of Conduct
+
+Please note that the metagam project is released with a [Contributor
+Code of
+Conduct](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html).
+By contributing to this project, you agree to abide by its terms.

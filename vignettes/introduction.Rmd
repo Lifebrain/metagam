@@ -15,11 +15,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+devtools::load_all(".")
 ```
 
-```{r setup}
-library(metagam)
-```
 
 The purpose of the metagam package is to meta-analyze generalized additive models (GAMs), including generalized additive mixed models (GAMMs). The main application we have in mind is the case in which researchers at different locations have the same type of data, but are not allowed to share the rawdata. The metagam package offers an opportunity to gain statistical power by fitting similar GAMs to the data in each location, removing individual participant data from the model objects such that they can be shared to a common location, and finally obtaining a meta-analytic GAM fit from the individual models. The methodology is described in detail in a paper which will soon (as of January 2020) be public.
 
@@ -30,6 +28,10 @@ The reason the methods in metagam are needed, is that current meta-analytic appr
 Assume some data of interest are located in three different cohorts. In order to increase statistical power and hence be more able to detect relationships in the data, we would ideally fit a GAM to all three datasets combined, using a model on the form `y ~ s(x0) + s(x1) + s(x2)`, where `y` is an outcome of interest and `x1` and `x2` are explanatory variables. The smooth functions `s()` allow the outcome to vary nonlinearly as a function of each explanatory variable. When all three datasets are not available in a single location, we cannot fit a GAM using this mega-analytic approach. The metagam package provides a flexible solution to this problem, which here will be illustrated.
 
 We start by simulation three datasets using the `gamSim()` function from mgcv.
+
+```{r, eval=FALSE}
+library(metagam)
+```
 
 ```{r, message=FALSE}
 library(mgcv)

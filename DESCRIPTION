@@ -2,12 +2,16 @@ Package: metagam
 Type: Package
 Title: Flexible meta-analysis of generalized additive models
 Version: 0.1.0
-Authors@R: c(person("Sørensen", "Øystein", 
+Authors@R: c(person("Øystein", "Sørensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0003-0724-3542")),
-            person("Brandmaier", "Andreas", 
-                    role = c("aut")))
+            person("Andreas", "Brandmaier", 
+                    role = c("aut")),
+            person("Athanasia Mo", "Mowinckel", 
+                    email = "a.m.mowinckel@psykologi.uio.no", 
+                    role = c("aut"),
+                    comment = c(ORCID = "0000-0002-5756-0223")))
 Description: This package performs meta-analysis of generalized additive
     models and generalized additive mixed models. A typical use case is
     when data cannot be shared across locations, and an overall meta-analytic
@@ -18,21 +22,26 @@ Description: This package performs meta-analysis of generalized additive
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: dplyr,
-  ggplot2,
-  knitr,
-  mgcv,
-  metafor,
-  metap,
-  purrr,
-  rlang,
-  stringr,
-  tibble,
-  tidyr,
-  viridis
+Imports: 
+    mgcv,
+    dplyr,
+    ggplot2,
+    knitr,
+    metafor,
+    metap,
+    purrr,
+    rlang,
+    stringr,
+    tibble,
+    tidyr,
+    viridis
 RoxygenNote: 7.0.2
-Suggests: roxygen2,
-    rmarkdown
+Suggests: 
+    roxygen2,
+    rmarkdown,
+    devtools,
+    covr,
+    testthat (>= 2.1.0)
 URL: https://lifebrain.github.io/metagam/, https://github.com/Lifebrain/metagam
 BugReports: https://github.com/Lifebrain/metagam/issues
 VignetteBuilder: knitr
