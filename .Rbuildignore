@@ -7,3 +7,5 @@ Makefile
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^appveyor\.yml$
+^codecov\.yml$

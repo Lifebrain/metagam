@@ -10,12 +10,18 @@ knitr::opts_chunk$set(
   comment = "#>",
   out.width = "100%"
 )
+devtools::load_all(".")
+library(mgcv)
 ```
 
 # metagam
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/lifebrain/metagam.svg?branch=master)](https://travis-ci.org/lifebrain/metagam)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/Lifebrain/metagam?branch=master&svg=true)](https://ci.appveyor.com/project/Lifebrain/metagam)
+[![Codecov test coverage](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam?branch=master)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.org/package=metagam)
 <!-- badges: end -->
 
 
@@ -35,7 +41,7 @@ remotes::install_github("lifebrain/metagam")
 ```
 ## Application Example
 
-```{r}
+```{r, eval = FALSE}
 library(metagam)
 library(mgcv)
 ```

@@ -31,8 +31,11 @@ Imports: dplyr,
   tidyr,
   viridis
 RoxygenNote: 7.0.2
-Suggests: roxygen2,
-    rmarkdown
+Suggests: 
+    roxygen2,
+    rmarkdown,
+    devtools,
+    covr
 URL: https://lifebrain.github.io/metagam/, https://github.com/Lifebrain/metagam
 BugReports: https://github.com/Lifebrain/metagam/issues
 VignetteBuilder: knitr
