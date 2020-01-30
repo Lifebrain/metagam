@@ -26,7 +26,7 @@ environment:
 
 build_script:
   - travis-tool.sh install_r BiocManager
-  #- travis-tool.sh install_bioc multtest
+  - travis-tool.sh install_bioc multtest
   - travis-tool.sh install_deps
 
 test_script:
