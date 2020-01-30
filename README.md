@@ -15,7 +15,7 @@ metagam is an R-package for flexible meta-analysis of generalized
 additive models (GAMs). Its main application is cases in which raw data
 are located in multiple locations, and cannot be shared due to ethical
 or regulatory restrictions. metagam provides functions for removing all
-individual participant from from GAMs fitted separately at each
+individual participant data from from GAMs fitted separately at each
 location, such that the resulting object can be shared to a central
 location. Next, metagam provides functions for meta-analysing these
 fitted GAMs using pointwise meta-analysis, as well as plotting and

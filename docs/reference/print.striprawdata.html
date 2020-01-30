@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot estimated smooth terms — plot.metagam • metagam</title>
+<title>Print method for striprawdata — print.striprawdata • metagam</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Plot estimated smooth terms — plot.metagam" />
-<meta property="og:description" content="Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort." />
+<meta property="og:title" content="Print method for striprawdata — print.striprawdata" />
+<meta property="og:description" content="Print method for striprawdata" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,40 +123,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot estimated smooth terms</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Lifebrain/metagam/blob/master/R/plot_metagam.R'><code>R/plot_metagam.R</code></a></small>
-    <div class="hidden name"><code>plot.metagam.Rd</code></div>
+    <h1>Print method for striprawdata</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Lifebrain/metagam/blob/master/R/summary_strip_rawdata.R'><code>R/summary_strip_rawdata.R</code></a></small>
+    <div class="hidden name"><code>print.striprawdata.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.</p>
+    <p>Print method for striprawdata</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for metagam</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for striprawdata</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object returned by <code><a href='metagam.html'>metagam</a></code>.</p></td>
+      <td><p>Object of class <code>striprawdata</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments to plot.</p></td>
+      <td><p>Other arguments.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
-fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
-color codes.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function currently only works for meta-analytic estimates of a single smooth term,
-alternatively meta-analysis of response or link function.</p>
+    <p>The function invisibly returns its argument.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -164,7 +158,6 @@ alternatively meta-analysis of response or link function.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>

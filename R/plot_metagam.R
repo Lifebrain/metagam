@@ -5,7 +5,13 @@
 #' @param x Object returned by \code{\link{metagam}}.
 #' @param ... Other arguments to plot.
 #'
-#' @return A ggplot object.
+#' @return A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
+#' fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
+#' color codes.
+#'
+#' @details This function currently only works for meta-analytic estimates of a single smooth term,
+#' alternatively meta-analysis of response or link function.
+#'
 #' @export
 #'
 plot.metagam <- function(x, ...)

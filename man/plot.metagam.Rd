@@ -12,8 +12,14 @@
 \item{...}{Other arguments to plot.}
 }
 \value{
-A ggplot object.
+A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
+fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
+color codes.
 }
 \description{
 Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
+}
+\details{
+This function currently only works for meta-analytic estimates of a single smooth term,
+alternatively meta-analysis of response or link function.
 }
