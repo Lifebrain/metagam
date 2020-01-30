@@ -73,14 +73,14 @@ summary(meta_analysis)
 #> 
 #> Meta-analytic p-values of smooth terms:
 #> 
-#> Test                     s(x2)
-#> ----------------------  ------
-#> Stouffer's sum of z          0
-#> Edgington's sum of p         0
-#> Wilkinson's maximum p        0
-#> Wilkinson's minimum p        0
-#> logit p method               0
-#> Fisher's sum of logs         0
+#> Test                    s(x2)     
+#> ----------------------  ----------
+#> Stouffer's sum of z     2.547e-46 
+#> Edgington's sum of p    6.158e-48 
+#> Wilkinson's maximum p   1.000e-48 
+#> Wilkinson's minimum p   3.000e-16 
+#> logit p method          1.628e-19 
+#> Fisher's sum of logs    6.219e-45
 ```
 
 For further documentation and vignettes, please visit the [package
