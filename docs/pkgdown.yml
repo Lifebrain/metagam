@@ -1,8 +1,0 @@
-pandoc: '2.6'
-pkgdown: 1.4.1
-pkgdown_sha: ~
-articles:
-  domination: domination.html
-  heterogeneity: heterogeneity.html
-  introduction: introduction.html
-

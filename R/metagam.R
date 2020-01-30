@@ -34,9 +34,7 @@
 #'
 #' @return An object of type metagam.
 #' @export
-#'
 #' @example /inst/examples/metagam_examples.R
-#'
 metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms = NULL,
                     method = "FE", intercept = FALSE, restrict_range = NULL){
 

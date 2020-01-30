@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 )
 # loads all new features
 devtools::load_all(".")
-library(mgcv)
 ```
 
 The metagam package offers a way to visualize the heterogeneity of the estimated smooth functions over the range of explanatory variables. This will be illustrated here.
@@ -27,7 +26,6 @@ The metagam package offers a way to visualize the heterogeneity of the estimated
 
 ```{r setup, eval=FALSE}
 library(metagam)
-library(mgcv)
 ```
 
 

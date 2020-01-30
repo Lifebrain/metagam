@@ -11,7 +11,6 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 devtools::load_all(".")
-library(mgcv)
 ```
 
 # metagam
@@ -43,7 +42,6 @@ remotes::install_github("lifebrain/metagam")
 
 ```{r, eval = FALSE}
 library(metagam)
-library(mgcv)
 ```
 
 Simulate three datasets and fit a GAM to each of them. Then use `strip_rawdata()` from metagam to remove individual participant data.

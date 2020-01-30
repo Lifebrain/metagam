@@ -7,6 +7,14 @@
 
 [![Travis build
 status](https://travis-ci.org/lifebrain/metagam.svg?branch=master)](https://travis-ci.org/lifebrain/metagam)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/Lifebrain/metagam?branch=master&svg=true)](https://ci.appveyor.com/project/Lifebrain/metagam)
+[![Codecov test
+coverage](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam?branch=master)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.org/package=metagam)
 <!-- badges: end -->
 
 ## Overview
@@ -41,9 +49,6 @@ remotes::install_github("lifebrain/metagam")
 
 ``` r
 library(metagam)
-library(mgcv)
-#> Loading required package: nlme
-#> This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.
 ```
 
 Simulate three datasets and fit a GAM to each of them. Then use
