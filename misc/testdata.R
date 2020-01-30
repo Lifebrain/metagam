@@ -23,7 +23,10 @@ dat3 <- dat[501:1000, ]
 
 form <- as.formula(y ~ z + s(x1, bs = "cr")+ s(x2,bs="cr") )
 
-#model <- mgcv::gam(form, data = dat1, method = "REML")
+b <- mgcv::gam(form, data = dat1, method = "REML")
+model <- strip_rawdata(b)
+summary(model)
+
 
 # Fit a model
 models <- lapply(list(dat1, dat2, dat3), function(d){

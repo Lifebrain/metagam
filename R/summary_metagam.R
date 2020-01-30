@@ -45,3 +45,6 @@ summary.metagam <- function(object, ...){
   ret
 
 }
+
+
+

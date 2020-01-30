@@ -50,11 +50,13 @@ strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
     }
   })
 
+  # Original mgcv::gam output
+  mgcv_output <- utils::capture.output(summary(model))
+
   # Terms with respective variables
   term_tab <- purrr::map_dfr(model$smooth, function(x) {
     dplyr::tibble(term = x[["label"]], variables = list(x[["term"]]))
     })
-
 
   # Find p-values of smooth terms
   s.table <- summary(model)$s.table
@@ -105,10 +107,11 @@ strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
     n = nrow(model$model),
     smooth_terms = term_tab$term,
     term_df = term_tab,
-    s.table = s.table
+    s.table = s.table,
+    mgcv_output = mgcv_output
   )
 
-  class(obj) <- class(model)
+  class(obj) <- c("striprawdata", class(model))
 
   if(!is.null(path)) {
     print(paste("Saving object to", path))

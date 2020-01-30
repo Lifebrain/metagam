@@ -2,8 +2,10 @@
 
 S3method(plot,metagam)
 S3method(print,metagam)
+S3method(print,striprawdata)
 S3method(print,summary.metagam)
 S3method(summary,metagam)
+S3method(summary,striprawdata)
 export(":=")
 export(.data)
 export(as_label)
