@@ -20,7 +20,11 @@ plot.metagam <- function(x, ...)
 
   prepare_df <- function(df){
     df <- dplyr::rename_at(df, dplyr::vars(!!x$xvars), ~ "x")
-    dplyr::filter(df, .data$term == !!x$terms)
+    if(x$type == "iterms") {
+      dplyr::filter(df, .data$term == !!x$terms)
+    } else {
+      df
+    }
   }
 
 
@@ -32,7 +36,7 @@ plot.metagam <- function(x, ...)
                        linetype = "dashed") +
     ggplot2::geom_line(data = metadat) +
     ggplot2::xlab(x$xvars) +
-    ggplot2::ylab(x$terms) +
+    ggplot2::ylab(if(x$type == "iterms") x$terms else x$type) +
     ggplot2::theme_minimal() +
     ggplot2::labs(color = "Dataset")
 

@@ -1,0 +1,103 @@
+---
+title: "Introduction"
+author: "Øystein Sørensen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(metagam)
+```
+
+The purpose of the metagam package is to meta-analyze generalized additive models (GAMs), including generalized additive mixed models (GAMMs). The main application we have in mind is the case in which researchers at different locations have the same type of data, but are not allowed to share the rawdata. The metagam package offers an opportunity to gain statistical power by fitting similar GAMs to the data in each location, removing individual participant data from the model objects such that they can be shared to a common location, and finally obtaining a meta-analytic GAM fit from the individual models. The methodology is described in detail in a paper which will soon (as of January 2020) be public.
+
+The reason the methods in metagam are needed, is that current meta-analytic approaches mainly focusing on combining model parameters, e.g., regression coefficients or correlations. This approach works well in many cases, but there are many important problems for which it is impractical or impossible to use parametric models. GAMs offer a flexible way to fit various functional forms @Wood2017. Some current meta-analytic approaches to GAMs have required exactly the same basis functions and knot placement to be used in the model fitted to each dataset, but this is in general suboptimal and when the range of some explanatory variable differs between cohorts, it may often lead to models that are not identifiable. metagam hence instead combines the model fits (predictions) over some grid specified by the user.
+
+# Basic Usage Example
+
+Assume some data of interest are located in three different cohorts. In order to increase statistical power and hence be more able to detect relationships in the data, we would ideally fit a GAM to all three datasets combined, using a model on the form `y ~ s(x0) + s(x1) + s(x2)`, where `y` is an outcome of interest and `x1` and `x2` are explanatory variables. The smooth functions `s()` allow the outcome to vary nonlinearly as a function of each explanatory variable. When all three datasets are not available in a single location, we cannot fit a GAM using this mega-analytic approach. The metagam package provides a flexible solution to this problem, which here will be illustrated.
+
+We start by simulation three datasets using the `gamSim()` function from mgcv.
+
+```{r, message=FALSE}
+library(mgcv)
+## simulate three datasets
+set.seed(123)
+datasets <- lapply(1:3, function(x) gamSim(scale = 3, verbose = FALSE))
+```
+
+In each data location, we assume a GAM with the generic form `y~s(x0)+s(x1)+s(x2)` is fit to the data. Notably, model parameters like knot locations, number of basis functions, and smoothing method does not need to be identical in each separate fit. Instead, the parameters can be optimized independently to fit the data in each location.
+
+Here is an example:
+
+```{r}
+## Data location 1
+fit1 <- gam(y ~ s(x0, k = 8, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), 
+            data = datasets[[1]])
+
+## Data location 2, use P-splines for the first and third term
+fit2 <- gam(y ~ s(x0, bs = "ps") + s(x1, k = 20, bs = "cr") + s(x2, bs = "bs"), 
+            data = datasets[[2]])
+
+## Data location 3, use maximum likelihood for smoothing
+fit3 <- gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), 
+            data = datasets[[3]], method = "ML")
+```
+
+The `gam` objects `fit1`, `fit2`, and `fit3` contain individual participant data in various forms, and hence there are many cases in which these should not be shared. The function `strip_rawdata()` from metagam removes all such rawdata. We here illustrate how this function can be applied at each data location in order to obtain a model fit that can be shared.
+
+```{r}
+## Data location 1
+fit_no_raw1 <- strip_rawdata(fit1)
+
+## Data location 2
+fit_no_raw2 <- strip_rawdata(fit2)
+
+## Data location 3
+fit_no_raw3 <- strip_rawdata(fit3)
+```
+
+Now assume that the objects `fit_no_raw1`, `fit_no_raw2`, and `fit_no_raw3` have been gathered in a single location. First, we can inspect each of the objects.
+
+```{r}
+summary(fit_no_raw1)
+```
+
+
+We can now perform a meta-analysis of these fits using the `metagam()` function. We gather them in a list:
+
+```{r}
+models <- list(cohort1 = fit_no_raw1, 
+               cohort2 = fit_no_raw2, 
+               cohort3 = fit_no_raw3)
+```
+
+
+It is typically most convenient to analyze a single smooth term at a time. We start with the term `s(x0)`, and set `grid_size=100` to get 100 equally spaced values of `x0` within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.
+
+```{r}
+metafit <- metagam(models, grid_size = 100, terms = "s(x0)")
+summary(metafit)
+```
+
+The default plotting function shows the fits on the separate datasets together with the meta-analytic fit.
+
+```{r out.width="60%", fig.align="center"}
+plot(metafit)
+```
+
+Dominance plots and heterogeneity plots can also be created. These are described in separate vignettes.
+
+# References

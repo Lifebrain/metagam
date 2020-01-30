@@ -41,114 +41,47 @@ remotes::install_github("lifebrain/metagam")
 
 ``` r
 library(metagam)
-```
-
-Assume some data of interest are located in three different cohorts. In
-order to increase statistical power and hence be more able to detect
-relationships in the data, we would ideally fit a GAM to all three
-datasets combined, using a model on the form `y ~ s(x0) + s(x1) +
-s(x2)`, where `y` is an outcome of interest and `x1` and `x2` are
-explanatory variables. The smooth functions `s()` allow the outcome to
-vary nonlinearly as a function of each explanatory variable. When all
-three datasets are not available in a single location, we cannot fit a
-GAM using this mega-analytic approach. The metagam package provides a
-flexible solution to this problem, which here will be illustrated.
-
-We start by simulation three datasets using the `gamSim()` function from
-mgcv.
-
-``` r
 library(mgcv)
-## simulate three datasets
-set.seed(123)
-datasets <- lapply(1:3, function(x) gamSim(scale = 3, verbose = FALSE))
+#> Loading required package: nlme
+#> This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.
 ```
 
-In each data location, we assume a GAM with the generic form
-`y~s(x0)+s(x1)+s(x2)` is fit to the data. Notably, model parameters like
-knot locations, number of basis functions, and smoothing method does not
-need to be identical in each separate fit. Instead, the parameters can
-be optimized independently to fit the data in each location.
-
-Here is an example:
+Simulate three datasets and fit a GAM to each of them. Then use
+`strip_rawdata()` from metagam to remove individual participant data.
 
 ``` r
-## Data location 1
-fit1 <- gam(y ~ s(x0, k = 8, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), 
-            data = datasets[[1]])
-
-## Data location 2, use P-splines for the first and third term
-fit2 <- gam(y ~ s(x0, bs = "ps") + s(x1, k = 20, bs = "cr") + s(x2, bs = "bs"), 
-            data = datasets[[2]])
-
-## Data location 3, use maximum likelihood for smoothing
-fit3 <- gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), 
-            data = datasets[[3]], method = "ML")
+## Simulate using mgcv::gamSim
+datasets <- lapply(1:3, function(x) gamSim(verbose = FALSE))
+## Fit a model to each dataset
+models <- lapply(datasets, function(dat){
+  ## Full gam with mgcv
+  full_model <- gam(y ~ s(x2, bs = "cr"), data = dat)
+  ## Strip rawdata
+  strip_rawdata(full_model)
+})
 ```
 
-The `gam` objects `fit1`, `fit2`, and `fit3` contain individual
-participant data in various forms, and hence there are many cases in
-which these should not be shared. The function `strip_rawdata()` from
-metagam removes all such rawdata. We here illustrate how this function
-can be applied at each data location in order to obtain a model fit that
-can be shared.
+`models` now is a list containing three GAMs without individual
+participant data. We can then meta-analyze them using `metagam()`.
 
 ``` r
-## Data location 1
-fit_no_raw1 <- strip_rawdata(fit1)
-
-## Data location 2
-fit_no_raw2 <- strip_rawdata(fit2)
-
-## Data location 3
-fit_no_raw3 <- strip_rawdata(fit3)
-```
-
-Now assume that the objects `fit_no_raw1`, `fit_no_raw2`, and
-`fit_no_raw3` have been gathered in a single location. We can now
-perform a meta-analysis of these fits using the `metagam()` function. We
-gather them in a list:
-
-``` r
-models <- list(cohort1 = fit_no_raw1, 
-               cohort2 = fit_no_raw2, 
-               cohort3 = fit_no_raw3)
-```
-
-It is typically most convenient to analyze a single smooth term at a
-time. We start with the term `s(x0)`, and set `grid_size=100` to get 100
-equally spaced values of `x0` within the range of values encountered in
-the three model fits. The summary method prints out some information as
-well as meta-analytic p-values for the term.
-
-``` r
-metafit <- metagam(models, grid_size = 100, terms = "s(x0)")
-summary(metafit)
+meta_analysis <- metagam(models)
+summary(meta_analysis)
 #> Meta-analysis of GAMs from 3 cohorts, using method FE.
 #> 
-#> Smooth terms analyzed: s(x0) 
+#> Smooth terms analyzed: s(x2) 
 #> 
 #> Meta-analytic p-values of smooth terms:
 #> 
-#> Test                         s(x0)
-#> ----------------------  ----------
-#> Stouffer's sum of z      0.0000143
-#> Edgington's sum of p     0.0001186
-#> Wilkinson's maximum p    0.0002717
-#> Wilkinson's minimum p    0.0002545
-#> logit p method           0.0000207
-#> Fisher's sum of logs     0.0000191
+#> Test                     s(x2)
+#> ----------------------  ------
+#> Stouffer's sum of z          0
+#> Edgington's sum of p         0
+#> Wilkinson's maximum p        0
+#> Wilkinson's minimum p        0
+#> logit p method               0
+#> Fisher's sum of logs         0
 ```
-
-The default plotting function shows the fits on the separate datasets
-together with the meta-analytic
-fit.
-
-``` r
-plot(metafit)
-```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;" />
 
 For further documentation and vignettes, please visit the [package
 website](https://lifebrain.github.io/metagam/).

@@ -1,0 +1,87 @@
+---
+title: "Heterogeneity Plots"
+author: "Andreas M. Brandmaier and Øystein Sørensen"
+date: "`r Sys.Date()`"
+bibliography: ../inst/REFERENCES.bib
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Heterogeneity Plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The metagam package offers a way to visualize the heterogeneity of the estimated smooth functions over the range of explanatory variables. This will be illustrated here.
+
+## Simulation
+
+
+```{r setup}
+library(metagam)
+library(mgcv)
+```
+
+
+We start by simulating 5 datasets using the `gamSim()` function from mgcv. We use the response $y$ and the explanatory variable $x_{2}$, but add an additional shift $\beta x_{2}^{2}$ where $\beta_{2}$ differs between datasets, yielding heterogenous data.
+
+```{r}
+set.seed(1233)
+shifts <- c(0, .5, 1, 0, -1)
+datasets <- lapply(shifts, function(x) {
+  ## Simulate data
+  dat <- gamSim(scale = .1, verbose = FALSE)
+  ## Add a shift
+  dat$y <- dat$y + x * dat$x2^2
+  ## Return data
+  dat
+})
+```
+
+## Fit GAMs
+
+Next, we analyze all datasets, and strip individual participant data.
+
+```{r}
+models <- lapply(datasets, function(dat){
+  b <- gam(y ~ s(x2, bs = "cr"), data = dat)
+  strip_rawdata(b)  
+})
+```
+
+## Meta-Analysis
+
+Next, we meta-analyze the models. Since we only have a single smooth term, we use `type = "response"` to get the response function. This is equivalent to using `type = "iterms"` and `intercept = TRUE`.
+
+```{r}
+meta_analysis <- metagam(models, grid_size = 100, type = "response")
+```
+
+Next, we plot the separate estimates together with the meta-analytic fit. We clearly see that dataset 3, which had a positive shift $\beta=1 x_{2}^2$, lies above the others for $x_{2}$ close to 1, and opposite for dataset 5.
+
+```{r}
+plot(meta_analysis)
+```
+
+
+We can investigate this further using a heterogeneity plot, which visualizes Cochran's Q-test (@Cochran1954) as a function of $x_{2}$. By default, the test statistic (Q), with 95 \% confidence bands, is plotted. We can see that the confidence band for Q is above 0 for $x_{2}$ larger than about 0.7.
+
+```{r}
+plot_heterogeneity(meta_analysis)
+```
+
+We can also plot the $p$-value of Cochran's Q-test. The dashed line shows the value $0.05$. The $p$-value plot is in full agreement with the Q-statistic plot above: There is evidence that the underlying functions from each dataset are different for values from about 0.7 and above.
+
+```{r}
+plot_heterogeneity(meta_analysis, type = "p")
+```
+
+
+
+
+# References

@@ -50,7 +50,7 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
   }
 
   # If terms are not supplied, find the smooth terms
-  if(type == "iterms" && is.null(terms)){
+  if(is.null(terms)){
     terms <- dplyr::arrange(model_terms, .data$term)
     terms <- dplyr::slice(terms, 1)
     terms <- terms$term
@@ -189,7 +189,8 @@ metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms 
     method = method,
     xvars = xvars,
     intercept = intercept,
-    cohorts = length(models)
+    cohorts = length(models),
+    type = type
   )
   class(result) <- "metagam"
 

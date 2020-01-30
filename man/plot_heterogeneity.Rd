@@ -13,7 +13,7 @@ plot_heterogeneity(x, axis = NULL, term = NULL, type = "Q", alpha = 0.05, ...)
 fitted with a single term, the explanatory variable corresponding to this term
 is selected.}
 
-\item{term}{Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
+\item{term}{Character specifying which smooth term to plot. Defaults to \code{NULL}; if \code{x}
 was fitted with a single term, this one is taken.}
 
 \item{type}{Character specifying which type of plot. Either \code{"Q"} for the test statistic
@@ -30,5 +30,5 @@ A ggplot object.
 Heterogeneity Plot
 }
 \details{
-This plot visualizes the heterogeneity along the given axis, using Cochrane's Q test.
+This plot visualizes the heterogeneity along the given axis, using Cochran's Q test.
 }

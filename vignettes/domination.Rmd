@@ -26,7 +26,8 @@ Create `r num.datasets` datasets from standard gam example #1. The noise paramet
 ```{r cars}
 ## simulate datasets
 set.seed(123)
-datasets <- lapply(1:num.datasets, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
+datasets <- lapply(1:num.datasets, 
+                   function(x) mgcv::gamSim(scale = x, verbose = FALSE))
 ```
 
 Delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (ie., zero) contribution of the first dataset on low values of dimensions `x2`.
@@ -49,11 +50,12 @@ datasets[[2]] <- df
 
 Next, we fit the indivial GAMs for each of the eight datasets.
 
-```{r pressure, echo=FALSE}
+```{r}
 ## fit a generalized additive model to each dataset separately
 models <- lapply(datasets, function(dat){
   ## Full fit using mgcv
-  gamfit <- mgcv::gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), data = dat)
+  gamfit <- mgcv::gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + 
+                        s(x2, bs = "cr"), data = dat)
   ## Extract the necessary components for performing a meta-analysis
   ## This removes all subject-specific data
   strip_rawdata(gamfit)
@@ -65,7 +67,8 @@ models <- lapply(datasets, function(dat){
 Then, we analyze the term `s(x2)`.
 
 ```{r}
-meta_analysis <- metagam(models, grid_size = 500, terms = "s(x2)", intercept = TRUE)
+meta_analysis <- metagam(models, grid_size = 500, 
+                         terms = "s(x2)", intercept = TRUE)
 ```
 
 ## Domination Analysis

@@ -5,7 +5,7 @@
 #' @param axis Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
 #' fitted with a single term, the explanatory variable corresponding to this term
 #' is selected.
-#' @param term Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
+#' @param term Character specifying which smooth term to plot. Defaults to \code{NULL}; if \code{x}
 #' was fitted with a single term, this one is taken.
 #' @param type Character specifying which type of plot. Either \code{"Q"} for the test statistic
 #' or \code{"p"} for the p-value. Defaults to \code{"Q"}.
@@ -15,7 +15,7 @@
 #' @return A ggplot object.
 #' @export
 #'
-#' @details This plot visualizes the heterogeneity along the given axis, using Cochrane's Q test.
+#' @details This plot visualizes the heterogeneity along the given axis, using Cochran's Q test.
 #'
 plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = .05, ...)
 {
@@ -25,7 +25,11 @@ plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = 
   }
 
   if(is.null(term)){
-    term <- x$terms
+    if(x$type == "iterms"){
+      term <- x$terms
+    } else {
+      term <- x$type
+    }
   }
 
   dat <- x$meta_estimates
@@ -38,12 +42,10 @@ plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = 
 
     if (type=="p") {
 
-      gp <- ggplot2::ggplot(
-        data = dat,
-        ggplot2::aes(x = .data$x, y = .data$QEp)) +
+      gp <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$x, y = .data$QEp)) +
         ggplot2::geom_line() +
+        ggplot2::geom_hline(yintercept = alpha, lty = 2) +
         ggplot2::scale_y_continuous(trans = 'log2') +
-        ggplot2::geom_hline(yintercept = !!alpha, lty = 2) +
         ggplot2::theme_minimal() +
         ggplot2::ylab("Heterogeneity (p)") +
         ggplot2::xlab(axis)
@@ -56,20 +58,17 @@ plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = 
                   z = -0.862 + sqrt(0.743 - 2.404 * log(.data$QEp)),
                   Qse = .data$QE / .data$z)
 
-  gp <- ggplot2::ggplot(
-    data=dat,
-    ggplot2::aes(x= .data$x, y=.data$QE)
-    ) +
-    ggplot2::geom_ribbon(
-      mapping = ggplot2::aes(ymin = .data$QE + stats::qnorm(!!alpha / 2) * .data$Qse,
-                             ymax = .data$QE + stats::qnorm(1 - !!alpha / 2) * .data$Qse),
-      fill = viridis::viridis(4)[3],
-      col = viridis::viridis(4)[1]
-      ) +
-    ggplot2::geom_line() +
-    ggplot2::theme_minimal() +
-    ggplot2::ylab("Heterogeneity (Q)") +
-    ggplot2::xlab(axis)
+    gp <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$x, y = .data$QE)) +
+      ggplot2::geom_ribbon(
+        mapping = ggplot2::aes(ymin = .data$QE + stats::qnorm(!!alpha / 2) * .data$Qse,
+                               ymax = .data$QE + stats::qnorm(1 - !!alpha / 2) * .data$Qse),
+        fill = viridis::viridis(4)[3],
+        col = viridis::viridis(4)[1]
+        ) +
+      ggplot2::geom_line() +
+      ggplot2::theme_minimal() +
+      ggplot2::ylab("Heterogeneity (Q)") +
+      ggplot2::xlab(axis)
 
   } else {
     stop("Unknown type. Try 'Q' or 'p'.")

@@ -37,7 +37,8 @@ summary.metagam <- function(object, ...){
     terms = object$terms,
     method = object$method,
     intercept = object$intercept,
-    cohorts = object$cohorts
+    cohorts = object$cohorts,
+    type = object$type
   )
 
   class(ret) <- "summary.metagam"
