@@ -59,7 +59,7 @@ models <- lapply(datasets, function(dat){
 Next, we meta-analyze the models. Since we only have a single smooth term, we use `type = "response"` to get the response function. This is equivalent to using `type = "iterms"` and `intercept = TRUE`.
 
 ```{r}
-meta_analysis <- metagam(models, grid_size = 100, type = "response")
+meta_analysis <- metagam(models, type = "response")
 ```
 
 Next, we plot the separate estimates together with the meta-analytic fit. We clearly see that dataset 3, which had a positive shift $\beta=1 x_{2}^2$, lies above the others for $x_{2}$ close to 1, and opposite for dataset 5.

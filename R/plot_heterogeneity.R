@@ -17,6 +17,12 @@
 #'
 #' @details This plot visualizes the heterogeneity along the given axis, using Cochran's Q test.
 #'
+#' @examples
+#' # See the vignette, either at https://lifebrain.github.io/metagam/articles/heterogeneity.html
+#' # or by typing the following in the console:
+#' # vignette("heterogeneity")
+#'
+#'
 plot_heterogeneity <- function(x, axis = NULL, term = NULL, type = "Q", alpha = .05, ...)
 {
 

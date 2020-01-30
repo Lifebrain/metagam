@@ -21,7 +21,7 @@
 #' @return Model object with individual participant data removed.
 #' @export
 #'
-#'
+#' @example /inst/examples/metagam_examples.R
 #'
 strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
 

@@ -39,3 +39,9 @@ Plots the (relative) contribution of the individual GAMs to each data point
 on a given axis. It shows whether and how parts of the axis are dominated
 by certain individual GAMs.
 }
+\examples{
+# See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/domination.html
+# or by typing the following in the console:
+# vignette("domination")
+
+}

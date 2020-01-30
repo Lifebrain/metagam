@@ -20,6 +20,11 @@
 #'
 #' @export
 #'
+#' @examples
+#' # See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/domination.html
+#' # or by typing the following in the console:
+#' # vignette("domination")
+#'
 plot_domination <- function(x, axis = NULL, term = NULL, relative = TRUE, title = "Dominance Plot",
                             width = NULL)
 {

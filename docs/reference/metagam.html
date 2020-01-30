@@ -135,7 +135,7 @@
     <pre class="usage"><span class='fu'>metagam</span>(
   <span class='no'>models</span>,
   <span class='kw'>grid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grid_size</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>grid_size</span> <span class='kw'>=</span> <span class='fl'>100</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"iterms"</span>,
   <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"FE"</span>,
@@ -207,6 +207,45 @@ will also include meta-analysis of parametric terms in the models.</p>
 to ensure that no values are identically zero, which would imply that the
 alternative hypothesis be true with no uncertainty.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>metagam</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mgcv</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'>This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.</span></div><div class='input'>
+<span class='co'>## Create 5 datasets</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
+<span class='no'>datasets</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gamSim.html'>gamSim</a></span>(<span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
+
+<span class='co'>## Fit a GAM in each dataset, then use strip_rawdata() to remove</span>
+<span class='co'>## individual participant data</span>
+<span class='no'>models</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>datasets</span>, <span class='kw'>function</span>(<span class='no'>dat</span>){
+  <span class='co'>## This uses the gam() function from mgcv</span>
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x0</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x1</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x2</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)
+  <span class='co'>## This uses strip_rawdata() from metagam</span>
+  <span class='fu'><a href='strip_rawdata.html'>strip_rawdata</a></span>(<span class='no'>model</span>)
+})
+
+<span class='co'>## Next, we meta-analyze the models.</span>
+<span class='co'>## It is often most convenient to analyze a single term at a time. We focus on s(x1).</span>
+<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>metagam</span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
+
+<span class='co'>## We can print some information</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meta_analysis</span>)</div><div class='output co'>#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.
+#&gt; 
+#&gt; Smooth terms analyzed: s(x1) 
+#&gt; 
+#&gt; Meta-analytic p-values of smooth terms:
+#&gt; 
+#&gt; |Test                  |s(x1)     |
+#&gt; |:---------------------|:---------|
+#&gt; |Stouffer's sum of z   |2.682e-47 |
+#&gt; |Edgington's sum of p  |2.681e-44 |
+#&gt; |Wilkinson's maximum p |1.717e-42 |
+#&gt; |Wilkinson's minimum p |7.905e-13 |
+#&gt; |logit p method        |8.786e-24 |
+#&gt; |Fisher's sum of logs  |3.409e-45 |
+#&gt; 
+#&gt; </div><div class='input'>
+<span class='co'>## We can plot the fit</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>meta_analysis</span>)</div><div class='img'><img src='metagam-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -214,6 +253,7 @@ alternative hypothesis be true with no uncertainty.</p>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

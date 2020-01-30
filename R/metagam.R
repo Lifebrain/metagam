@@ -35,7 +35,9 @@
 #' @return An object of type metagam.
 #' @export
 #'
-metagam <- function(models, grid = NULL, grid_size = 10, type = "iterms", terms = NULL,
+#' @example /inst/examples/metagam_examples.R
+#'
+metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms = NULL,
                     method = "FE", intercept = FALSE, restrict_range = NULL){
 
   if(!(type %in% c("iterms", "link", "response"))){

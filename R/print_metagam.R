@@ -7,13 +7,13 @@
 #' @return The function invisibly returns its input argument \code{x}.
 #' @export
 #'
-print.summary.metagam <- function(x, digits = 4, ...){
+print.summary.metagam <- function(x, digits = 8, ...){
   cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
   cat("Smooth terms analyzed:", paste(x$terms, collapse = ", "), "\n\n")
 
   cat("Meta-analytic p-values of smooth terms:")
-  print(knitr::kable(x$meta_pvals), digits = digits)
+  print(knitr::kable(dplyr::mutate_at(x$meta_pvals, dplyr::vars(-Test), ~ sprintf("%.3e", .))))
 
   cat("\n\n")
 

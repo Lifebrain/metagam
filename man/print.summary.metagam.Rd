@@ -4,7 +4,7 @@
 \alias{print.summary.metagam}
 \title{Print output from summary of metagam fit.}
 \usage{
-\method{print}{summary.metagam}(x, digits = 4, ...)
+\method{print}{summary.metagam}(x, digits = 8, ...)
 }
 \arguments{
 \item{x}{A summary.metagam object}

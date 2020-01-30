@@ -14,6 +14,8 @@
 #'
 #' @export
 #'
+#' @example /inst/examples/metagam_examples.R
+#'
 plot.metagam <- function(x, ...)
 {
   if(length(x$terms) > 1){

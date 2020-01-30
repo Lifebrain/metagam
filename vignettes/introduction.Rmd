@@ -88,7 +88,7 @@ models <- list(cohort1 = fit_no_raw1,
 It is typically most convenient to analyze a single smooth term at a time. We start with the term `s(x0)`, and set `grid_size=100` to get 100 equally spaced values of `x0` within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.
 
 ```{r}
-metafit <- metagam(models, grid_size = 100, terms = "s(x0)")
+metafit <- metagam(models, terms = "s(x0)")
 summary(metafit)
 ```
 
