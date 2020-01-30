@@ -94,6 +94,12 @@
     <li>
       <a href="../articles/domination.html">Dominance Plots</a>
     </li>
+    <li>
+      <a href="../articles/heterogeneity.html">Heterogeneity Plots</a>
+    </li>
+    <li>
+      <a href="../articles/introduction.html">Introduction</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -144,7 +150,14 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of summary information.</p>
+    <p>A list of class <code>summary.metagam</code> containing the following information:</p><ul>
+<li><p><code>meta_pvals</code>: dataframe with meta-analytic p-values computed using the <code>metap</code> package.</p></li>
+<li><p><code>terms</code>: smooth terms that have been meta-analyzed.</p></li>
+<li><p><code>method</code>: method used for meta-analysis. See the <code>metafor</code> package for detailed description.</p></li>
+<li><p><code>intercept</code>: logical specifying whether or not the intercept has been included in the meta-analysis.</p></li>
+<li><p><code>cohorts</code>: Number of datasets ("cohorts") used in the meta-analysis.</p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

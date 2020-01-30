@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Title — plot_heterogeneity • metagam</title>
+<title>Heterogeneity Plot — plot_heterogeneity • metagam</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Title — plot_heterogeneity" />
-<meta property="og:description" content="Title" />
+<meta property="og:title" content="Heterogeneity Plot — plot_heterogeneity" />
+<meta property="og:description" content="Heterogeneity Plot" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -94,6 +94,12 @@
     <li>
       <a href="../articles/domination.html">Dominance Plots</a>
     </li>
+    <li>
+      <a href="../articles/heterogeneity.html">Heterogeneity Plots</a>
+    </li>
+    <li>
+      <a href="../articles/introduction.html">Introduction</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -117,13 +123,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Title</h1>
+    <h1>Heterogeneity Plot</h1>
     <small class="dont-index">Source: <a href='https://github.com/Lifebrain/metagam/blob/master/R/plot_heterogeneity.R'><code>R/plot_heterogeneity.R</code></a></small>
     <div class="hidden name"><code>plot_heterogeneity.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Title</p>
+    <p>Heterogeneity Plot</p>
     </div>
 
     <pre class="usage"><span class='fu'>plot_heterogeneity</span>(<span class='no'>x</span>, <span class='kw'>axis</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Q"</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>...</span>)</pre>
@@ -133,23 +139,27 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>metagam object</p></td>
+      <td><p>Object returned by <code><a href='metagam.html'>metagam</a></code>.</p></td>
     </tr>
     <tr>
       <th>axis</th>
-      <td><p>Which axis</p></td>
+      <td><p>Character specifying which variable to plot. Defaults to <code>NULL</code>; if <code>x</code> was
+fitted with a single term, the explanatory variable corresponding to this term
+is selected.</p></td>
     </tr>
     <tr>
       <th>term</th>
-      <td><p>Which term</p></td>
+      <td><p>Character specifying which smooth term to plot. Defaults to <code>NULL</code>; if <code>x</code>
+was fitted with a single term, this one is taken.</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>Character specifying which type of plot</p></td>
+      <td><p>Character specifying which type of plot. Either <code>"Q"</code> for the test statistic
+or <code>"p"</code> for the p-value. Defaults to <code>"Q"</code>.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>Significance level</p></td>
+      <td><p>Significance level. Defaults to <code>.05</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -159,7 +169,10 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>plot</p>
+    <p>A ggplot object.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This plot visualizes the heterogeneity along the given axis, using Cochran's Q test.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -167,6 +180,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>
