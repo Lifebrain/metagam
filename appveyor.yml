@@ -8,10 +8,8 @@ init:
         Import-Module '..\appveyor-tool.ps1'
 
 install:
-  ps: Bootstrap
-
-install:
   - ./travis-tool.sh install_bioc multtest
+  ps: Bootstrap
 
 cache:
   - C:\RLibrary
