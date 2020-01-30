@@ -21,7 +21,7 @@ The function \code{\link{metagam}} takes a list of fits produced by
 
 \section{Plotting}{
 
-The functions \code{\link{plot_domination}} and \code{\link{plot_heterogeneity}}
+The functions \code{\link{plot_dominance}} and \code{\link{plot_heterogeneity}}
 can be used to study the meta-analytic fit computed by \code{\link{strip_rawdata}}.
 }
 

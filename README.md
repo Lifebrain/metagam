@@ -49,12 +49,17 @@ remotes::install_github("lifebrain/metagam")
 
 ``` r
 library(metagam)
+library(mgcv)
+#> Loading required package: nlme
+#> This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.
 ```
 
 Simulate three datasets and fit a GAM to each of them. Then use
 `strip_rawdata()` from metagam to remove individual participant data.
 
 ``` r
+## Set seed for reproducible random numbers
+set.seed(8562957)
 ## Simulate using mgcv::gamSim
 datasets <- lapply(1:3, function(x) gamSim(verbose = FALSE))
 ## Fit a model to each dataset
@@ -90,3 +95,10 @@ summary(meta_analysis)
 
 For further documentation and vignettes, please visit the [package
 website](https://lifebrain.github.io/metagam/).
+
+## Code of Conduct
+
+Please note that the metagam project is released with a [Contributor
+Code of
+Conduct](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html).
+By contributing to this project, you agree to abide by its terms.

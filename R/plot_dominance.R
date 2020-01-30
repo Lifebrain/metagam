@@ -1,4 +1,4 @@
-#' Domination plot
+#' Dominance plot
 #'
 #' Plots the (relative) contribution of the individual GAMs to each data point
 #' on a given axis. It shows whether and how parts of the axis are dominated
@@ -21,11 +21,11 @@
 #' @export
 #'
 #' @examples
-#' # See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/domination.html
+#' # See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/dominance.html
 #' # or by typing the following in the console:
-#' # vignette("domination")
+#' # vignette("Dominance")
 #'
-plot_domination <- function(x, axis = NULL, term = NULL, relative = TRUE, title = "Dominance Plot",
+plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE, title = "Dominance Plot",
                             width = NULL)
 {
 
@@ -53,8 +53,6 @@ plot_domination <- function(x, axis = NULL, term = NULL, relative = TRUE, title 
     width <- min(abs(diff(dat[["x"]])))
   }
 
-
-  # TODO: determine width parameter automatically
   gp <- ggplot2::ggplot(dat,
                         ggplot2::aes(x = .data$x, y = .data$y,
                                      fill = .data$model, width = width)) +
