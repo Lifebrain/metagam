@@ -9,7 +9,7 @@ init:
 
 install:
   - ./travis-tool.sh install_bioc multtest
-  ps: Bootstrap
+  # ps: Bootstrap
 
 cache:
   - C:\RLibrary
