@@ -43,6 +43,8 @@ library(mgcv)
 Simulate three datasets and fit a GAM to each of them. Then use `strip_rawdata()` from metagam to remove individual participant data.
 
 ```{r}
+## Set seed for reproducible random numbers
+set.seed(8562957)
 ## Simulate using mgcv::gamSim
 datasets <- lapply(1:3, function(x) gamSim(verbose = FALSE))
 ## Fit a model to each dataset
