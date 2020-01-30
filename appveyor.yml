@@ -8,8 +8,7 @@ init:
         Import-Module '..\appveyor-tool.ps1'
 
 install:
-  - ./travis-tool.sh install_bioc multtest
-  # ps: Bootstrap
+  ps: Bootstrap
 
 cache:
   - C:\RLibrary
@@ -25,6 +24,7 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
+  - travis-tool.sh install_bioc multtest
 
 test_script:
   - travis-tool.sh run_tests
