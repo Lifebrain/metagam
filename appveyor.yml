@@ -20,6 +20,7 @@ environment:
   USE_RTOOLS: true
   # R_REMOTES_STANDALONE: true
   R_VERSION: 3.6.0
+  BIOC_USE_DEVEL: false
 
 # Adapt as necessary starting from here
 
