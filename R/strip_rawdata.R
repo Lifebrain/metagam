@@ -8,7 +8,8 @@
 #' @param path Optional path in which to save the object as a \code{.rds} file.
 #' @param save_ranges Logical specifying whether to save the ranges of each
 #' variable used by the model. For numeric variables this amounts to the minimum
-#' and maximum, and for factors all levels are saved.
+#' and maximum, and for factors all levels are saved. The values will be in the
+#' list element \code{var.summary} of the returned object.
 #' @param ... Other arguments (not used).
 #'
 #' @details Currently supported models are those returned by \code{mgcv::gam},
@@ -26,13 +27,13 @@
 #'
 #' @example /inst/examples/metagam_examples.R
 #'
-strip_rawdata <- function(model, path = NULL, save_ranges = FALSE, ...){
+strip_rawdata <- function(model, path = NULL, save_ranges = TRUE, ...){
   UseMethod("strip_rawdata")
 }
 
 #' @describeIn strip_rawdata Strip rawdata from list object returned by gamm4
 #' @export
-strip_rawdata.list <- function(model, path = NULL, save_ranges = FALSE, ...){
+strip_rawdata.list <- function(model, path = NULL, save_ranges = TRUE, ...){
   model <- model$gam
   strip_rawdata(model)
 }
@@ -40,14 +41,14 @@ strip_rawdata.list <- function(model, path = NULL, save_ranges = FALSE, ...){
 
 #' @describeIn strip_rawdata Strip rawdata from gamm object
 #' @export
-strip_rawdata.gamm <- function(model, path = NULL, save_ranges = FALSE, ...){
+strip_rawdata.gamm <- function(model, path = NULL, save_ranges = TRUE, ...){
   model <- model$gam
   strip_rawdata(model)
 }
 
 #' @describeIn strip_rawdata Strip rawdata from gam object
 #' @export
-strip_rawdata.gam <- function(model, path = NULL, save_ranges = FALSE, ...){
+strip_rawdata.gam <- function(model, path = NULL, save_ranges = TRUE, ...){
 
   # Vector of mgcv smooth classes currently supported
   supported_smooths <- c("pspline.smooth", "tensor.smooth", "Bspline.smooth",
@@ -111,7 +112,7 @@ strip_rawdata.gam <- function(model, path = NULL, save_ranges = FALSE, ...){
     smooth = model$smooth,
     sp = model$sp,
     terms = model$terms,
-    var.summary = model$var.summary,
+    var.summary = if(save_ranges) model$var.summary,
     Ve = model$Ve,
     Vp = model$Vp,
     Vc = model$Vc,

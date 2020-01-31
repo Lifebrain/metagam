@@ -15,7 +15,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-devtools::load_all(".")
 ```
 
 
@@ -29,11 +28,9 @@ Assume some data of interest are located in three different cohorts. In order to
 
 We start by simulation three datasets using the `gamSim()` function from mgcv.
 
-```{r, eval=FALSE}
-library(metagam)
-```
 
 ```{r, message=FALSE}
+library(metagam)
 library(mgcv)
 ## simulate three datasets
 set.seed(123)

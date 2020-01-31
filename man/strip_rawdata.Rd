@@ -7,13 +7,13 @@
 \alias{strip_rawdata.gam}
 \title{Strip rawdata from a generalized additive model}
 \usage{
-strip_rawdata(model, path = NULL, save_ranges = FALSE, ...)
+strip_rawdata(model, path = NULL, save_ranges = TRUE, ...)
 
-\method{strip_rawdata}{list}(model, path = NULL, save_ranges = FALSE, ...)
+\method{strip_rawdata}{list}(model, path = NULL, save_ranges = TRUE, ...)
 
-\method{strip_rawdata}{gamm}(model, path = NULL, save_ranges = FALSE, ...)
+\method{strip_rawdata}{gamm}(model, path = NULL, save_ranges = TRUE, ...)
 
-\method{strip_rawdata}{gam}(model, path = NULL, save_ranges = FALSE, ...)
+\method{strip_rawdata}{gam}(model, path = NULL, save_ranges = TRUE, ...)
 }
 \arguments{
 \item{model}{A model fitted using \code{mgcv::gam} or \code{mgcv::gamm}.}
@@ -22,7 +22,8 @@ strip_rawdata(model, path = NULL, save_ranges = FALSE, ...)
 
 \item{save_ranges}{Logical specifying whether to save the ranges of each
 variable used by the model. For numeric variables this amounts to the minimum
-and maximum, and for factors all levels are saved.}
+and maximum, and for factors all levels are saved. The values will be in the
+list element \code{var.summary} of the returned object.}
 
 \item{...}{Other arguments (not used).}
 }

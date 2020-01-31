@@ -24,8 +24,8 @@ dat3 <- dat[501:1000, ]
 
 form <- as.formula(y ~ z + s(x1, bs = "cr")+ s(x2,bs="cr") )
 
-b <- gamm4(form, random = ~ (1|z2), data = dat1)
-model <- strip_rawdata(b)
+b <- gam(form, data = dat1)
+model <- strip_rawdata(b, save_ranges = T)
 summary(model)
 
 
