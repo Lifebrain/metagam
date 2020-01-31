@@ -37,6 +37,7 @@ Imports:
     viridis
 RoxygenNote: 7.0.2
 Suggests: 
+    gamm4,
     roxygen2,
     rmarkdown,
     devtools,

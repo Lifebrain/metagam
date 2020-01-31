@@ -1,5 +1,6 @@
 library(tidyverse)
 library(mgcv)
+library(gamm4)
 f0 <- function(x) 2 * sin(pi * x)
 f1 <- function(x) exp(2 * x) - 1
 f2 <- function(x) 0.2 * x^11 * (10 * (1 - x))^6 + 10 *
@@ -23,7 +24,7 @@ dat3 <- dat[501:1000, ]
 
 form <- as.formula(y ~ z + s(x1, bs = "cr")+ s(x2,bs="cr") )
 
-b <- mgcv::gam(form, data = dat1, method = "REML")
+b <- gamm4(form, random = ~ (1|z2), data = dat1)
 model <- strip_rawdata(b)
 summary(model)
 
