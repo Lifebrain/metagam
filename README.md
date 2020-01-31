@@ -29,6 +29,14 @@ location. Next, metagam provides functions for meta-analysing these
 fitted GAMs using pointwise meta-analysis, as well as plotting and
 summary methods for analyzing the meta-analytic fits.
 
+Currently, GAMs objects created with the following functions are
+supported:
+
+  - From package [mgcv](https://cran.r-project.org/package=mgcv):
+    `gam()` and `gamm()`.
+  - From package [gamm4](https://cran.r-project.org/package=gamm4):
+    `gamm4()`.
+
 This package is under development, so changes to the interface can be
 expected. Suggestions for improvements and bug reports are warmly
 welcome, either by filing an

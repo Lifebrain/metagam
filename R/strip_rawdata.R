@@ -9,9 +9,12 @@
 #' @param save_ranges Logical specifying whether to save the ranges of each
 #' variable used by the model. For numeric variables this amounts to the minimum
 #' and maximum, and for factors all levels are saved.
+#' @param ... Other arguments (not used).
 #'
-#' @details If \code{model} is of class \code{"gamm"}, only the \code{"gam"} part of the
-#' model will be kept.
+#' @details Currently supported models are those returned by \code{mgcv::gam},
+#' \code{mgcv::gamm}, and \code{gamm4::gamm4}. Since the latter returns an
+#' object of class \code{list}, the generic for \code{gamm4} is \code{strip_rawdata.list}.
+#' It will fail unless the list has an element named \code{gam} of class \code{gam}.
 #'
 #' Thin plate regression splines (\code{bs='tp'} and \code{bs='ts'}) and Duchon splines \code{bs='ds'}
 #' are currently not supported, since for these splines \code{mgcv}
@@ -23,18 +26,33 @@
 #'
 #' @example /inst/examples/metagam_examples.R
 #'
-strip_rawdata <- function(model, path = NULL, save_ranges = FALSE){
+strip_rawdata <- function(model, path = NULL, save_ranges = FALSE, ...){
+  UseMethod("strip_rawdata")
+}
+
+#' @describeIn strip_rawdata Strip rawdata from list object returned by gamm4
+#' @export
+strip_rawdata.list <- function(model, path = NULL, save_ranges = FALSE, ...){
+  model <- model$gam
+  strip_rawdata(model)
+}
+
+
+#' @describeIn strip_rawdata Strip rawdata from gamm object
+#' @export
+strip_rawdata.gamm <- function(model, path = NULL, save_ranges = FALSE, ...){
+  model <- model$gam
+  strip_rawdata(model)
+}
+
+#' @describeIn strip_rawdata Strip rawdata from gam object
+#' @export
+strip_rawdata.gam <- function(model, path = NULL, save_ranges = FALSE, ...){
 
   # Vector of mgcv smooth classes currently supported
   supported_smooths <- c("pspline.smooth", "tensor.smooth", "Bspline.smooth",
                          "cp.smooth", "cr.smooth", "cyclic.smooth", "t2.smooth")
 
-  # Validation
-  if(!(inherits(model, "gam") | inherits(model, "gamm"))){
-    stop('model must be of class "gam" or "gamm".\n')
-  }
-
-  if(inherits(model, "gamm")) model <- model$gam
 
   purrr::walk(model$smooth, function(x){
     check_smooths(x, supported_smooths)
@@ -121,3 +139,5 @@ check_smooths <- function(x, supported_smooths){
                 paste(supported_smooths, collapse = "\n"),
                 "\n\nSee the Details section in the documentation for strip_rawdata()."))
 }
+
+
