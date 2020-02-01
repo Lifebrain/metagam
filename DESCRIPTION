@@ -4,14 +4,12 @@ Title: Flexible meta-analysis of generalized additive models
 Version: 0.1.0
 Authors@R: c(person("Øystein", "Sørensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
-                    role = c("aut", "cre"),
-                    comment = c(ORCID = "0000-0003-0724-3542")),
+                    role = c("aut", "cre")),
             person("Andreas", "Brandmaier", 
                     role = c("aut")),
             person("Athanasia Mo", "Mowinckel", 
                     email = "a.m.mowinckel@psykologi.uio.no", 
-                    role = c("aut"),
-                    comment = c(ORCID = "0000-0002-5756-0223")))
+                    role = c("aut")))
 Description: This package performs meta-analysis of generalized additive
     models and generalized additive mixed models. A typical use case is
     when data cannot be shared across locations, and an overall meta-analytic
