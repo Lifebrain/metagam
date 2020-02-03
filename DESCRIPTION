@@ -1,6 +1,6 @@
 Package: metagam
 Type: Package
-Title: Flexible meta-analysis of generalized additive models
+Title: Meta-analysis of generalized additive models
 Version: 0.1.0
 Authors@R: c(person("Øystein", "Sørensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
