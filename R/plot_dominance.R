@@ -12,7 +12,6 @@
 #' was fitted with a single term, this one is taken.
 #' @param relative Logical specifying whether to have relative or absolute scales.
 #' Defaults to \code{TRUE}.
-#' @param title Title of plot.
 #' @param width Width of bars. Default to \code{NULL}, which means it is automatically
 #' determined based on the minimum grid spacing in \code{x}.
 #'
@@ -25,7 +24,7 @@
 #' # or by typing the following in the console:
 #' # vignette("Dominance")
 #'
-plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE, title = "Dominance Plot",
+plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
                             width = NULL)
 {
 
@@ -59,7 +58,6 @@ plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE, title =
     ggplot2::geom_bar(position=position,stat="identity")+
     ggplot2::theme_minimal()+
     viridis::scale_fill_viridis(discrete = T) +
-    ggplot2::ggtitle(title)+
     ggplot2::ylab("Relative Influence") +
     ggplot2::xlab(axis) +
     ggplot2::labs(fill = "Cohort")
