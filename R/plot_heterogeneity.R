@@ -10,7 +10,6 @@
 #' @param type Character specifying which type of plot. Either \code{"Q"} for the test statistic
 #' or \code{"p"} for the p-value. Defaults to \code{"Q"}.
 #' @param alpha_thresh Significance level. Defaults to \code{.05}.
-#' @param ... Other arguments to ggplot.
 #'
 #' @return A ggplot object.
 #' @export
@@ -23,7 +22,7 @@
 #' # vignette("heterogeneity")
 #'
 #'
-plot_heterogeneity <- function(x, axis = x$xvars, term = NULL, type = "Q", alpha_thresh = .05, ...)
+plot_heterogeneity <- function(x, axis = x$xvars, term = NULL, type = "Q", alpha_thresh = .05)
 {
 
   type <- match.arg(type, c("p", "Q"))
@@ -31,8 +30,8 @@ plot_heterogeneity <- function(x, axis = x$xvars, term = NULL, type = "Q", alpha
   dat <- make_heterogeneity_data(x, axis = axis, term = term)
 
   gp <- switch(type,
-         "p" = plot_heterogeneity_p(dat, axis, alpha_thresh, ...),
-         "Q" = plot_heterogeneity_q(dat, axis, alpha_thresh, ...)
+         "p" = plot_heterogeneity_p(dat, axis, alpha_thresh),
+         "Q" = plot_heterogeneity_q(dat, axis, alpha_thresh)
          )
 
   return(gp)
@@ -78,10 +77,10 @@ make_heterogeneity_data <- function(x, axis = x$xvars, term = NULL)
 #' @inheritParams plot_heterogeneity
 #'
 #' @return ggproto object
-plot_heterogeneity_p <- function(data, axis, alpha_thresh, ...){
+plot_heterogeneity_p <- function(data, axis, alpha_thresh){
   ggplot2::ggplot(data = data,
                   ggplot2::aes(x = .data$x, y = .data$QEp)) +
-    ggplot2::geom_line(...) +
+    ggplot2::geom_line() +
     ggplot2::geom_hline(yintercept = alpha_thresh, lty = 2) +
     ggplot2::scale_y_continuous(trans = 'log2') +
     ggplot2::theme_minimal() +
@@ -98,7 +97,7 @@ plot_heterogeneity_p <- function(data, axis, alpha_thresh, ...){
 #' @inheritParams plot_heterogeneity
 #'
 #' @return ggproto object
-plot_heterogeneity_q <- function(data, axis, alpha_thresh, ...){
+plot_heterogeneity_q <- function(data, axis, alpha_thresh){
   # TODO: øystein, please check whether this is the correct approximation
 
   data <- dplyr::mutate(data,
@@ -108,12 +107,13 @@ plot_heterogeneity_q <- function(data, axis, alpha_thresh, ...){
 
   ggplot2::ggplot(data = data,
                   ggplot2::aes(x = .data$x, y = .data$QE)) +
-    ggplot2::geom_ribbon(...,
+    ggplot2::geom_ribbon(
       mapping = ggplot2::aes(
         ymin = .data$QE + stats::qnorm(!!alpha_thresh / 2) * .data$Qse,
-        ymax = .data$QE + stats::qnorm(1 - !!alpha_thresh / 2) * .data$Qse)
+        ymax = .data$QE + stats::qnorm(1 - !!alpha_thresh / 2) * .data$Qse),
+      alpha = .3
     ) +
-    ggplot2::geom_line(...) +
+    ggplot2::geom_line() +
     ggplot2::theme_minimal() +
     ggplot2::labs(y = "Heterogeneity (Q)",
                   x = axis)
