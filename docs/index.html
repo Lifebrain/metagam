@@ -44,12 +44,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -60,13 +54,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/dominance.html">Dominance Plots</a>
-    </li>
-    <li>
-      <a href="articles/heterogeneity.html">Heterogeneity Plots</a>
-    </li>
-    <li>
       <a href="articles/introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="articles/dominance.html">Dominance analysis</a>
+    </li>
+    <li>
+      <a href="articles/heterogeneity.html">Heterogeneity analysis</a>
     </li>
   </ul>
 </li>
@@ -98,7 +92,7 @@
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>metagam is an R-package for flexible meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits.</p>
+<p>metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits.</p>
 <p>Currently, GAMs objects created with the following functions are supported:</p>
 <ul>
 <li>From package <a href="https://cran.r-project.org/package=mgcv">mgcv</a>: <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam()</a></code> and <code><a href="https://rdrr.io/pkg/mgcv/man/gamm.html">gamm()</a></code>.</li>

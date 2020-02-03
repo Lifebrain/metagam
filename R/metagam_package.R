@@ -1,4 +1,4 @@
-#' metagam: Flexible meta-analysis of generalized additive models.
+#' metagam: Meta-analysis of generalized additive models.
 #'
 #' The main functions in the metagam package are described below.
 #'

@@ -22,3 +22,4 @@ ggproto object
 Internal function to plot
 the heterogeneity p values
 }
+\keyword{internal}

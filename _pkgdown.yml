@@ -1,2 +1,42 @@
 destination: docs
 
+reference:
+- title: Removing individual participant data from models
+  contents:
+  - strip_rawdata
+  - strip_rawdata.gam
+  - strip_rawdata.gamm
+  - strip_rawdata.list
+  - print.striprawdata
+  - summary.striprawdata
+
+- title: Meta-analysis
+  contents:
+  - metagam
+  - plot.metagam
+  - plot_dominance
+  - plot_heterogeneity
+  - print.metagam
+  - print.summary.metagam
+  - summary.metagam
+
+- title: Pacakge overview
+  contents:
+  - metagam-package
+
+
+
+navbar:
+  type: default
+  left:
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    menu:
+    - text: Introduction
+      href: articles/introduction.html
+    - text: Dominance analysis
+      href: articles/dominance.html
+    - text: Heterogeneity analysis
+      href: articles/heterogeneity.html
+

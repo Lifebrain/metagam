@@ -24,6 +24,7 @@
 #' # or by typing the following in the console:
 #' # vignette("Dominance")
 #'
+#'
 plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
                             width = NULL)
 {

@@ -3,7 +3,7 @@
 \docType{package}
 \name{metagam-package}
 \alias{metagam-package}
-\title{metagam: Flexible meta-analysis of generalized additive models.}
+\title{metagam: Meta-analysis of generalized additive models.}
 \description{
 The main functions in the metagam package are described below.
 }

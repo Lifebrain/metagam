@@ -23,3 +23,4 @@ tibble/data.frame
 Internal function to prepare
 data for heterogeneity plots
 }
+\keyword{internal}

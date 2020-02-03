@@ -35,4 +35,5 @@ by certain individual GAMs.
 # or by typing the following in the console:
 # vignette("Dominance")
 
+
 }

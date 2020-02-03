@@ -76,12 +76,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -92,13 +86,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/dominance.html">Dominance Plots</a>
-    </li>
-    <li>
-      <a href="../articles/heterogeneity.html">Heterogeneity Plots</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/dominance.html">Dominance analysis</a>
+    </li>
+    <li>
+      <a href="../articles/heterogeneity.html">Heterogeneity analysis</a>
     </li>
   </ul>
 </li>
@@ -137,8 +131,7 @@
   <span class='kw'>axis</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>xvars</span>,
   <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Q"</span>,
-  <span class='kw'>alpha_thresh</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='no'>...</span>
+  <span class='kw'>alpha_thresh</span> <span class='kw'>=</span> <span class='fl'>0.05</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -167,10 +160,6 @@ or <code>"p"</code> for the p-value. Defaults to <code>"Q"</code>.</p></td>
     <tr>
       <th>alpha_thresh</th>
       <td><p>Significance level. Defaults to <code>.05</code>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments to ggplot.</p></td>
     </tr>
     </table>
 

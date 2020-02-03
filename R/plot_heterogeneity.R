@@ -47,6 +47,8 @@ plot_heterogeneity <- function(x, axis = x$xvars, term = NULL, type = "Q", alpha
 #' @inheritParams plot_heterogeneity
 #'
 #' @return tibble/data.frame
+#'
+#' @keywords internal
 make_heterogeneity_data <- function(x, axis = x$xvars, term = NULL)
 {
 
@@ -77,6 +79,9 @@ make_heterogeneity_data <- function(x, axis = x$xvars, term = NULL)
 #' @inheritParams plot_heterogeneity
 #'
 #' @return ggproto object
+#'
+#' @keywords internal
+#'
 plot_heterogeneity_p <- function(data, axis, alpha_thresh){
   ggplot2::ggplot(data = data,
                   ggplot2::aes(x = .data$x, y = .data$QEp)) +
@@ -97,6 +102,9 @@ plot_heterogeneity_p <- function(data, axis, alpha_thresh){
 #' @inheritParams plot_heterogeneity
 #'
 #' @return ggproto object
+#'
+#' @keywords internal
+#'
 plot_heterogeneity_q <- function(data, axis, alpha_thresh){
   # TODO: øystein, please check whether this is the correct approximation
 
