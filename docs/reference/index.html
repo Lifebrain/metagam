@@ -74,12 +74,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -90,13 +84,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/dominance.html">Dominance Plots</a>
-    </li>
-    <li>
-      <a href="../articles/heterogeneity.html">Heterogeneity Plots</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/dominance.html">Dominance analysis</a>
+    </li>
+    <li>
+      <a href="../articles/heterogeneity.html">Heterogeneity analysis</a>
     </li>
   </ul>
 </li>
@@ -135,23 +129,37 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-removing-individual-participant-data-from-models" class="hasAnchor"><a href="#section-removing-individual-participant-data-from-models" class="anchor"></a>Removing individual participant data from models</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="make_heterogeneity_data.html">make_heterogeneity_data()</a></code> </p>
+          <p><code><a href="strip_rawdata.html">strip_rawdata()</a></code> </p>
         </td>
-        <td><p>Prepare heterogeneity data</p></td>
+        <td><p>Strip rawdata from a generalized additive model</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="metagam-package.html">metagam-package</a></code> </p>
+          <p><code><a href="print.striprawdata.html">print(<i>&lt;striprawdata&gt;</i>)</a></code> </p>
         </td>
-        <td><p>metagam: Flexible meta-analysis of generalized additive models.</p></td>
+        <td><p>Print method for striprawdata</p></td>
       </tr><tr>
+        
+        <td>
+          <p><code><a href="summary.striprawdata.html">summary(<i>&lt;striprawdata&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summary method for GAMs stripped for rawdata</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-meta-analysis" class="hasAnchor"><a href="#section-meta-analysis" class="anchor"></a>Meta-analysis</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="metagam.html">metagam()</a></code> </p>
@@ -178,27 +186,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="plot_heterogeneity_p.html">plot_heterogeneity_p()</a></code> </p>
-        </td>
-        <td><p>Heterogeneity p-plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_heterogeneity_q.html">plot_heterogeneity_q()</a></code> </p>
-        </td>
-        <td><p>Heterogeneity Q-plot</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="print.metagam.html">print(<i>&lt;metagam&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print method for metagam objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="print.striprawdata.html">print(<i>&lt;striprawdata&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print method for striprawdata</p></td>
       </tr><tr>
         
         <td>
@@ -208,21 +198,23 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="strip_rawdata.html">strip_rawdata()</a></code> </p>
-        </td>
-        <td><p>Strip rawdata from a generalized additive model</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="summary.metagam.html">summary(<i>&lt;metagam&gt;</i>)</a></code> </p>
         </td>
         <td><p>Summary method for metagam objects</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-pacakge-overview" class="hasAnchor"><a href="#section-pacakge-overview" class="anchor"></a>Pacakge overview</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
-          <p><code><a href="summary.striprawdata.html">summary(<i>&lt;striprawdata&gt;</i>)</a></code> </p>
+          <p><code><a href="metagam-package.html">metagam-package</a></code> </p>
         </td>
-        <td><p>Summary method for GAMs stripped for rawdata</p></td>
+        <td><p>metagam: Meta-analysis of generalized additive models.</p></td>
       </tr>
     </tbody>
     </table>
@@ -231,7 +223,9 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-removing-individual-participant-data-from-models">Removing individual participant data from models</a></li>
+      <li><a href="#section-meta-analysis">Meta-analysis</a></li>
+      <li><a href="#section-pacakge-overview">Pacakge overview</a></li>
     </ul>
   </div>
 </div>

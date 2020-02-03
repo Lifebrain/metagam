@@ -9,8 +9,7 @@ plot_heterogeneity(
   axis = x$xvars,
   term = NULL,
   type = "Q",
-  alpha_thresh = 0.05,
-  ...
+  alpha_thresh = 0.05
 )
 }
 \arguments{
@@ -27,8 +26,6 @@ was fitted with a single term, this one is taken.}
 or \code{"p"} for the p-value. Defaults to \code{"Q"}.}
 
 \item{alpha_thresh}{Significance level. Defaults to \code{.05}.}
-
-\item{...}{Other arguments to ggplot.}
 }
 \value{
 A ggplot object.

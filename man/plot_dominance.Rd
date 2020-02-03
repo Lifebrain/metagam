@@ -4,14 +4,7 @@
 \alias{plot_dominance}
 \title{Dominance plot}
 \usage{
-plot_dominance(
-  x,
-  axis = NULL,
-  term = NULL,
-  relative = TRUE,
-  title = "Dominance Plot",
-  width = NULL
-)
+plot_dominance(x, axis = NULL, term = NULL, relative = TRUE, width = NULL)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
@@ -25,8 +18,6 @@ was fitted with a single term, this one is taken.}
 
 \item{relative}{Logical specifying whether to have relative or absolute scales.
 Defaults to \code{TRUE}.}
-
-\item{title}{Title of plot.}
 
 \item{width}{Width of bars. Default to \code{NULL}, which means it is automatically
 determined based on the minimum grid spacing in \code{x}.}
@@ -43,5 +34,6 @@ by certain individual GAMs.
 # See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/dominance.html
 # or by typing the following in the console:
 # vignette("Dominance")
+
 
 }

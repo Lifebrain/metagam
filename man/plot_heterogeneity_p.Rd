@@ -4,7 +4,7 @@
 \alias{plot_heterogeneity_p}
 \title{Heterogeneity p-plot}
 \usage{
-plot_heterogeneity_p(data, axis, alpha_thresh, ...)
+plot_heterogeneity_p(data, axis, alpha_thresh)
 }
 \arguments{
 \item{data}{data made by \code{\link{make_heterogeneity_data}}.}
@@ -14,8 +14,6 @@ fitted with a single term, the explanatory variable corresponding to this term
 is selected.}
 
 \item{alpha_thresh}{Significance level. Defaults to \code{.05}.}
-
-\item{...}{Other arguments to ggplot.}
 }
 \value{
 ggproto object
@@ -24,3 +22,4 @@ ggproto object
 Internal function to plot
 the heterogeneity p values
 }
+\keyword{internal}

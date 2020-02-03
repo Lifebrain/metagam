@@ -78,12 +78,6 @@ by certain individual GAMs." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -94,13 +88,13 @@ by certain individual GAMs." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/dominance.html">Dominance Plots</a>
-    </li>
-    <li>
-      <a href="../articles/heterogeneity.html">Heterogeneity Plots</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/dominance.html">Dominance analysis</a>
+    </li>
+    <li>
+      <a href="../articles/heterogeneity.html">Heterogeneity analysis</a>
     </li>
   </ul>
 </li>
@@ -136,14 +130,7 @@ on a given axis. It shows whether and how parts of the axis are dominated
 by certain individual GAMs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_dominance</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>axis</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Dominance Plot"</span>,
-  <span class='kw'>width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>plot_dominance</span>(<span class='no'>x</span>, <span class='kw'>axis</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,10 +156,6 @@ was fitted with a single term, this one is taken.</p></td>
 Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
-      <th>title</th>
-      <td><p>Title of plot.</p></td>
-    </tr>
-    <tr>
       <th>width</th>
       <td><p>Width of bars. Default to <code>NULL</code>, which means it is automatically
 determined based on the minimum grid spacing in <code>x</code>.</p></td>
@@ -187,6 +170,7 @@ determined based on the minimum grid spacing in <code>x</code>.</p></td>
     <pre class="examples"><div class='input'># See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/dominance.html
 # or by typing the following in the console:
 # vignette("Dominance")
+
 
 </div></pre>
   </div>

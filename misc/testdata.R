@@ -39,7 +39,8 @@ models <- lapply(list(dat1, dat2, dat3), function(d){
 
 object <- metagam(models)
 
-
+plot_heterogeneity(object, alpha_thresh = .3)
+plot_heterogeneity(object, type = "p")
 #predict(fits[[1]], newdata = tibble(x1 = .5, z = factor(1, levels=1:2)), type = "terms", terms = "s(x1)", newdata.guaranteed = TRUE)
 
 #grid <- expand.grid(replicate(3, seq(from = 0, to = 1, by = .01), simplify = FALSE))
