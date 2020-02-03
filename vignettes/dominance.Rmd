@@ -1,23 +1,20 @@
 ---
 title: "Dominance Plots"
-author: "Andreas M. Brandmaier and Øystein Sørensen"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{dominance}
+  %\VignetteIndexEntry{Dominance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-devtools::load_all(".")
 num.datasets <- 5
 ```
 
 ## Simulation
 
-```{r, eval=FALSE}
+```{r}
 library(metagam)
 ```
 

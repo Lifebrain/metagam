@@ -1,7 +1,5 @@
 ---
 title: "Heterogeneity Plots"
-author: "Andreas M. Brandmaier and Øystein Sørensen"
-date: "`r Sys.Date()`"
 bibliography: ../inst/REFERENCES.bib
 output: rmarkdown::html_vignette
 vignette: >
@@ -15,8 +13,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# loads all new features
-devtools::load_all(".")
+
 ```
 
 The metagam package offers a way to visualize the heterogeneity of the estimated smooth functions over the range of explanatory variables. This will be illustrated here.
@@ -24,7 +21,7 @@ The metagam package offers a way to visualize the heterogeneity of the estimated
 ## Simulation
 
 
-```{r setup, eval=FALSE}
+```{r}
 library(metagam)
 ```
 

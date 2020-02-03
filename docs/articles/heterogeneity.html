@@ -80,9 +80,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Heterogeneity Plots</h1>
-                        <h4 class="author">Andreas M. Brandmaier and Øystein Sørensen</h4>
             
-            <h4 class="date">2020-02-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Lifebrain/metagam/blob/master/vignettes/heterogeneity.Rmd"><code>vignettes/heterogeneity.Rmd</code></a></small>
       <div class="hidden name"><code>heterogeneity.Rmd</code></div>
@@ -127,17 +125,17 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">meta_analysis &lt;-<span class="st"> </span><span class="kw"><a href="../reference/metagam.html">metagam</a></span>(models, <span class="dt">type =</span> <span class="st">"response"</span>)</a></code></pre></div>
 <p>Next, we plot the separate estimates together with the meta-analytic fit. We clearly see that dataset 3, which had a positive shift <span class="math inline">\(\beta=1 x_{2}^2\)</span>, lies above the others for <span class="math inline">\(x_{2}\)</span> close to 1, and opposite for dataset 5.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(meta_analysis)</a></code></pre></div>
-<p><img src="heterogeneity_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="heterogeneity_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>The plotting function for the meta-analysis object is a ggplot2-object, and can thus be altered using standard ggplot syntax. To learn more about customization of ggplot2-objects, please <a href="https://ggplot2.tidyverse.org/">see the ggplot2 documentation</a>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(meta_analysis) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_colour_brewer</a></span>(<span class="dt">palette =</span> <span class="st">"Set1"</span>)</a></code></pre></div>
-<p><img src="heterogeneity_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="heterogeneity_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>We can investigate this further using a heterogeneity plot, which visualizes Cochran’s Q-test (<span class="citation">Cochran (1954)</span>) as a function of <span class="math inline">\(x_{2}\)</span>. By default, the test statistic (Q), with 95 % confidence bands, is plotted. We can see that the confidence band for Q is above 0 for <span class="math inline">\(x_{2}\)</span> larger than about 0.7.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="../reference/plot_heterogeneity.html">plot_heterogeneity</a></span>(meta_analysis)</a></code></pre></div>
-<p><img src="heterogeneity_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="heterogeneity_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>We can also plot the <span class="math inline">\(p\)</span>-value of Cochran’s Q-test. The dashed line shows the value <span class="math inline">\(0.05\)</span>. The <span class="math inline">\(p\)</span>-value plot is in full agreement with the Q-statistic plot above: There is evidence that the underlying functions from each dataset are different for values from about 0.7 and above.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="../reference/plot_heterogeneity.html">plot_heterogeneity</a></span>(meta_analysis, <span class="dt">type =</span> <span class="st">"p"</span>)</a></code></pre></div>
-<p><img src="heterogeneity_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="heterogeneity_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
