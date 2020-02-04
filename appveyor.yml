@@ -11,6 +11,11 @@ install:
   ps: Bootstrap
 
 
+environment:
+  R_ARCH: x64
+  R_VERSION: devel
+  NOT_CRAN: true
+
 build_script:
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
