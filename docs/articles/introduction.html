@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Introduction • metagam</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Introduction">
 <meta property="og:description" content="">
@@ -114,15 +114,15 @@
 <a class="sourceLine" id="cb2-9" title="9"><span class="co">## Data location 3, use maximum likelihood for smoothing</span></a>
 <a class="sourceLine" id="cb2-10" title="10">fit3 &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), </a>
 <a class="sourceLine" id="cb2-11" title="11">            <span class="dt">data =</span> datasets[[<span class="dv">3</span>]], <span class="dt">method =</span> <span class="st">"ML"</span>)</a></code></pre></div>
-<p>The <code>gam</code> objects <code>fit1</code>, <code>fit2</code>, and <code>fit3</code> contain individual participant data in various forms, and hence there are many cases in which these should not be shared. The function <code><a href="../reference/strip_rawdata.html">strip_rawdata()</a></code> from metagam removes all such rawdata. We here illustrate how this function can be applied at each data location in order to obtain a model fit that can be shared.</p>
+<p>The <code>gam</code> objects <code>fit1</code>, <code>fit2</code>, and <code>fit3</code> contain individual participant data in various forms, and hence there are many cases in which these should not be shared. The function <code>strip_rawdata()</code> from metagam removes all such rawdata. We here illustrate how this function can be applied at each data location in order to obtain a model fit that can be shared.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## Data location 1</span></a>
-<a class="sourceLine" id="cb3-2" title="2">fit_no_raw1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span>(fit1)</a>
+<a class="sourceLine" id="cb3-2" title="2">fit_no_raw1 &lt;-<span class="st"> </span><span class="kw">strip_rawdata</span>(fit1)</a>
 <a class="sourceLine" id="cb3-3" title="3"></a>
 <a class="sourceLine" id="cb3-4" title="4"><span class="co">## Data location 2</span></a>
-<a class="sourceLine" id="cb3-5" title="5">fit_no_raw2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span>(fit2)</a>
+<a class="sourceLine" id="cb3-5" title="5">fit_no_raw2 &lt;-<span class="st"> </span><span class="kw">strip_rawdata</span>(fit2)</a>
 <a class="sourceLine" id="cb3-6" title="6"></a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="co">## Data location 3</span></a>
-<a class="sourceLine" id="cb3-8" title="8">fit_no_raw3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span>(fit3)</a></code></pre></div>
+<a class="sourceLine" id="cb3-8" title="8">fit_no_raw3 &lt;-<span class="st"> </span><span class="kw">strip_rawdata</span>(fit3)</a></code></pre></div>
 <p>Now assume that the objects <code>fit_no_raw1</code>, <code>fit_no_raw2</code>, and <code>fit_no_raw3</code> have been gathered in a single location. First, we can inspect each of the objects.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(fit_no_raw1)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; GAM stripped for individual participant data with strip_rawdata().</span></a>
@@ -152,12 +152,12 @@
 <a class="sourceLine" id="cb4-26" title="26"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-27" title="27"><span class="co">#&gt; R-sq.(adj) =  0.537   Deviance explained = 55.3%</span></a>
 <a class="sourceLine" id="cb4-28" title="28"><span class="co">#&gt; GCV = 10.013  Scale est. = 9.645     n = 400</span></a></code></pre></div>
-<p>We can now perform a meta-analysis of these fits using the <code><a href="../reference/metagam.html">metagam()</a></code> function. We gather them in a list:</p>
+<p>We can now perform a meta-analysis of these fits using the <code>metagam()</code> function. We gather them in a list:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">models &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">cohort1 =</span> fit_no_raw1, </a>
 <a class="sourceLine" id="cb5-2" title="2">               <span class="dt">cohort2 =</span> fit_no_raw2, </a>
 <a class="sourceLine" id="cb5-3" title="3">               <span class="dt">cohort3 =</span> fit_no_raw3)</a></code></pre></div>
 <p>It is typically most convenient to analyze a single smooth term at a time. We start with the term <code>s(x0)</code>, and set <code>grid_size=100</code> to get 100 equally spaced values of <code>x0</code> within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">metafit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/metagam.html">metagam</a></span>(models, <span class="dt">terms =</span> <span class="st">"s(x0)"</span>)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">metafit &lt;-<span class="st"> </span><span class="kw">metagam</span>(models, <span class="dt">terms =</span> <span class="st">"s(x0)"</span>)</a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(metafit)</a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; Meta-analysis of GAMs from 3 cohorts, using method FE.</span></a>
 <a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt; </span></a>
@@ -189,7 +189,7 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
         <div id="tocnav">
       <h2 class="hasAnchor">
@@ -210,7 +210,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -143,7 +143,7 @@
     <tr>
       <th>models</th>
       <td><p>List of generalized additive models, each of which has been returned
-by <code><a href='strip_rawdata.html'>strip_rawdata</a></code>. If the list is named, the names will be used in the output.</p></td>
+by <code>strip_rawdata</code>. If the list is named, the names will be used in the output.</p></td>
     </tr>
     <tr>
       <th>grid</th>
@@ -214,12 +214,12 @@ alternative hypothesis be true with no uncertainty.</p>
   <span class='co'>## This uses the gam() function from mgcv</span>
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x0</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x1</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x2</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)
   <span class='co'>## This uses strip_rawdata() from metagam</span>
-  <span class='fu'><a href='strip_rawdata.html'>strip_rawdata</a></span>(<span class='no'>model</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/metagam/man/strip_rawdata.html'>strip_rawdata</a></span>(<span class='no'>model</span>)
 })
 
 <span class='co'>## Next, we meta-analyze the models.</span>
 <span class='co'>## It is often most convenient to analyze a single term at a time. We focus on s(x1).</span>
-<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>metagam</span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
+<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/metagam/man/metagam.html'>metagam</a></span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
 
 <span class='co'>## We can print some information</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meta_analysis</span>)</div><div class='output co'>#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.
@@ -241,7 +241,7 @@ alternative hypothesis be true with no uncertainty.</p>
 <span class='co'>## We can plot the fit</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>meta_analysis</span>)</div><div class='img'><img src='metagam-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
@@ -260,7 +260,7 @@ alternative hypothesis be true with no uncertainty.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>
