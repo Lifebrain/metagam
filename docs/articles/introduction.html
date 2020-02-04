@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Introduction • metagam</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Introduction">
 <meta property="og:description" content="">
@@ -94,25 +94,25 @@
 <div id="basic-usage-example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#basic-usage-example" class="anchor"></a>Basic Usage Example</h1>
-<p>Assume some data of interest are located in three different cohorts. In order to increase statistical power and hence be more able to detect relationships in the data, we would ideally fit a GAM to all three datasets combined, using a model on the form <code>y ~ s(x0) + s(x1) + s(x2)</code>, where <code>y</code> is an outcome of interest and <code>x1</code> and <code>x2</code> are explanatory variables. The smooth functions <code><a href="https://rdrr.io/pkg/mgcv/man/s.html">s()</a></code> allow the outcome to vary nonlinearly as a function of each explanatory variable. When all three datasets are not available in a single location, we cannot fit a GAM using this mega-analytic approach. The metagam package provides a flexible solution to this problem, which here will be illustrated.</p>
-<p>We start by simulation three datasets using the <code><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim()</a></code> function from mgcv.</p>
+<p>Assume some data of interest are located in three different cohorts. In order to increase statistical power and hence be more able to detect relationships in the data, we would ideally fit a GAM to all three datasets combined, using a model on the form <code>y ~ s(x0) + s(x1) + s(x2)</code>, where <code>y</code> is an outcome of interest and <code>x1</code> and <code>x2</code> are explanatory variables. The smooth functions <code>s()</code> allow the outcome to vary nonlinearly as a function of each explanatory variable. When all three datasets are not available in a single location, we cannot fit a GAM using this mega-analytic approach. The metagam package provides a flexible solution to this problem, which here will be illustrated.</p>
+<p>We start by simulation three datasets using the <code>gamSim()</code> function from mgcv.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(metagam)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(mgcv)</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="co">## simulate three datasets</span></a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5">datasets &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span>(<span class="dt">scale =</span> <span class="dv">3</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb1-5" title="5">datasets &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="cf">function</span>(x) <span class="kw">gamSim</span>(<span class="dt">scale =</span> <span class="dv">3</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>))</a></code></pre></div>
 <p>In each data location, we assume a GAM with the generic form <code>y~s(x0)+s(x1)+s(x2)</code> is fit to the data. Notably, model parameters like knot locations, number of basis functions, and smoothing method does not need to be identical in each separate fit. Instead, the parameters can be optimized independently to fit the data in each location.</p>
 <p>Here is an example:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">## Data location 1</span></a>
-<a class="sourceLine" id="cb2-2" title="2">fit1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x0, <span class="dt">k =</span> <span class="dv">8</span>, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x1, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), </a>
+<a class="sourceLine" id="cb2-2" title="2">fit1 &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0, <span class="dt">k =</span> <span class="dv">8</span>, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), </a>
 <a class="sourceLine" id="cb2-3" title="3">            <span class="dt">data =</span> datasets[[<span class="dv">1</span>]])</a>
 <a class="sourceLine" id="cb2-4" title="4"></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">## Data location 2, use P-splines for the first and third term</span></a>
-<a class="sourceLine" id="cb2-6" title="6">fit2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x0, <span class="dt">bs =</span> <span class="st">"ps"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x1, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x2, <span class="dt">bs =</span> <span class="st">"bs"</span>), </a>
+<a class="sourceLine" id="cb2-6" title="6">fit2 &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0, <span class="dt">bs =</span> <span class="st">"ps"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">bs =</span> <span class="st">"bs"</span>), </a>
 <a class="sourceLine" id="cb2-7" title="7">            <span class="dt">data =</span> datasets[[<span class="dv">2</span>]])</a>
 <a class="sourceLine" id="cb2-8" title="8"></a>
 <a class="sourceLine" id="cb2-9" title="9"><span class="co">## Data location 3, use maximum likelihood for smoothing</span></a>
-<a class="sourceLine" id="cb2-10" title="10">fit3 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x0, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x1, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), </a>
+<a class="sourceLine" id="cb2-10" title="10">fit3 &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, <span class="dt">bs =</span> <span class="st">"cr"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), </a>
 <a class="sourceLine" id="cb2-11" title="11">            <span class="dt">data =</span> datasets[[<span class="dv">3</span>]], <span class="dt">method =</span> <span class="st">"ML"</span>)</a></code></pre></div>
 <p>The <code>gam</code> objects <code>fit1</code>, <code>fit2</code>, and <code>fit3</code> contain individual participant data in various forms, and hence there are many cases in which these should not be shared. The function <code><a href="../reference/strip_rawdata.html">strip_rawdata()</a></code> from metagam removes all such rawdata. We here illustrate how this function can be applied at each data location in order to obtain a model fit that can be shared.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## Data location 1</span></a>
@@ -156,7 +156,7 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">models &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">cohort1 =</span> fit_no_raw1, </a>
 <a class="sourceLine" id="cb5-2" title="2">               <span class="dt">cohort2 =</span> fit_no_raw2, </a>
 <a class="sourceLine" id="cb5-3" title="3">               <span class="dt">cohort3 =</span> fit_no_raw3)</a></code></pre></div>
-<p>It is typically most convenient to analyze a single smooth term at a time. We start with the term <code><a href="https://rdrr.io/pkg/mgcv/man/s.html">s(x0)</a></code>, and set <code>grid_size=100</code> to get 100 equally spaced values of <code>x0</code> within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.</p>
+<p>It is typically most convenient to analyze a single smooth term at a time. We start with the term <code>s(x0)</code>, and set <code>grid_size=100</code> to get 100 equally spaced values of <code>x0</code> within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">metafit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/metagam.html">metagam</a></span>(models, <span class="dt">terms =</span> <span class="st">"s(x0)"</span>)</a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(metafit)</a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; Meta-analysis of GAMs from 3 cohorts, using method FE.</span></a>
@@ -189,7 +189,7 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
 
         <div id="tocnav">
       <h2 class="hasAnchor">
@@ -206,11 +206,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Øystein Sørensen, Andreas Brandmaier, Athanasia Mo Mowinckel.</p>
+  <p>Developed by Øystein Sørensen, Andreas M. Brandmaier, Athanasia Mo Mowinckel.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

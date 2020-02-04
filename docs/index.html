@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meta-analysis of generalized additive models • metagam</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Meta-analysis of generalized additive models">
 <meta property="og:description" content="This package performs meta-analysis of generalized additive
@@ -95,7 +95,7 @@
 <p>metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits.</p>
 <p>Currently, GAMs objects created with the following functions are supported:</p>
 <ul>
-<li>From package <a href="https://cran.r-project.org/package=mgcv">mgcv</a>: <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam()</a></code> and <code><a href="https://rdrr.io/pkg/mgcv/man/gamm.html">gamm()</a></code>.</li>
+<li>From package <a href="https://cran.r-project.org/package=mgcv">mgcv</a>: <code>gam()</code> and <code>gamm()</code>.</li>
 <li>From package <a href="https://cran.r-project.org/package=gamm4">gamm4</a>: <code>gamm4()</code>.</li>
 </ul>
 <p>This package is under development, so changes to the interface can be expected. Suggestions for improvements and bug reports are warmly welcome, either by filing an <a href="https://github.com/lifebrain/metagam/issues">Issue</a> or opening a <a href="https://github.com/lifebrain/metagam/pulls">Pull Request</a>.</p>
@@ -118,11 +118,11 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## Set seed for reproducible random numbers</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">8562957</span>)</a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="co">## Simulate using mgcv::gamSim</span></a>
-<a class="sourceLine" id="cb3-4" title="4">datasets &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span>(<span class="dt">verbose =</span> <span class="ot">FALSE</span>))</a>
+<a class="sourceLine" id="cb3-4" title="4">datasets &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="cf">function</span>(x) <span class="kw">gamSim</span>(<span class="dt">verbose =</span> <span class="ot">FALSE</span>))</a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="co">## Fit a model to each dataset</span></a>
 <a class="sourceLine" id="cb3-6" title="6">models &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(datasets, <span class="cf">function</span>(dat){</a>
 <a class="sourceLine" id="cb3-7" title="7">  <span class="co">## Full gam with mgcv</span></a>
-<a class="sourceLine" id="cb3-8" title="8">  full_model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), <span class="dt">data =</span> dat)</a>
+<a class="sourceLine" id="cb3-8" title="8">  full_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), <span class="dt">data =</span> dat)</a>
 <a class="sourceLine" id="cb3-9" title="9">  <span class="co">## Strip rawdata</span></a>
 <a class="sourceLine" id="cb3-10" title="10">  <span class="kw"><a href="reference/strip_rawdata.html">strip_rawdata</a></span>(full_model)</a>
 <a class="sourceLine" id="cb3-11" title="11">})</a></code></pre></div>
@@ -153,7 +153,7 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
@@ -178,22 +178,32 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Øystein Sørensen <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0724-3542" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Andreas Brandmaier <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-8765-6982" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Athanasia Mo Mowinckel <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5756-0223" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Øystein Sørensen <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0724-3542" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Andreas M. Brandmaier <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-8765-6982" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Athanasia Mo Mowinckel <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5756-0223" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.org/lifebrain/metagam"><img src="https://travis-ci.org/lifebrain/metagam.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://ci.appveyor.com/project/Lifebrain/metagam"><img src="https://ci.appveyor.com/api/projects/status/github/Lifebrain/metagam?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
+<li><a href="https://codecov.io/gh/Lifebrain/metagam?branch=master"><img src="https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://CRAN.R-project.org/package=metagam"><img src="https://www.r-pkg.org/badges/version/metagam" alt="CRAN status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Øystein Sørensen, Andreas Brandmaier, Athanasia Mo Mowinckel.</p>
+  <p>Developed by Øystein Sørensen, Andreas M. Brandmaier, Athanasia Mo Mowinckel.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
