@@ -20,8 +20,8 @@ color codes.
 Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
 }
 \details{
-This function currently only works for meta-analytic estimates of a single smooth term,
-alternatively meta-analysis of response or link function.
+This function currently works for meta-analytic estimates of a single smooth term, which can be either
+univariate or bivariate. It alswo works for alternatively meta-analysis of response or link functions.
 }
 \examples{
 library(metagam)

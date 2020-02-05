@@ -22,7 +22,7 @@
 #' # vignette("heterogeneity")
 #'
 #'
-plot_heterogeneity <- function(x, axis = x$xvars, term = NULL,
+plot_heterogeneity <- function(x, axis = NULL, term = NULL,
                                type = "Q", alpha_thresh = .05)
 {
 
@@ -30,8 +30,13 @@ plot_heterogeneity <- function(x, axis = x$xvars, term = NULL,
     axis <- x$xvars
   }
 
+
   if(is.null(term)){
-    term <- x$terms
+    if(x$type %in% c("iterms", "terms")){
+      term <- x$terms
+    } else {
+      term <- x$type
+    }
   }
 
   if(length(axis) > 1 || length(term) > 1){
@@ -62,17 +67,8 @@ plot_heterogeneity <- function(x, axis = x$xvars, term = NULL,
 #' @return tibble/data.frame
 #'
 #' @keywords internal
-make_heterogeneity_data <- function(x, axis = x$xvars, term = NULL)
+make_heterogeneity_data <- function(x, axis, term)
 {
-
-  if(is.null(term)){
-    if(x$type == "iterms"){
-      term <- x$terms
-    } else {
-      term <- x$type
-    }
-  }
-
   dat <- x$meta_estimates
   dat <- dplyr::filter(dat, .data$term == !!term)
   dat <- dplyr::mutate(dat,

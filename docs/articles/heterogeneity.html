@@ -56,6 +56,9 @@
     <li>
       <a href="../articles/heterogeneity.html">Heterogeneity analysis</a>
     </li>
+    <li>
+      <a href="../articles/multivariate.html">Multivariate smooth terms</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -94,7 +97,7 @@
 <h2 class="hasAnchor">
 <a href="#simulation" class="anchor"></a>Simulation</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(metagam)</a></code></pre></div>
-<p>We start by simulating 5 datasets using the <code>gamSim()</code> function from mgcv. We use the response <span class="math inline">\(y\)</span> and the explanatory variable <span class="math inline">\(x_{2}\)</span>, but add an additional shift <span class="math inline">\(\beta x_{2}^{2}\)</span> where <span class="math inline">\(\beta_{2}\)</span> differs between datasets, yielding heterogenous data.</p>
+<p>We start by simulating 5 datasets using the <code><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim()</a></code> function from mgcv. We use the response <span class="math inline">\(y\)</span> and the explanatory variable <span class="math inline">\(x_{2}\)</span>, but add an additional shift <span class="math inline">\(\beta x_{2}^{2}\)</span> where <span class="math inline">\(\beta_{2}\)</span> differs between datasets, yielding heterogenous data.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(mgcv)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; Loading required package: nlme</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt; This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.</span></a>
@@ -102,7 +105,7 @@
 <a class="sourceLine" id="cb2-5" title="5">shifts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="fl">.5</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-1</span>)</a>
 <a class="sourceLine" id="cb2-6" title="6">datasets &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(shifts, <span class="cf">function</span>(x) {</a>
 <a class="sourceLine" id="cb2-7" title="7">  <span class="co">## Simulate data</span></a>
-<a class="sourceLine" id="cb2-8" title="8">  dat &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">scale =</span> <span class="fl">.1</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-8" title="8">  dat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span>(<span class="dt">scale =</span> <span class="fl">.1</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb2-9" title="9">  <span class="co">## Add a shift</span></a>
 <a class="sourceLine" id="cb2-10" title="10">  dat<span class="op">$</span>y &lt;-<span class="st"> </span>dat<span class="op">$</span>y <span class="op">+</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>dat<span class="op">$</span>x2<span class="op">^</span><span class="dv">2</span></a>
 <a class="sourceLine" id="cb2-11" title="11">  <span class="co">## Return data</span></a>
@@ -114,15 +117,15 @@
 <a href="#fit-gams" class="anchor"></a>Fit GAMs</h2>
 <p>Next, we analyze all datasets, and strip individual participant data.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">models &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(datasets, <span class="cf">function</span>(dat){</a>
-<a class="sourceLine" id="cb3-2" title="2">  b &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), <span class="dt">data =</span> dat)</a>
-<a class="sourceLine" id="cb3-3" title="3">  <span class="kw"><a href="https://rdrr.io/pkg/metagam/man/strip_rawdata.html">strip_rawdata</a></span>(b)  </a>
+<a class="sourceLine" id="cb3-2" title="2">  b &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(x2, <span class="dt">bs =</span> <span class="st">"cr"</span>), <span class="dt">data =</span> dat)</a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="kw"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span>(b)  </a>
 <a class="sourceLine" id="cb3-4" title="4">})</a></code></pre></div>
 </div>
 <div id="meta-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#meta-analysis" class="anchor"></a>Meta-Analysis</h2>
 <p>Next, we meta-analyze the models. Since we only have a single smooth term, we use <code>type = "response"</code> to get the response function. This is equivalent to using <code>type = "iterms"</code> and <code>intercept = TRUE</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">meta_analysis &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/metagam/man/metagam.html">metagam</a></span>(models, <span class="dt">type =</span> <span class="st">"response"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">meta_analysis &lt;-<span class="st"> </span><span class="kw"><a href="../reference/metagam.html">metagam</a></span>(models, <span class="dt">type =</span> <span class="st">"response"</span>)</a></code></pre></div>
 <p>Next, we plot the separate estimates together with the meta-analytic fit. We clearly see that dataset 3, which had a positive shift <span class="math inline">\(\beta=1 x_{2}^2\)</span>, lies above the others for <span class="math inline">\(x_{2}\)</span> close to 1, and opposite for dataset 5.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(meta_analysis)</a></code></pre></div>
 <p><img src="heterogeneity_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
@@ -131,10 +134,10 @@
 <a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_colour_brewer</a></span>(<span class="dt">palette =</span> <span class="st">"Set1"</span>)</a></code></pre></div>
 <p><img src="heterogeneity_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>We can investigate this further using a heterogeneity plot, which visualizes Cochran’s Q-test (<span class="citation">Cochran (1954)</span>) as a function of <span class="math inline">\(x_{2}\)</span>. By default, the test statistic (Q), with 95 % confidence bands, is plotted. We can see that the confidence band for Q is above 0 for <span class="math inline">\(x_{2}\)</span> larger than about 0.7.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/metagam/man/plot_heterogeneity.html">plot_heterogeneity</a></span>(meta_analysis)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="../reference/plot_heterogeneity.html">plot_heterogeneity</a></span>(meta_analysis)</a></code></pre></div>
 <p><img src="heterogeneity_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>We can also plot the <span class="math inline">\(p\)</span>-value of Cochran’s Q-test. The dashed line shows the value <span class="math inline">\(0.05\)</span>. The <span class="math inline">\(p\)</span>-value plot is in full agreement with the Q-statistic plot above: There is evidence that the underlying functions from each dataset are different for values from about 0.7 and above.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/metagam/man/plot_heterogeneity.html">plot_heterogeneity</a></span>(meta_analysis, <span class="dt">type =</span> <span class="st">"p"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="../reference/plot_heterogeneity.html">plot_heterogeneity</a></span>(meta_analysis, <span class="dt">type =</span> <span class="st">"p"</span>)</a></code></pre></div>
 <p><img src="heterogeneity_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="references" class="section level1 unnumbered">

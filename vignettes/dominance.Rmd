@@ -1,6 +1,9 @@
 ---
 title: "Dominance Plots"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 4
 vignette: >
   %\VignetteIndexEntry{Dominance}
   %\VignetteEngine{knitr::rmarkdown}

@@ -1,6 +1,9 @@
 ---
 title: "Introduction"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 4
 bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Introduction}

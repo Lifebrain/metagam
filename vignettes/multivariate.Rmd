@@ -1,0 +1,99 @@
+---
+title: "Multivariate Smooth Terms"
+bibliography: ../inst/REFERENCES.bib
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 4
+vignette: >
+  %\VignetteIndexEntry{Multivariate Smooth Terms}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(metagam)
+```
+
+This vignette demonstrates how to meta-analyze multivariate smooth terms. In particular, we will focus on tensor interaction terms (@Wood2006). We start by loading mgcv and generate five example datasets with somewhere between 100 and 1000 observations.
+
+```{r}
+library(mgcv)
+set.seed(123)
+datasets <- lapply(1:5, function(x) gamSim(eg = 2, n = sample(100:1000, 1), 
+                                           verbose = FALSE)$data)
+```
+
+Here are the first few rows from the first dataset:
+
+```{r}
+knitr::kable(head(datasets[[1]]))
+```
+
+## GAMs with Tensor Interaction Terms
+
+We are interested in analyzing the joint effect of the explanatory variables x and z on the response y. This can be done using tensor interaction terms. We will illustrate this using the functions in the mgcv package before showing how individual participant data can be removed and the fits be meta-analyzed.
+
+On the first dataset, we fit the following model:
+
+```{r}
+mod <- gam(y ~ te(x, z), data = datasets[[1]])
+```
+
+```{r}
+summary(mod)
+```
+
+We can get a nice visualization of the term `te(x,z)` using `gratia::draw()`. In this case there seems to be an interaction between x and z, hence making such a tensor interaction term useful.
+
+```{r}
+library(gratia)
+draw(mod)
+```
+
+## Fitting GAMs with Tensor Interaction Terms and Removing Rawdata
+
+Now assume that a model of the form `y ~ te(x, z)` is to be fitted to data in the five locations for which we simulated above. We can replicate this here by first fitting the GAM and then calling `strip_rawdata()` on the resulting objects:
+
+```{r}
+fits <- lapply(datasets, function(dat){
+  b <- gam(y ~ te(x, z), data = dat)
+  strip_rawdata(b)
+})
+```
+
+Each element in the list `fits` now corresponds to a model without any individual participant data, which can be shared with a central location for meta-analysis. The summary method for the fits reproduces the summary output from the original `mgcv::gam()` fit.
+
+```{r}
+summary(fits[[1]])
+```
+
+
+## Meta-Analyzing GAMs with Tensor Interaction Terms
+
+Assuming all GAM fits without individual participant data have been gathered in a single location and put a list named `fits` (which we did above), a meta-analytic can now be computed using `metagam()`. If no grid is provided, `metagam()` sets up a grid in which the argument `grid_size` determines the number of unique values of each term. Using the default `grid_size = 100` in this case means that the grid has 100 x 100 = 10,000 rows. Performing meta-analysis at each of these points might take a few moments, so we set `grid_size = 20` to get a first rough estimate.
+
+```{r}
+metafit <- metagam(fits, grid_size = 20)
+```
+
+The summary method prints out the p-values of the smooth terms:
+
+```{r}
+summary(metafit)
+```
+
+We can then plot the corresponding meta-analytic fit:
+
+```{r}
+plot(metafit)
+```
+
+# References

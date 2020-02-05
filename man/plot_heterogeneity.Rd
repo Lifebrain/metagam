@@ -6,7 +6,7 @@
 \usage{
 plot_heterogeneity(
   x,
-  axis = x$xvars,
+  axis = NULL,
   term = NULL,
   type = "Q",
   alpha_thresh = 0.05

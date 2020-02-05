@@ -4,7 +4,7 @@
 \alias{make_heterogeneity_data}
 \title{Prepare heterogeneity data}
 \usage{
-make_heterogeneity_data(x, axis = x$xvars, term = NULL)
+make_heterogeneity_data(x, axis, term)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}

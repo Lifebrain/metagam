@@ -1,7 +1,10 @@
 ---
 title: "Heterogeneity Plots"
 bibliography: ../inst/REFERENCES.bib
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 4
 vignette: >
   %\VignetteIndexEntry{Heterogeneity Plots}
   %\VignetteEngine{knitr::rmarkdown}
