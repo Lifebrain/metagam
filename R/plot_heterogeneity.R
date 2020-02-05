@@ -22,9 +22,22 @@
 #' # vignette("heterogeneity")
 #'
 #'
-plot_heterogeneity <- function(x, axis = x$xvars, term = NULL, type = "Q", alpha_thresh = .05)
+plot_heterogeneity <- function(x, axis = x$xvars, term = NULL,
+                               type = "Q", alpha_thresh = .05)
 {
 
+  if(is.null(axis)){
+    axis <- x$xvars
+  }
+
+  if(is.null(term)){
+    term <- x$terms
+  }
+
+  if(length(axis) > 1 || length(term) > 1){
+    stop("plot_heterogeneity() currently only works for analyzing a single univariate term\n",
+         "please run metagam() with type='iterms'.\n\n")
+  }
   type <- match.arg(type, c("p", "Q"))
 
   dat <- make_heterogeneity_data(x, axis = axis, term = term)

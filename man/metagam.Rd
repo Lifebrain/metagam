@@ -25,7 +25,9 @@ for the smooth terms defined by the \code{terms} argument, with length given by
 \code{grid_size} for numeric variables and a single value of each factor variable.}
 
 \item{grid_size}{Numeric value giving the number of elements to use in the grid of explanatory
-variables when \code{grid=NULL}.}
+variables when \code{grid=NULL}. When multiple terms are supplied, each combination of
+values of explanatory variables are generated, and the number of grid
+points becomes \code{grid_size} to the power of the number of terms.}
 
 \item{type}{Type of prediction to use. Defaults to \code{"iterms"}. Available options
 are \code{"iterms"}, \code{"link"}, and \code{"response"}. See the documentation

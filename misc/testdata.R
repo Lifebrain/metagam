@@ -22,7 +22,7 @@ dat2 <- dat[dat$x2 < .5, ]
 dat1 <- dat[301:500, ]
 dat3 <- dat[501:1000, ]
 
-form <- as.formula(y ~ z + s(x1, bs = "cr")+ s(x2,bs="cr") )
+form <- as.formula(y ~ s(x1, bs = "cr")+ s(x2,bs="cr") )
 
 b <- gam(form, data = dat1)
 model <- strip_rawdata(b, save_ranges = T)
@@ -35,9 +35,9 @@ models <- lapply(list(dat1, dat2, dat3), function(d){
   metagam::strip_rawdata(fit)
 })
 
-#grid <- tibble(x1 = seq(0,1,.1), x2 = 0, z = factor(1, levels = 1:2))
+#grid <- crossing(x1 = seq(0,1,.1), x2 = seq(0, 1, .1))
 
-object <- metagam(models)
+object <- metagam(models, grid_size = 10, type = "iterms")
 
 plot_heterogeneity(object, alpha_thresh = .3)
 plot_heterogeneity(object, type = "p")

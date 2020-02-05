@@ -29,6 +29,19 @@ plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
                             width = NULL)
 {
 
+  if(is.null(axis)){
+    axis <- x$xvars
+  }
+
+  if(is.null(term)){
+    term <- x$terms
+  }
+
+  if(length(axis) > 1 || length(term) > 1){
+    stop("plot_heterogeneity() currently only works for analyzing a single univariate term\n",
+         "please run metagam() with type='iterms'.\n\n")
+  }
+
   # position = fill gives percent stacked bar,
   # otherwise fo position = stacked
   if (isTRUE(relative)) {
@@ -37,13 +50,7 @@ plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
     position = "stacked"
   }
 
-  if(is.null(axis)){
-    axis <- x$xvars
-  }
 
-  if(is.null(term)){
-    term <- x$terms
-  }
 
   dat <- dplyr::filter(x$cohort_estimates, .data$term == !!term)
   dat <- dplyr::rename_at(dat, dplyr::vars(axis), ~ "x")
