@@ -7,7 +7,9 @@
 #' for the smooth terms defined by the \code{terms} argument, with length given by
 #' \code{grid_size} for numeric variables and a single value of each factor variable.
 #' @param grid_size Numeric value giving the number of elements to use in the grid of explanatory
-#' variables when \code{grid=NULL}.
+#' variables when \code{grid=NULL}. When multiple terms are supplied, each combination of
+#' values of explanatory variables are generated, and the number of grid
+#' points becomes \code{grid_size} to the power of the number of terms.
 #' @param type Type of prediction to use. Defaults to \code{"iterms"}. Available options
 #' are \code{"iterms"}, \code{"link"}, and \code{"response"}. See the documentation
 #' of \code{mgcv::predict.gam} for details. Note that \code{type="terms"} is not supported,
@@ -45,15 +47,19 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   # Find the terms from each model
   model_terms <- purrr::map_dfr(models, function(x) x$term_df)
 
+  # Check if the user-specified term exists
   if(!is.null(terms) && !all(ind <- terms %in% model_terms$term)){
     stop("Unknown term ", paste(terms[!ind], collapse = " and "), " requested.\n")
   }
 
-  # If terms are not supplied, find the smooth terms
-  if(is.null(terms)){
+  # If terms are not supplied and type is "iterms" or "terms", find the smooth terms
+  # Otherwise use all terms
+  if(is.null(terms) && type %in% c("iterms", "terms")){
     terms <- dplyr::arrange(model_terms, .data$term)
     terms <- dplyr::slice(terms, 1)
     terms <- terms$term
+  } else if(type %in% c("link", "response")){
+    terms <- sort(unique(model_terms$term))
   }
 
   # Find the variables corresponding to terms
@@ -62,7 +68,6 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   # Create grid if not supplied by user
   if(is.null(grid)){
-
     # Find the minimum and maximum from each model
     grid <- purrr::map_dfr(models, function(x){
       purrr::map_dfr(x$var.summary, function(vs){
