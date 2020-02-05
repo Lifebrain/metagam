@@ -35,6 +35,17 @@ test_that("strip_rawdata.gam works", {
   lapply(stripfits, function(x) expect_s3_class(x, "striprawdata"))
 })
 
+test_that("strip_rawdata.bam works", {
+  fullfits <- lapply(1:ndat, function(x){
+    dat <- gamSim(n = n, verbose = FALSE)
+    bam(y ~ s(x0, bs = 'cr') + s(x1, bs = 'cr'), data = dat)
+  })
+
+  stripfits <- lapply(fullfits, strip_rawdata)
+  test_predictions(fullfits, stripfits)
+  lapply(stripfits, function(x) expect_s3_class(x, "striprawdata"))
+})
+
 test_that("strip_rawdata.gamm works", {
 
   fullfits <- lapply(1:ndat, function(x){
