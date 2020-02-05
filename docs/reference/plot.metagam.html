@@ -94,6 +94,9 @@
     <li>
       <a href="../articles/heterogeneity.html">Heterogeneity analysis</a>
     </li>
+    <li>
+      <a href="../articles/multivariate.html">Multivariate smooth terms</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -134,7 +137,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object returned by <code>metagam</code>.</p></td>
+      <td><p>Object returned by <code><a href='metagam.html'>metagam</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -149,8 +152,8 @@ fit is shown as a solid black line, and the cohort fits are shown as dashed line
 color codes.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function currently only works for meta-analytic estimates of a single smooth term,
-alternatively meta-analysis of response or link function.</p>
+    <p>This function currently works for meta-analytic estimates of a single smooth term, which can be either
+univariate or bivariate. It alswo works for alternatively meta-analysis of response or link functions.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>metagam</span>)
@@ -166,17 +169,17 @@ alternatively meta-analysis of response or link function.</p>
   <span class='co'>## This uses the gam() function from mgcv</span>
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x0</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x1</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x2</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)
   <span class='co'>## This uses strip_rawdata() from metagam</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/metagam/man/strip_rawdata.html'>strip_rawdata</a></span>(<span class='no'>model</span>)
+  <span class='fu'><a href='strip_rawdata.html'>strip_rawdata</a></span>(<span class='no'>model</span>)
 })
 
 <span class='co'>## Next, we meta-analyze the models.</span>
 <span class='co'>## It is often most convenient to analyze a single term at a time. We focus on s(x1).</span>
-<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/metagam/man/metagam.html'>metagam</a></span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
+<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='metagam.html'>metagam</a></span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
 
 <span class='co'>## We can print some information</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meta_analysis</span>)</div><div class='output co'>#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.
 #&gt; 
-#&gt; Smooth terms analyzed: s(x1) 
+#&gt; Smooth terms analyzed: s(x1) .
 #&gt; 
 #&gt; Meta-analytic p-values of smooth terms:
 #&gt; 

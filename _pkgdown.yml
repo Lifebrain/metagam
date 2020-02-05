@@ -39,4 +39,6 @@ navbar:
       href: articles/dominance.html
     - text: Heterogeneity analysis
       href: articles/heterogeneity.html
+    - text: Multivariate smooth terms
+      href: articles/multivariate.html
 

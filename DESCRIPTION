@@ -40,6 +40,7 @@ Imports:
 RoxygenNote: 7.0.2
 Suggests: 
     gamm4,
+    gratia,
     roxygen2,
     rmarkdown,
     devtools,
