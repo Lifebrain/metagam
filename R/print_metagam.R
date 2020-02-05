@@ -8,9 +8,8 @@
 #' @export
 #'
 print.summary.metagam <- function(x, digits = 8, ...){
-  cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
-  cat("Smooth terms analyzed:", paste(x$terms, collapse = ", "), "\n\n")
+  printfun(x)
 
   cat("Meta-analytic p-values of smooth terms:")
   print(
@@ -35,8 +34,20 @@ print.summary.metagam <- function(x, digits = 8, ...){
 #' @export
 #'
 print.metagam <- function(x, ...){
+  printfun(x)
+  invisible(x)
+}
+
+
+
+printfun <- function(x){
   cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
-  cat("Smooth terms analyzed:", paste(x$terms, collapse = ", "), "\n\n")
-  invisible(x)
+  if(x$type %in% c("terms", "iterms")){
+    cat("Smooth terms analyzed:", paste(x$terms, collapse = ", "), ".\n\n")
+  } else if (x$type %in% c("link", "response")){
+    cat(stringr::str_to_title(x$type), "function analyzed.\n\n")
+  } else {
+    stop("Unknown type", x$type, ".\n\n")
+  }
 }
