@@ -92,7 +92,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   # Find the estimates from each model over the grid
-  cohort_estimates <- purrr::map_dfr(models, function(x) {
+  cohort_estimates <- furrr::future_map_dfr(models, function(x) {
     pred <- stats::predict(x, newdata = grid, type = type,
                            se.fit = TRUE, terms = terms)
 
@@ -130,7 +130,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   meta_estimates <- dplyr::mutate(
     meta_estimates,
-    meta_model = purrr::map(.data$data, function(x){
+    meta_model = furrr::future_map(.data$data, function(x){
       metafor::rma(yi = x$estimate, sei = x$se, method = method)
     })
     )
@@ -138,7 +138,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   meta_estimates <- dplyr::ungroup(meta_estimates)
   meta_estimates <- dplyr::bind_cols(
     meta_estimates,
-    purrr::map_dfr(meta_estimates$meta_model, function(x) {
+    furrr::future_map_dfr(meta_estimates$meta_model, function(x) {
       pred <- stats::predict(x)
 
       dplyr::tibble(
@@ -149,7 +149,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
       )
       }))
 
-  # Move this to strip_rawdata
+  # Extract p-values
   pvals <- purrr::map_dfr(models, function(x) {
     dat <- x$s.table
     tmp_terms <- rownames(dat)
@@ -166,7 +166,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   # Create a tibble which contains both the meta-analytic p-values
   # and the full objects returned by metap functions
-  meta_pvals <- purrr::pmap_dfr(meta_pvals, function(term, data){
+  meta_pvals <- furrr::future_pmap_dfr(meta_pvals, function(term, data){
     df <- purrr::imap_dfc(
       list(
         sumz = metap::sumz,

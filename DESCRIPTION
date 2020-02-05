@@ -27,6 +27,7 @@ LazyData: true
 Imports: 
     mgcv,
     dplyr,
+    furrr,
     ggplot2,
     knitr,
     metafor,
@@ -39,6 +40,7 @@ Imports:
     viridis
 RoxygenNote: 7.0.2
 Suggests: 
+    future,
     gamm4,
     gratia,
     roxygen2,

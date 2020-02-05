@@ -84,6 +84,11 @@ participant data. We can then meta-analyze them using `metagam()`.
 
 ``` r
 meta_analysis <- metagam(models)
+#> 
+#> Attaching package: 'purrr'
+#> The following object is masked from 'package:testthat':
+#> 
+#>     is_null
 summary(meta_analysis)
 #> Meta-analysis of GAMs from 3 cohorts, using method FE.
 #> 
