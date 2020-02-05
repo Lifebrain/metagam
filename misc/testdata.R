@@ -1,6 +1,6 @@
 library(tidyverse)
 library(mgcv)
-library(gamm4)
+
 f0 <- function(x) 2 * sin(pi * x)
 f1 <- function(x) exp(2 * x) - 1
 f2 <- function(x) 0.2 * x^11 * (10 * (1 - x))^6 + 10 *
@@ -24,23 +24,22 @@ dat3 <- dat[501:1000, ]
 
 form <- as.formula(y ~ s(x1, bs = "cr")+ s(x2,bs="cr") )
 
-b <- gam(form, data = dat1)
-model <- strip_rawdata(b, save_ranges = T)
-summary(model)
-
-
 # Fit a model
 models <- lapply(list(dat1, dat2, dat3), function(d){
-  fit <- mgcv::gam(form, data = d, method = "REML")
+  fit <- mgcv::bam(form, data = d, discrete = TRUE)
   metagam::strip_rawdata(fit)
 })
 
 #grid <- crossing(x1 = seq(0,1,.1), x2 = seq(0, 1, .1))
 
-object <- metagam(models, grid_size = 10, type = "iterms")
+object <- metagam(models, grid_size = 100, type = "iterms")
 
 plot_heterogeneity(object, alpha_thresh = .3)
 plot_heterogeneity(object, type = "p")
+plot(object)
+summary(object)
+object
+
 #predict(fits[[1]], newdata = tibble(x1 = .5, z = factor(1, levels=1:2)), type = "terms", terms = "s(x1)", newdata.guaranteed = TRUE)
 
 #grid <- expand.grid(replicate(3, seq(from = 0, to = 1, by = .01), simplify = FALSE))

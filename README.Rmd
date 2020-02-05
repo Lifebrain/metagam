@@ -30,7 +30,7 @@ metagam is an R-package for meta-analysis of generalized additive models (GAMs).
 
 Currently, GAMs objects created with the following functions are supported:
 
-- From package [mgcv](https://cran.r-project.org/package=mgcv): `gam()` and `gamm()`.
+- From package [mgcv](https://cran.r-project.org/package=mgcv): `bam()`, `gam()` and `gamm()`.
 - From package [gamm4](https://cran.r-project.org/package=gamm4): `gamm4()`.
 
 This package is under development, so changes to the interface can be expected. Suggestions for improvements and bug reports are warmly welcome, either by filing an [Issue](https://github.com/lifebrain/metagam/issues) or opening a [Pull Request](https://github.com/lifebrain/metagam/pulls).

@@ -33,7 +33,7 @@ Currently, GAMs objects created with the following functions are
 supported:
 
   - From package [mgcv](https://cran.r-project.org/package=mgcv):
-    `gam()` and `gamm()`.
+    `bam()`, `gam()` and `gamm()`.
   - From package [gamm4](https://cran.r-project.org/package=gamm4):
     `gamm4()`.
 
@@ -87,7 +87,7 @@ meta_analysis <- metagam(models)
 summary(meta_analysis)
 #> Meta-analysis of GAMs from 3 cohorts, using method FE.
 #> 
-#> Smooth terms analyzed: s(x2) 
+#> Smooth terms analyzed: s(x2) .
 #> 
 #> Meta-analytic p-values of smooth terms:
 #> 

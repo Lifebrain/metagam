@@ -138,6 +138,9 @@ shared without exposing individual participant data.</p>
 <span class='co'># S3 method for gamm</span>
 <span class='fu'>strip_rawdata</span>(<span class='no'>model</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>save_ranges</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for bam</span>
+<span class='fu'>strip_rawdata</span>(<span class='no'>model</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>save_ranges</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
 <span class='co'># S3 method for gam</span>
 <span class='fu'>strip_rawdata</span>(<span class='no'>model</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>save_ranges</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
@@ -146,7 +149,8 @@ shared without exposing individual participant data.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A model fitted using <code><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>mgcv::gam</a></code> or <code><a href='https://rdrr.io/pkg/mgcv/man/gamm.html'>mgcv::gamm</a></code>.</p></td>
+      <td><p>A model fitted using <code><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>mgcv::gam</a></code>, <code><a href='https://rdrr.io/pkg/mgcv/man/bam.html'>mgcv::bam</a></code>,
+<code><a href='https://rdrr.io/pkg/mgcv/man/gamm.html'>mgcv::gamm</a></code>, or <code><a href='https://rdrr.io/pkg/gamm4/man/gamm4.html'>gamm4::gamm4</a></code>.</p></td>
     </tr>
     <tr>
       <th>path</th>
@@ -170,11 +174,7 @@ list element <code>var.summary</code> of the returned object.</p></td>
     <p>Model object with individual participant data removed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Currently supported models are those returned by <code><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>mgcv::gam</a></code>,
-<code><a href='https://rdrr.io/pkg/mgcv/man/gamm.html'>mgcv::gamm</a></code>, and <code>gamm4::gamm4</code>. Since the latter returns an
-object of class <code>list</code>, the generic for <code>gamm4</code> is <code>strip_rawdata.list</code>.
-It will fail unless the list has an element named <code>gam</code> of class <code>gam</code>.</p>
-<p>Thin plate regression splines (<code>bs='tp'</code> and <code>bs='ts'</code>) and Duchon splines <code>bs='ds'</code>
+    <p>Thin plate regression splines (<code>bs='tp'</code> and <code>bs='ts'</code>) and Duchon splines <code>bs='ds'</code>
 are currently not supported, since for these splines <code>mgcv</code>
 requires the unique values of the explanatory variables for each smooth term for the <code>predict</code>
 method to work. Future updates to this package will fix this.</p>
@@ -184,6 +184,7 @@ method to work. Future updates to this package will fix this.</p>
 <ul>
 <li><p><code>list</code>: Strip rawdata from list object returned by gamm4</p></li>
 <li><p><code>gamm</code>: Strip rawdata from gamm object</p></li>
+<li><p><code>bam</code>: Strip rawdata from gam object</p></li>
 <li><p><code>gam</code>: Strip rawdata from gam object</p></li>
 </ul>
 
@@ -201,17 +202,17 @@ method to work. Future updates to this package will fix this.</p>
   <span class='co'>## This uses the gam() function from mgcv</span>
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x0</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x1</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>) + <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span>(<span class='no'>x2</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='st'>"cr"</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)
   <span class='co'>## This uses strip_rawdata() from metagam</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/metagam/man/strip_rawdata.html'>strip_rawdata</a></span>(<span class='no'>model</span>)
+  <span class='fu'>strip_rawdata</span>(<span class='no'>model</span>)
 })
 
 <span class='co'>## Next, we meta-analyze the models.</span>
 <span class='co'>## It is often most convenient to analyze a single term at a time. We focus on s(x1).</span>
-<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/metagam/man/metagam.html'>metagam</a></span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
+<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='metagam.html'>metagam</a></span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
 
 <span class='co'>## We can print some information</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meta_analysis</span>)</div><div class='output co'>#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.
 #&gt; 
-#&gt; Smooth terms analyzed: s(x1) 
+#&gt; Smooth terms analyzed: s(x1) .
 #&gt; 
 #&gt; Meta-analytic p-values of smooth terms:
 #&gt; 

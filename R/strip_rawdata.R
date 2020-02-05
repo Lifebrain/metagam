@@ -4,7 +4,8 @@
 #' model object, while keeping aggregated quantities. The resulting object can be
 #' shared without exposing individual participant data.
 #'
-#' @param model A model fitted using \code{mgcv::gam} or \code{mgcv::gamm}.
+#' @param model A model fitted using \code{mgcv::gam}, \code{mgcv::bam},
+#' \code{mgcv::gamm}, or \code{gamm4::gamm4}.
 #' @param path Optional path in which to save the object as a \code{.rds} file.
 #' @param save_ranges Logical specifying whether to save the ranges of each
 #' variable used by the model. For numeric variables this amounts to the minimum
@@ -12,10 +13,7 @@
 #' list element \code{var.summary} of the returned object.
 #' @param ... Other arguments (not used).
 #'
-#' @details Currently supported models are those returned by \code{mgcv::gam},
-#' \code{mgcv::gamm}, and \code{gamm4::gamm4}. Since the latter returns an
-#' object of class \code{list}, the generic for \code{gamm4} is \code{strip_rawdata.list}.
-#' It will fail unless the list has an element named \code{gam} of class \code{gam}.
+#' @details
 #'
 #' Thin plate regression splines (\code{bs='tp'} and \code{bs='ts'}) and Duchon splines \code{bs='ds'}
 #' are currently not supported, since for these splines \code{mgcv}
@@ -44,6 +42,13 @@ strip_rawdata.list <- function(model, path = NULL, save_ranges = TRUE, ...){
 strip_rawdata.gamm <- function(model, path = NULL, save_ranges = TRUE, ...){
   model <- model$gam
   strip_rawdata(model)
+}
+
+#' @describeIn strip_rawdata Strip rawdata from gam object
+#' @export
+strip_rawdata.bam <- function(model, path = NULL, save_ranges = TRUE, ...){
+  # bam objects inherit from gam, and can be treated as them
+  NextMethod()
 }
 
 #' @describeIn strip_rawdata Strip rawdata from gam object
@@ -102,7 +107,6 @@ strip_rawdata.gam <- function(model, path = NULL, save_ranges = TRUE, ...){
     optimizer = model$optimizer,
     pred.formula = model$pred.formula,
     pterms = model$pterms,
-    R = model$R,
     rank = model$rank,
     reml.scale = model$reml.scale,
     rV = model$rV,

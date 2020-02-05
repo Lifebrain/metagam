@@ -4,6 +4,7 @@
 \alias{strip_rawdata}
 \alias{strip_rawdata.list}
 \alias{strip_rawdata.gamm}
+\alias{strip_rawdata.bam}
 \alias{strip_rawdata.gam}
 \title{Strip rawdata from a generalized additive model}
 \usage{
@@ -13,10 +14,13 @@ strip_rawdata(model, path = NULL, save_ranges = TRUE, ...)
 
 \method{strip_rawdata}{gamm}(model, path = NULL, save_ranges = TRUE, ...)
 
+\method{strip_rawdata}{bam}(model, path = NULL, save_ranges = TRUE, ...)
+
 \method{strip_rawdata}{gam}(model, path = NULL, save_ranges = TRUE, ...)
 }
 \arguments{
-\item{model}{A model fitted using \code{mgcv::gam} or \code{mgcv::gamm}.}
+\item{model}{A model fitted using \code{mgcv::gam}, \code{mgcv::bam},
+\code{mgcv::gamm}, or \code{gamm4::gamm4}.}
 
 \item{path}{Optional path in which to save the object as a \code{.rds} file.}
 
@@ -36,11 +40,6 @@ model object, while keeping aggregated quantities. The resulting object can be
 shared without exposing individual participant data.
 }
 \details{
-Currently supported models are those returned by \code{mgcv::gam},
-\code{mgcv::gamm}, and \code{gamm4::gamm4}. Since the latter returns an
-object of class \code{list}, the generic for \code{gamm4} is \code{strip_rawdata.list}.
-It will fail unless the list has an element named \code{gam} of class \code{gam}.
-
 Thin plate regression splines (\code{bs='tp'} and \code{bs='ts'}) and Duchon splines \code{bs='ds'}
 are currently not supported, since for these splines \code{mgcv}
 requires the unique values of the explanatory variables for each smooth term for the \code{predict}
@@ -51,6 +50,8 @@ method to work. Future updates to this package will fix this.
 \item \code{list}: Strip rawdata from list object returned by gamm4
 
 \item \code{gamm}: Strip rawdata from gamm object
+
+\item \code{bam}: Strip rawdata from gam object
 
 \item \code{gam}: Strip rawdata from gam object
 }}
