@@ -2,7 +2,7 @@ Package: metagam
 Type: Package
 Title: Meta-Analysis of Generalized Additive Models
 Version: 0.1.0
-Authors@R: c(person("\u00D8ystein", "S\u00F8rensen", 
+Authors@R: c(person("Oystein", "Sorensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0003-0724-3542")),

@@ -12,3 +12,4 @@ Makefile
 ^CODE_OF_CONDUCT\.md$
 ^misc$
 ^data-raw$
+^cran-comments\.md$
