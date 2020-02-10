@@ -13,3 +13,5 @@ Makefile
 ^misc$
 ^data-raw$
 ^cran-comments\.md$
+^CRAN-RELEASE$
+^news\.md$
