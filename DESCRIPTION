@@ -1,8 +1,8 @@
 Package: metagam
 Type: Package
-Title: Meta-analysis of generalized additive models
+Title: Meta-Analysis of Generalized Additive Models
 Version: 0.1.0
-Authors@R: c(person("Øystein", "Sørensen", 
+Authors@R: c(person("\u00D8ystein", "S\u00F8rensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0003-0724-3542")),
@@ -14,16 +14,16 @@ Authors@R: c(person("Øystein", "Sørensen",
                     email = "a.m.mowinckel@psykologi.uio.no", 
                     role = c("aut"),
                     comment = c(ORCID = "0000-0002-5756-0223")))
-Description: This package performs meta-analysis of generalized additive
+Description: Meta-analysis of generalized additive
     models and generalized additive mixed models. A typical use case is
     when data cannot be shared across locations, and an overall meta-analytic
     fit is sought. metagam provides functionality for removing individual
     participant data from models computed using the mgcv and gamm4 packages such
     that the model objects can be shared without exposing individual data.
     Furthermore, methods for meta-analysing these fits are provided. The implemented
-    methods are described in Sorensen et al. (2020), <http://arxiv.org/abs/2002.02627>,
+    methods are described in Sorensen et al. (2020), <arXiv:2002.02627>,
     extending previous works by Schwartz and Zanobetti (2000) <http://www.jstor.org/stable/3703820>
-    and Crippa et al. (2018) <https://doi.org/10.6000/1929-6029.2018.07.02.1>.
+    and Crippa et al. (2018) <doi:10.6000/1929-6029.2018.07.02.1>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
