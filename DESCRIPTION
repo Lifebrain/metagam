@@ -20,12 +20,15 @@ Description: This package performs meta-analysis of generalized additive
     fit is sought. metagam provides functionality for removing individual
     participant data from models computed using the mgcv and gamm4 packages such
     that the model objects can be shared without exposing individual data.
-    Furthermore, methods for meta-analysing these fits are provided.
+    Furthermore, methods for meta-analysing these fits are provided. The implemented
+    methods are described in Sorensen et al. (2020), <http://arxiv.org/abs/2002.02627>,
+    extending previous works by Schwartz and Zanobetti (2000) <http://www.jstor.org/stable/3703820>
+    and Crippa et al. (2018) <https://doi.org/10.6000/1929-6029.2018.07.02.1>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+biovViews: 
 Imports: 
-    mgcv,
     dplyr,
     furrr,
     ggplot2,
@@ -41,6 +44,7 @@ Imports:
 RoxygenNote: 7.0.2
 Suggests: 
     future,
+    mgcv,
     gamm4,
     gratia,
     roxygen2,

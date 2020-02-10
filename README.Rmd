@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: ./inst/REFERENCES.bib
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -26,7 +27,7 @@ devtools::load_all(".")
 
 ## Overview
 
-metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits.
+metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits. The methods implemented are described in @Sorensen2020, extending upon previous works by @Schwarz2000 and @Crippa2018.
 
 Currently, GAMs objects created with the following functions are supported:
 
@@ -81,3 +82,5 @@ For further documentation and vignettes, please visit the [package website](http
 ## Code of Conduct
 
 Please note that the metagam project is released with a [Contributor Code of Conduct](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html). By contributing to this project, you agree to abide by its terms.
+
+## References

@@ -27,7 +27,9 @@ participant data from from GAMs fitted separately at each location, such
 that the resulting object can be shared to a central location. Next,
 metagam provides functions for meta-analysing these fitted GAMs using
 pointwise meta-analysis, as well as plotting and summary methods for
-analyzing the meta-analytic fits.
+analyzing the meta-analytic fits. The methods implemented are described
+in Sørensen et al. (2020), extending upon previous works by Schwartz and
+Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).
 
 Currently, GAMs objects created with the following functions are
 supported:
@@ -115,3 +117,37 @@ Please note that the metagam project is released with a [Contributor
 Code of
 Conduct](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html).
 By contributing to this project, you agree to abide by its terms.
+
+## References
+
+<div id="refs" class="references">
+
+<div id="ref-Crippa2018">
+
+Crippa, Alessio, Ilias Thomas, and Nicola Orsini. 2018. “A Pointwise
+Approach to Dose-Response Meta-Analysis of Aggregated Data.”
+*International Journal of Statistics in Medical Research* 7 (May):
+25–32. <https://doi.org/10.6000/1929-6029.2018.07.02.1>.
+
+</div>
+
+<div id="ref-Schwarz2000">
+
+Schwartz, Joel, and Antonella Zanobetti. 2000. “Using Meta-Smoothing to
+Estimate Dose-Response Trends Across Multiple Studies, with Application
+to Air Pollution and Daily Death.” *Epidemiology* 11 (6): 666–72.
+<http://www.jstor.org/stable/3703820>.
+
+</div>
+
+<div id="ref-Sorensen2020">
+
+Sørensen, Øystein, Andreas M Brandmaier, Didac Macia Bros, Klaus
+Ebmeier, Paolo Ghisletta, Rogier A Kievit, Athanasia M Mowinckel,
+Kristine B Walhovd, Rene Westerhausen, and Anders Fjell. 2020.
+“Meta-Analysis of Generalized Additive Models in Neuroimaging
+Studies.” <http://arxiv.org/abs/2002.02627>.
+
+</div>
+
+</div>
