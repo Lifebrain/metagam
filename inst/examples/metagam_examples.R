@@ -16,10 +16,11 @@ models <- lapply(datasets, function(dat){
 
 ## Next, we meta-analyze the models.
 ## It is often most convenient to analyze a single term at a time. We focus on s(x1).
-meta_analysis <- metagam(models, terms = "s(x1)")
+meta_analysis <- metagam(models, terms = "s(x1)", grid_size = 30)
 
 ## We can print some information
 summary(meta_analysis)
 
 ## We can plot the fit
 plot(meta_analysis)
+
