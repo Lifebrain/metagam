@@ -224,7 +224,7 @@ alternative hypothesis be true with no uncertainty.</p>
 
 <span class='co'>## Next, we meta-analyze the models.</span>
 <span class='co'>## It is often most convenient to analyze a single term at a time. We focus on s(x1).</span>
-<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>metagam</span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>)
+<span class='no'>meta_analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>metagam</span>(<span class='no'>models</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='st'>"s(x1)"</span>, <span class='kw'>grid_size</span> <span class='kw'>=</span> <span class='fl'>30</span>)
 
 <span class='co'>## We can print some information</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meta_analysis</span>)</div><div class='output co'>#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.
@@ -244,7 +244,8 @@ alternative hypothesis be true with no uncertainty.</p>
 #&gt; 
 #&gt; </div><div class='input'>
 <span class='co'>## We can plot the fit</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>meta_analysis</span>)</div><div class='img'><img src='metagam-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>meta_analysis</span>)</div><div class='img'><img src='metagam-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
@@ -261,7 +262,7 @@ alternative hypothesis be true with no uncertainty.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Øystein Sørensen, Andreas M. Brandmaier, Athanasia Mo Mowinckel.</p>
+  <p>Developed by Oystein Sorensen, Andreas M. Brandmaier, Athanasia Mo Mowinckel.</p>
 </div>
 
 <div class="pkgdown">
