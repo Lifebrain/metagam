@@ -47,6 +47,13 @@ Request](https://github.com/lifebrain/metagam/pulls).
 
 ## Installation
 
+Install the current release of `metagam` from
+[CRAN](https://cran.r-project.org/) with:
+
+``` r
+install.packages("metagam")
+```
+
 Install the current development version of `metagam` from
 [GitHub](https://github.com/) with:
 

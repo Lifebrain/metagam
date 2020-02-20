@@ -38,6 +38,12 @@ This package is under development, so changes to the interface can be expected. 
 
 ## Installation
 
+Install the current release of `metagam` from [CRAN](https://cran.r-project.org/) with:
+
+``` r
+install.packages("metagam")
+```
+
 Install the current development version of `metagam` from [GitHub](https://github.com/) with:
 
 ``` r
