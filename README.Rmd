@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 devtools::load_all(".")
 ```
 
-# metagam
+# metagam <img src="man/figures/logo.png" height=200 align="right"/>
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/lifebrain/metagam.svg?branch=master)](https://travis-ci.org/lifebrain/metagam)

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# metagam
+# metagam <img src="man/figures/logo.png" height=200 align="right"/>
 
 <!-- badges: start -->
 
