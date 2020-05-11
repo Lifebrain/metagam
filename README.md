@@ -143,7 +143,6 @@ Approach to Dose-Response Meta-Analysis of Aggregated Data.”
 Schwartz, Joel, and Antonella Zanobetti. 2000. “Using Meta-Smoothing to
 Estimate Dose-Response Trends Across Multiple Studies, with Application
 to Air Pollution and Daily Death.” *Epidemiology* 11 (6): 666–72.
-<http://www.jstor.org/stable/3703820>.
 
 </div>
 
