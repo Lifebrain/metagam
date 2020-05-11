@@ -1,6 +1,6 @@
 ## Comments
 
-This is a resubmission containing a small internal fix to make metagam compatible with the upcoming dplyr v1.0.0.
+This is a resubmission containing a small internal fix for compatibility with the upcoming dplyr v1.0.0.
 
 ## Test environments
 * local OS X install, R 4.0
