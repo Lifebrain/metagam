@@ -131,7 +131,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   meta_estimates <- dplyr::mutate(
     meta_estimates,
     meta_model = furrr::future_map(.data$data, function(x){
-      metafor::rma(yi = x$estimate, sei = x$se, method = method)
+      metafor::rma(yi = c(x$estimate), sei = c(x$se), method = method)
     })
     )
 
