@@ -130,8 +130,11 @@
 <div id="dominance-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dominance-analysis" class="anchor"></a>Dominance Analysis</h2>
-<p>Finally, we create a dominance plot that tells us how much the points on axis <code>x2</code> are influenced by the individual GAMs. We see that the influence of the GAMs is graded according to the simulated noise levels. Second, we see that on the left-hand side, the influence of the first dataset is almost zero whereas the influence of the second dataset is almost zero on the righthand side.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_dominance.html">plot_dominance</a></span>(<span class="no">meta_analysis</span>)</pre></body></html></div>
+<p>Finally, we create a dominance plot that tells us how much the points on axis <code>x2</code> are influenced by the individual GAMs. Since <code>plot_dominance</code> returns a ggplot object, we can modify the colors using, e.g. the viridis package. We see that the influence of the GAMs is graded according to the simulated noise levels. Second, we see that on the left-hand side, the influence of the first dataset is almost zero whereas the influence of the second dataset is almost zero on the righthand side.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">viridis</span>)</pre></body></html></div>
+<pre><code>## Loading required package: viridisLite</code></pre>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_dominance.html">plot_dominance</a></span>(<span class="no">meta_analysis</span>) +
+  <span class="fu"><a href="https://rdrr.io/pkg/viridis/man/scale_viridis.html">scale_fill_viridis</a></span>(<span class="kw">discrete</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="dominance_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
   </div>

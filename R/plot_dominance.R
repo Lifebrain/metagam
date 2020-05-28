@@ -64,8 +64,7 @@ plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
                         ggplot2::aes(x = .data$x, y = .data$y,
                                      fill = .data$model, width = width)) +
     ggplot2::geom_bar(position=position,stat="identity")+
-    ggplot2::theme_minimal()+
-    viridis::scale_fill_viridis(discrete = T) +
+    ggplot2::theme_minimal() +
     ggplot2::ylab("Relative Influence") +
     ggplot2::xlab(axis) +
     ggplot2::labs(fill = "Cohort")
