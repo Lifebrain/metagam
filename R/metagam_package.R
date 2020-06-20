@@ -18,3 +18,16 @@
 #' @name metagam-package
 #'
 NULL
+
+
+.onAttach <- function(libname, pkgname) {
+  if(!requireNamespace("multtest", quietly = TRUE)){
+    packageStartupMessage(paste0("Welcome to metagam\n",
+                                "Please install the dependency 'multtest' by running:\n\n",
+                                "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')\n",
+                                "BiocManager::install('multtest')"
+                                ))
+
+  }
+
+}
