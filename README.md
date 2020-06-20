@@ -51,15 +51,8 @@ Install the current release of metagam from
 [CRAN](https://cran.r-project.org/) with:
 
 ``` r
-#install.packages("BiocManager")
-BiocManager::install('multtest')
+install.packages("metagam")
 ```
-
-Installation with
-[BiocManager](https://cran.r-project.org/package=BiocManager) is
-necessary because `metagam` depends on the
-[Bioconductor](https://www.bioconductor.org/) package
-[multtest](https://www.bioconductor.org/packages/multtest/).
 
 Install the current development version of `metagam` from
 [GitHub](https://github.com/) with:
