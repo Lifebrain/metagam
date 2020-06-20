@@ -117,8 +117,10 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install the current release of <code>metagam</code> from <a href="https://cran.r-project.org/">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"metagam"</span>)</pre></div>
+<p>Install the current release of metagam from <a href="https://cran.r-project.org/">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="co">#install.packages("BiocManager")</span>
+<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">'multtest'</span>)</pre></div>
+<p>Installation with <a href="https://cran.r-project.org/package=BiocManager">BiocManager</a> is necessary because <code>metagam</code> depends on the <a href="https://www.bioconductor.org/">Bioconductor</a> package <a href="https://www.bioconductor.org/packages/multtest/">multtest</a>.</p>
 <p>Install the current development version of <code>metagam</code> from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("remotes")</span>
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"lifebrain/metagam"</span>)</pre></div>
@@ -174,7 +176,7 @@
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
 <div id="ref-Crippa2018">
 <p>Crippa, Alessio, Ilias Thomas, and Nicola Orsini. 2018. “A Pointwise Approach to Dose-Response Meta-Analysis of Aggregated Data.” <em>International Journal of Statistics in Medical Research</em> 7 (May): 25–32. <a href="https://doi.org/10.6000/1929-6029.2018.07.02.1" class="uri">https://doi.org/10.6000/1929-6029.2018.07.02.1</a>.</p>
 </div>
