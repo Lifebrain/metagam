@@ -13,7 +13,7 @@ install:
 
 environment:
   R_ARCH: x64
-  R_VERSION: devel
+  R_VERSION: stable
   NOT_CRAN: true
 
 build_script:
