@@ -40,16 +40,20 @@ This package is under development, so changes to the interface can be expected. 
 
 Install the current release of metagam from [CRAN](https://cran.r-project.org/) with:
 
-``` r
-install.packages("metagam")
+```{r,eval=FALSE}
+# install.packages("BiocManager")
+BiocManager::install("metagam")
 ```
+
+BiocManager is necessary because metagam depends on the Bioconductor package [multtest](https://www.bioconductor.org/packages/multtest/).
 
 Install the current development version of `metagam` from [GitHub](https://github.com/) with:
 
-``` r
+```{r,eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("lifebrain/metagam")
 ```
+
 ## Application Example
 
 ```{r}
