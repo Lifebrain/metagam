@@ -3,6 +3,15 @@
 \docType{package}
 \name{metagam-package}
 \alias{metagam-package}
+\alias{expr}
+\alias{enquo}
+\alias{enquos}
+\alias{sym}
+\alias{syms}
+\alias{.data}
+\alias{:=}
+\alias{as_name}
+\alias{as_label}
 \title{metagam: Meta-analysis of generalized additive models.}
 \description{
 The main functions in the metagam package are described below.
