@@ -21,7 +21,7 @@ Plot the meta-analytic estimate of a smooth term along with the separate fits in
 }
 \details{
 This function currently works for meta-analytic estimates of a single smooth term, which can be either
-univariate or bivariate. It alswo works for alternatively meta-analysis of response or link functions.
+univariate or bivariate. It also works for alternatively meta-analysis of response or link functions.
 }
 \examples{
 library(metagam)

@@ -29,7 +29,7 @@ set.seed(123)
 datasets <- lapply(1:num.datasets, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
 ```
 
-Delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (ie., zero) contribution of the first dataset on low values of dimensions `x2`.
+Delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (i.e., zero) contribution of the first dataset on low values of dimensions `x2`.
 
 ```{r}
 df <- datasets[[1]]
@@ -47,7 +47,7 @@ datasets[[2]] <- df
 
 ## Fit GAMs
 
-Next, we fit the indivial GAMs for each of the eight datasets.
+Next, we fit the individual GAMs for each of the eight datasets.
 
 ```{r pressure, echo=FALSE}
 ## fit a generalized additive model to each dataset separately
