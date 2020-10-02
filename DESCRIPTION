@@ -1,7 +1,7 @@
 Package: metagam
 Type: Package
 Title: Meta-Analysis of Generalized Additive Models
-Version: 0.1.2
+Version: 0.1.2.9000
 Authors@R: c(person("Oystein", "Sorensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
                     role = c("aut", "cre"),
@@ -38,7 +38,7 @@ Imports:
     rlang,
     stringr,
     tidyr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests: 
     future,
     multtest,

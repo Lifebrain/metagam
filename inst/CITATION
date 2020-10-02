@@ -1,0 +1,21 @@
+citHeader("To cite metagam in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "Meta-Analysis of Generalized Additive Models in Neuroimaging Studies",
+  author   = "Øystein Sørensen and Andreas M. Brandmaier and Dídac Macià and Klaus Ebmeier and Paolo Ghisletta and Rogier A. Kievit and Athanasia M. Mowinckel and Kristine B. Walhovd and Rene Westerhausen and Anders Fjell",
+  journal  = "{NeuroImage}",
+  year     = "2020",
+  pages    = "117416",
+  doi      = "10.1016/j.neuroimage.2020.117416",
+  textVersion = paste(
+  "Øystein Sørensen, Andreas M. Brandmaier, Dídac Macià, Klaus Ebmeier, Paolo Ghisletta, Rogier A. Kievit, Athanasia M. Mowinckel, Kristine B. Walhovd, Rene Westerhausen, Anders Fjell,",
+  "Meta-Analysis of Generalized Additive Models in Neuroimaging Studies,",
+  "NeuroImage,",
+  "2020,",
+  "117416,",
+  "ISSN 1053-8119,",
+  "https://doi.org/10.1016/j.neuroimage.2020.117416.",
+  "(http://www.sciencedirect.com/science/article/pii/S1053811920309010)"
+  )
+)
