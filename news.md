@@ -1,3 +1,7 @@
+# metagam version 0.1.2.9001
+
+- Updated citation after paper was published in NeuroImage.
+
 # metagam version 0.1.2.9000
 
 - Updated recommended citation after paper was accepted in NeuroImage.

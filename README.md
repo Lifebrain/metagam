@@ -28,7 +28,7 @@ that the resulting object can be shared to a central location. Next,
 metagam provides functions for meta-analysing these fitted GAMs using
 pointwise meta-analysis, as well as plotting and summary methods for
 analyzing the meta-analytic fits. The methods implemented are described
-in Sørensen et al. (2020), extending upon previous works by Schwartz and
+in Sorensen et al. (2021), extending upon previous works by Schwartz and
 Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).
 
 Currently, GAMs objects created with the following functions are
@@ -150,13 +150,13 @@ to Air Pollution and Daily Death.” *Epidemiology* 11 (6): 666–72.
 
 </div>
 
-<div id="ref-Sorensen2020">
+<div id="ref-Sorensen2021">
 
-Sørensen, Andreas M. Brandmaier, Dı́dac Macià, Klaus Ebmeier, Paolo
-Ghisletta, Rogier A. Kievit, Athanasia M. Mowinckel, Kristine B.
-Walhovd, Rene Westerhausen, and Anders Fjell. 2020. “Meta-Analysis of
-Generalized Additive Models in Neuroimaging Studies.” *NeuroImage*,
-October, 117416. <https://doi.org/10.1016/j.neuroimage.2020.117416>.
+Sorensen, Oystein, Andreas M. Brandmaier, Didac Macia, Klaus Ebmeier,
+Paolo Ghisletta, Rogier A. Kievit, Athanasia M. Mowinckel, Kristine B.
+Walhovd, Rene Westerhausen, and Anders Fjell. 2021. “Meta-Analysis of
+Generalized Additive Models in Neuroimaging Studies.” *NeuroImage* 224
+(January): 117416. <https://doi.org/10.1016/j.neuroimage.2020.117416>.
 
 </div>
 
