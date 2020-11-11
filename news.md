@@ -1,3 +1,7 @@
+# metagam version 0.1.2.9002
+
+- Fixed issue #30. Running in parallel caused error.
+
 # metagam version 0.1.2.9001
 
 - Updated citation after paper was published in NeuroImage.
