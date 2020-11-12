@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -106,7 +106,7 @@
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits. The methods implemented are described in Sørensen et al. (2020), extending upon previous works by Schwartz and Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).</p>
+<p>metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits. The methods implemented are described in Sorensen et al. (2021), extending upon previous works by Schwartz and Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).</p>
 <p>Currently, GAMs objects created with the following functions are supported:</p>
 <ul>
 <li>From package <a href="https://cran.r-project.org/package=mgcv">mgcv</a>: <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html">bam()</a></code>, <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam()</a></code> and <code><a href="https://rdrr.io/pkg/mgcv/man/gamm.html">gamm()</a></code>.</li>
@@ -118,54 +118,59 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install the current release of metagam from <a href="https://cran.r-project.org/">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("BiocManager")</span>
-<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"metagam"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("BiocManager")</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"metagam"</span><span class="op">)</span></code></pre></div>
 <p>BiocManager is necessary because metagam depends on the Bioconductor package <a href="https://www.bioconductor.org/packages/multtest/">multtest</a>.</p>
 <p>Install the current development version of <code>metagam</code> from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("remotes")</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"lifebrain/metagam"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"lifebrain/metagam"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="application-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#application-example" class="anchor"></a>Application Example</h2>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">metagam</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mgcv</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lifebrain.github.io/metagam/">metagam</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: nlme</span>
-<span class="co">#&gt; This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.</span></pre></div>
+<span class="co">#&gt; This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.</span></code></pre></div>
 <p>Simulate three datasets and fit a GAM to each of them. Then use <code><a href="reference/strip_rawdata.html">strip_rawdata()</a></code> from metagam to remove individual participant data.</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="co">## Set seed for reproducible random numbers</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">8562957</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Set seed for reproducible random numbers</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">8562957</span><span class="op">)</span>
 <span class="co">## Simulate using mgcv::gamSim</span>
-<span class="no">datasets</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span>(<span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>))
+<span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Fit a model to each dataset</span>
-<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">datasets</span>, <span class="kw">function</span>(<span class="no">dat</span>){
+<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="kw">function</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">{</span>
   <span class="co">## Full gam with mgcv</span>
-  <span class="no">full_model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">y</span> ~ <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(<span class="no">x2</span>, <span class="kw">bs</span> <span class="kw">=</span> <span class="st">"cr"</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+  <span class="va">full_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x2</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
   <span class="co">## Strip rawdata</span>
-  <span class="fu"><a href="reference/strip_rawdata.html">strip_rawdata</a></span>(<span class="no">full_model</span>)
-})</pre></div>
+  <span class="fu"><a href="reference/strip_rawdata.html">strip_rawdata</a></span><span class="op">(</span><span class="va">full_model</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p><code>models</code> now is a list containing three GAMs without individual participant data. We can then meta-analyze them using <code><a href="reference/metagam.html">metagam()</a></code>.</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="no">meta_analysis</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/metagam.html">metagam</a></span>(<span class="no">models</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'purrr'</span>
 <span class="co">#&gt; The following object is masked from 'package:testthat':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     is_null</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">meta_analysis</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">meta_analysis</span><span class="op">)</span>
 <span class="co">#&gt; Meta-analysis of GAMs from 3 cohorts, using method FE.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Smooth terms analyzed: s(x2) .</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Meta-analytic p-values of smooth terms:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Test                    s(x2)     </span>
-<span class="co">#&gt; ----------------------  ----------</span>
-<span class="co">#&gt; Stouffer's sum of z     2.547e-46 </span>
-<span class="co">#&gt; Edgington's sum of p    6.158e-48 </span>
-<span class="co">#&gt; Wilkinson's maximum p   1.000e-48 </span>
-<span class="co">#&gt; Wilkinson's minimum p   3.000e-16 </span>
-<span class="co">#&gt; logit p method          1.628e-19 </span>
-<span class="co">#&gt; Fisher's sum of logs    6.219e-45</span></pre></div>
+<span class="co">#&gt; |Test                  |s(x2)     |</span>
+<span class="co">#&gt; |:---------------------|:---------|</span>
+<span class="co">#&gt; |Stouffer's sum of z   |2.547e-46 |</span>
+<span class="co">#&gt; |Edgington's sum of p  |6.158e-48 |</span>
+<span class="co">#&gt; |Wilkinson's maximum p |1.000e-48 |</span>
+<span class="co">#&gt; |Wilkinson's minimum p |3.000e-16 |</span>
+<span class="co">#&gt; |logit p method        |1.628e-19 |</span>
+<span class="co">#&gt; |Fisher's sum of logs  |6.219e-45 |</span></code></pre></div>
 <p>For further documentation and vignettes, please visit the <a href="https://lifebrain.github.io/metagam/">package website</a>.</p>
 </div>
 <div id="code-of-conduct" class="section level2">
@@ -183,8 +188,8 @@
 <div id="ref-Schwarz2000">
 <p>Schwartz, Joel, and Antonella Zanobetti. 2000. “Using Meta-Smoothing to Estimate Dose-Response Trends Across Multiple Studies, with Application to Air Pollution and Daily Death.” <em>Epidemiology</em> 11 (6): 666–72.</p>
 </div>
-<div id="ref-Sorensen2020">
-<p>Sørensen, Øystein, Andreas M Brandmaier, Didac Macia Bros, Klaus Ebmeier, Paolo Ghisletta, Rogier A Kievit, Athanasia M Mowinckel, Kristine B Walhovd, Rene Westerhausen, and Anders Fjell. 2020. “Meta-Analysis of Generalized Additive Models in Neuroimaging Studies.” <a href="http://arxiv.org/abs/2002.02627" class="uri">http://arxiv.org/abs/2002.02627</a>.</p>
+<div id="ref-Sorensen2021">
+<p>Sorensen, Oystein, Andreas M. Brandmaier, Didac Macia, Klaus Ebmeier, Paolo Ghisletta, Rogier A. Kievit, Athanasia M. Mowinckel, Kristine B. Walhovd, Rene Westerhausen, and Anders Fjell. 2021. “Meta-Analysis of Generalized Additive Models in Neuroimaging Studies.” <em>NeuroImage</em> 224 (January): 117416. <a href="https://doi.org/10.1016/j.neuroimage.2020.117416" class="uri">https://doi.org/10.1016/j.neuroimage.2020.117416</a>.</p>
 </div>
 </div>
 </div>
@@ -215,6 +220,12 @@
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing metagam</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -243,7 +254,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

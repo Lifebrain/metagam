@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -86,7 +86,8 @@
 
       
 
-      </header><script src="multivariate_files/header-attrs-2.3/header-attrs.js"></script><script src="multivariate_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="multivariate_files/header-attrs-2.5/header-attrs.js"></script><script src="multivariate_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="multivariate_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="multivariate_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Multivariate Smooth Terms</h1>
@@ -99,16 +100,19 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">metagam</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lifebrain.github.io/metagam/">metagam</a></span><span class="op">)</span></code></pre></div>
 <p>This vignette demonstrates how to meta-analyze multivariate smooth terms. In particular, we will focus on tensor interaction terms (<span class="citation">Wood (2006)</span>). We start by loading mgcv and generate five example datasets with somewhere between 100 and 1000 observations.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mgcv</span>)
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: nlme</span>
-<span class="co">#&gt; This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
-<span class="no">datasets</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span>(<span class="kw">eg</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">100</span>:<span class="fl">1000</span>, <span class="fl">1</span>),
-                                           <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>)$<span class="no">data</span>)</pre></body></html></div>
+<span class="co">#&gt; This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>eg <span class="op">=</span> <span class="fl">2</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">100</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">1</span><span class="op">)</span>, 
+                                           verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></code></pre></div>
 <p>Here are the first few rows from the first dataset:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">datasets</span><span class="kw">[[</span><span class="fl">1</span>]]))</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">y</th>
@@ -160,8 +164,10 @@
 <a href="#gams-with-tensor-interaction-terms" class="anchor"></a>GAMs with Tensor Interaction Terms</h2>
 <p>We are interested in analyzing the joint effect of the explanatory variables x and z on the response y. This can be done using tensor interaction terms. We will illustrate this using the functions in the mgcv package before showing how individual participant data can be removed and the fits be meta-analyzed.</p>
 <p>On the first dataset, we fit the following model:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">y</span> ~ <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/te.html">te</a></span>(<span class="no">x</span>, <span class="no">z</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">datasets</span><span class="kw">[[</span><span class="fl">1</span>]])</pre></body></html></div>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">mod</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/te.html">te</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">datasets</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Family: gaussian </span>
 <span class="co">#&gt; Link function: identity </span>
@@ -177,27 +183,30 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Approximate significance of smooth terms:</span>
 <span class="co">#&gt;         edf Ref.df     F p-value  </span>
-<span class="co">#&gt; te(x,z) 3.7  4.287 2.201  0.0606 .</span>
+<span class="co">#&gt; te(x,z) 3.7  4.287 2.201  0.0605 .</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; R-sq.(adj) =  0.0135   Deviance explained = 2.06%</span>
-<span class="co">#&gt; GCV = 3.9497  Scale est. = 3.9135    n = 514</span></pre></body></html></div>
+<span class="co">#&gt; GCV = 3.9497  Scale est. = 3.9135    n = 514</span></code></pre></div>
 <p>We can get a nice visualization of the term <code><a href="https://rdrr.io/pkg/mgcv/man/te.html">te(x,z)</a></code> using <code><a href="https://gavinsimpson.github.io/gratia//reference/draw.html">gratia::draw()</a></code>. In this case there seems to be an interaction between x and z, hence making such a tensor interaction term useful.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gratia</span>)
-<span class="fu"><a href="https://gavinsimpson.github.io/gratia//reference/draw.html">draw</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gavinsimpson.github.io/gratia">gratia</a></span><span class="op">)</span>
+<span class="fu"><a href="https://gavinsimpson.github.io/gratia//reference/draw.html">draw</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
 <p><img src="multivariate_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="fitting-gams-with-tensor-interaction-terms-and-removing-rawdata" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fitting-gams-with-tensor-interaction-terms-and-removing-rawdata" class="anchor"></a>Fitting GAMs with Tensor Interaction Terms and Removing Rawdata</h2>
 <p>Now assume that a model of the form <code>y ~ te(x, z)</code> is to be fitted to data in the five locations for which we simulated above. We can replicate this here by first fitting the GAM and then calling <code><a href="../reference/strip_rawdata.html">strip_rawdata()</a></code> on the resulting objects:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">fits</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">datasets</span>, <span class="kw">function</span>(<span class="no">dat</span>){
-  <span class="no">b</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">y</span> ~ <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/te.html">te</a></span>(<span class="no">x</span>, <span class="no">z</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-  <span class="fu"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span>(<span class="no">b</span>)
-})</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="kw">function</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/te.html">te</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>Each element in the list <code>fits</code> now corresponds to a model without any individual participant data, which can be shared with a central location for meta-analysis. The summary method for the fits reproduces the summary output from the original <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">mgcv::gam()</a></code> fit.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fits</span><span class="kw">[[</span><span class="fl">1</span>]])
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; GAM stripped for individual participant data with strip_rawdata().</span>
 <span class="co">#&gt; For meta-analysis of smooth terms, use the following identifiers: te(x,z).</span>
 <span class="co">#&gt; </span>
@@ -217,36 +226,42 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Approximate significance of smooth terms:</span>
 <span class="co">#&gt;         edf Ref.df     F p-value  </span>
-<span class="co">#&gt; te(x,z) 3.7  4.287 2.201  0.0606 .</span>
+<span class="co">#&gt; te(x,z) 3.7  4.287 2.201  0.0605 .</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; R-sq.(adj) =  0.0135   Deviance explained = 2.06%</span>
-<span class="co">#&gt; GCV = 3.9497  Scale est. = 3.9135    n = 514</span></pre></body></html></div>
+<span class="co">#&gt; GCV = 3.9497  Scale est. = 3.9135    n = 514</span></code></pre></div>
 </div>
 <div id="meta-analyzing-gams-with-tensor-interaction-terms" class="section level2">
 <h2 class="hasAnchor">
 <a href="#meta-analyzing-gams-with-tensor-interaction-terms" class="anchor"></a>Meta-Analyzing GAMs with Tensor Interaction Terms</h2>
 <p>Assuming all GAM fits without individual participant data have been gathered in a single location and put a list named <code>fits</code> (which we did above), a meta-analytic can now be computed using <code><a href="../reference/metagam.html">metagam()</a></code>. If no grid is provided, <code><a href="../reference/metagam.html">metagam()</a></code> sets up a grid in which the argument <code>grid_size</code> determines the number of unique values of each term. Using the default <code>grid_size = 100</code> in this case means that the grid has 100 x 100 = 10,000 rows. Performing meta-analysis at each of these points might take a few moments, so we set <code>grid_size = 20</code> to get a first rough estimate.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">metafit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span>(<span class="no">fits</span>, <span class="kw">grid_size</span> <span class="kw">=</span> <span class="fl">20</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">metafit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">fits</span>, grid_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: Matrix</span>
+<span class="co">#&gt; Loading 'metafor' package (version 2.4-0). For an overview </span>
+<span class="co">#&gt; and introduction to the package please type: help(metafor).</span></code></pre></div>
 <p>The summary method prints out the p-values of the smooth terms:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">metafit</span>)
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span>
 <span class="co">#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Smooth terms analyzed: te(x,z) .</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Meta-analytic p-values of smooth terms:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Test                    te(x,z)   </span>
-<span class="co">#&gt; ----------------------  ----------</span>
-<span class="co">#&gt; Stouffer's sum of z     6.633e-02 </span>
-<span class="co">#&gt; Edgington's sum of p    1.777e-01 </span>
-<span class="co">#&gt; Wilkinson's maximum p   1.951e-01 </span>
-<span class="co">#&gt; Wilkinson's minimum p   1.916e-02 </span>
-<span class="co">#&gt; logit p method          4.379e-02 </span>
-<span class="co">#&gt; Fisher's sum of logs    3.149e-02</span></pre></body></html></div>
+<span class="co">#&gt; |Test                  |te(x,z)   |</span>
+<span class="co">#&gt; |:---------------------|:---------|</span>
+<span class="co">#&gt; |Stouffer's sum of z   |6.626e-02 |</span>
+<span class="co">#&gt; |Edgington's sum of p  |1.775e-01 |</span>
+<span class="co">#&gt; |Wilkinson's maximum p |1.951e-01 |</span>
+<span class="co">#&gt; |Wilkinson's minimum p |1.918e-02 |</span>
+<span class="co">#&gt; |logit p method        |4.375e-02 |</span>
+<span class="co">#&gt; |Fisher's sum of logs  |3.148e-02 |</span></code></pre></div>
 <p>We can then plot the corresponding meta-analytic fit:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">metafit</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span></code></pre></div>
 <p><img src="multivariate_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -275,7 +290,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
