@@ -1,3 +1,7 @@
+# metagam version 0.2.0
+
+- Proper support for parallelism added, thanks to Henrik Bengtsson. See example in help("metagam").
+
 # metagam version 0.1.2.9002
 
 - Fixed issue #30. Running in parallel caused error.
