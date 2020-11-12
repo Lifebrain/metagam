@@ -112,7 +112,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     standard_error <- dplyr::rename_all(standard_error, function(x) paste0("se_", x))
 
     dplyr::bind_cols(grid, estimate, standard_error)
-  }, .id = "model")
+  }, .id = "model", .options = furrr::furrr_options(packages = "metafor"))
 
 
   # Now do the meta-analysis. First reshape the dataframe.

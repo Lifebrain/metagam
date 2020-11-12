@@ -50,4 +50,11 @@ summary(meta_analysis)
 ## We can plot the fit
 plot(meta_analysis)
 
+## Meta analysis can also be performed in parallel, using future
+\dontrun{
+  library(future)
+  plan(multisession, workers = 2)
+  meta_analysis <- metagam(models, terms = "s(x1)", grid_size = 30)
+  plan("default")
+}
 }
