@@ -147,7 +147,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
         ci.lb = pred$ci.lb,
         ci.ub = pred$ci.ub
       )
-      }))
+      }, .options = furrr::furrr_options(packages = "metafor")))
 
   # Extract p-values
   pvals <- purrr::map_dfr(models, function(x) {
