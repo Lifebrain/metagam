@@ -15,3 +15,4 @@ Makefile
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^news\.md$
+^\.github$
