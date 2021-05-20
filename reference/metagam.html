@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -114,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Lifebrain/metagam/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -220,7 +220,7 @@ alternative hypothesis be true with no uncertainty.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lifebrain.github.io/metagam/'>metagam</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>mgcv</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'>This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'>This is mgcv 1.8-35. For overview type 'help("mgcv-package")'.</span></div><div class='input'>
 <span class='co'>## Create 5 datasets</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
 <span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gamSim.html'>gamSim</a></span><span class='op'>(</span>scale <span class='op'>=</span> <span class='fl'>5</span>, verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
@@ -237,7 +237,8 @@ alternative hypothesis be true with no uncertainty.</p>
 <span class='co'>## Next, we meta-analyze the models.</span>
 <span class='co'>## It is often most convenient to analyze a single term at a time. We focus on s(x1).</span>
 <span class='va'>meta_analysis</span> <span class='op'>&lt;-</span> <span class='fu'>metagam</span><span class='op'>(</span><span class='va'>models</span>, terms <span class='op'>=</span> <span class='st'>"s(x1)"</span>, grid_size <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>Loading 'metafor' package (version 2.4-0). For an overview </span>
+#&gt; <span class='message'>and introduction to the package please type: help(metafor).</span></div><div class='input'>
 <span class='co'>## We can print some information</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meta_analysis</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.
@@ -248,17 +249,24 @@ alternative hypothesis be true with no uncertainty.</p>
 #&gt; 
 #&gt; |Test                  |s(x1)     |
 #&gt; |:---------------------|:---------|
-#&gt; |Stouffer's sum of z   |2.682e-47 |
-#&gt; |Edgington's sum of p  |2.681e-44 |
-#&gt; |Wilkinson's maximum p |1.717e-42 |
-#&gt; |Wilkinson's minimum p |7.905e-13 |
-#&gt; |logit p method        |8.786e-24 |
-#&gt; |Fisher's sum of logs  |3.409e-45 |
+#&gt; |Stouffer's sum of z   |8.640e-76 |
+#&gt; |Edgington's sum of p  |4.393e-79 |
+#&gt; |Wilkinson's maximum p |1.000e-80 |
+#&gt; |Wilkinson's minimum p |5.000e-16 |
+#&gt; |logit p method        |3.032e-29 |
+#&gt; |Fisher's sum of logs  |4.903e-73 |
 #&gt; 
 #&gt; </div><div class='input'>
 <span class='co'>## We can plot the fit</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>meta_analysis</span><span class='op'>)</span>
 </div><div class='img'><img src='metagam-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'>## Meta analysis can also be performed in parallel, using future</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HenrikBengtsson/future'>future</a></span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multisession</span>, workers <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+  <span class='va'>meta_analysis</span> <span class='op'>&lt;-</span> <span class='fu'>metagam</span><span class='op'>(</span><span class='va'>models</span>, terms <span class='op'>=</span> <span class='st'>"s(x1)"</span>, grid_size <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='st'>"default"</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/Lifebrain/metagam/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,16 +97,16 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="metagam" class="section level1">
+<div id="metagam-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#metagam" class="anchor"></a>metagam <img src="reference/figures/logo.png" height="200" align="right">
+<a href="#metagam-" class="anchor"></a>metagam <img src="reference/figures/logo.png" height="200" align="right">
 </h1></div>
 <!-- badges: start -->
 
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits. The methods implemented are described in Sorensen et al. (2021), extending upon previous works by Schwartz and Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).</p>
+<p>metagam is an R-package for meta-analysis of generalized additive models (GAMs). Its main application is cases in which raw data are located in multiple locations, and cannot be shared due to ethical or regulatory restrictions. metagam provides functions for removing all individual participant data from from GAMs fitted separately at each location, such that the resulting object can be shared to a central location. Next, metagam provides functions for meta-analysing these fitted GAMs using pointwise meta-analysis, as well as plotting and summary methods for analyzing the meta-analytic fits. The methods implemented are described in Sorensen et al. (2021), extending upon previous works by Schwartz and Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).</p>
 <p>Currently, GAMs objects created with the following functions are supported:</p>
 <ul>
 <li>From package <a href="https://cran.r-project.org/package=mgcv">mgcv</a>: <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html">bam()</a></code>, <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam()</a></code> and <code><a href="https://rdrr.io/pkg/mgcv/man/gamm.html">gamm()</a></code>.</li>
@@ -118,26 +118,26 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install the current release of metagam from <a href="https://cran.r-project.org/">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># install.packages("BiocManager")</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"metagam"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("BiocManager")</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"metagam"</span><span class="op">)</span></code></pre></div>
 <p>BiocManager is necessary because metagam depends on the Bioconductor package <a href="https://www.bioconductor.org/packages/multtest/">multtest</a>.</p>
 <p>Install the current development version of <code>metagam</code> from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"lifebrain/metagam"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"lifebrain/metagam"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="application-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#application-example" class="anchor"></a>Application Example</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lifebrain.github.io/metagam/">metagam</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lifebrain.github.io/metagam/">metagam</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: nlme</span>
-<span class="co">#&gt; This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.</span></pre></div>
+<span class="co">#&gt; This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.</span></code></pre></div>
 <p>Simulate three datasets and fit a GAM to each of them. Then use <code><a href="reference/strip_rawdata.html">strip_rawdata()</a></code> from metagam to remove individual participant data.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co">## Set seed for reproducible random numbers</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Set seed for reproducible random numbers</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">8562957</span><span class="op">)</span>
 <span class="co">## Simulate using mgcv::gamSim</span>
 <span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
@@ -147,10 +147,10 @@
   <span class="va">full_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x2</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
   <span class="co">## Strip rawdata</span>
   <span class="fu"><a href="reference/strip_rawdata.html">strip_rawdata</a></span><span class="op">(</span><span class="va">full_model</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></pre></div>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p><code>models</code> now is a list containing three GAMs without individual participant data. We can then meta-analyze them using <code><a href="reference/metagam.html">metagam()</a></code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'purrr'</span>
 <span class="co">#&gt; The following object is masked from 'package:testthat':</span>
@@ -170,7 +170,7 @@
 <span class="co">#&gt; |Wilkinson's maximum p |1.000e-48 |</span>
 <span class="co">#&gt; |Wilkinson's minimum p |3.000e-16 |</span>
 <span class="co">#&gt; |logit p method        |1.628e-19 |</span>
-<span class="co">#&gt; |Fisher's sum of logs  |6.219e-45 |</span></pre></div>
+<span class="co">#&gt; |Fisher's sum of logs  |6.219e-45 |</span></code></pre></div>
 <p>For further documentation and vignettes, please visit the <a href="https://lifebrain.github.io/metagam/">package website</a>.</p>
 </div>
 <div id="code-of-conduct" class="section level2">
@@ -238,11 +238,10 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/lifebrain/metagam"><img src="https://travis-ci.org/lifebrain/metagam.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/Lifebrain/metagam"><img src="https://ci.appveyor.com/api/projects/status/github/Lifebrain/metagam?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
 <li><a href="https://codecov.io/gh/Lifebrain/metagam?branch=master"><img src="https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://CRAN.R-project.org/package=metagam"><img src="https://www.r-pkg.org/badges/version/metagam" alt="CRAN status"></a></li>
+<li><a href="https://github.com/Lifebrain/metagam/actions"><img src="https://github.com/Lifebrain/metagam/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 </div>
