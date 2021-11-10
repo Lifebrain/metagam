@@ -26,7 +26,6 @@ Description: Meta-analysis of generalized additive
     and Crippa et al. (2018) <doi:10.6000/1929-6029.2018.07.02.1>.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Imports: 
     dplyr,
     furrr,

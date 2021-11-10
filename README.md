@@ -7,11 +7,11 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam?branch=master)
-[![R-CMD-check](https://github.com/Lifebrain/metagam/workflows/R-CMD-check/badge.svg)](https://github.com/Lifebrain/metagam/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.org/package=metagam)
+[![R-CMD-check](https://github.com/Lifebrain/metagam/workflows/R-CMD-check/badge.svg)](https://github.com/Lifebrain/metagam/actions)
 <!-- badges: end -->
 
 ## Overview
