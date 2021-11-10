@@ -45,7 +45,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   # Find the terms from each model
-  model_terms <- purrr::map_dfr(models, function(x) x$term_df)
+  model_terms <- do.call(rbind, lapply(models, function(x) x$term_df))
 
   # Check if the user-specified term exists
   if(!is.null(terms) && !all(ind <- terms %in% model_terms$term)){
@@ -55,40 +55,41 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   # If terms are not supplied and type is "iterms" or "terms", find the smooth terms
   # Otherwise use all terms
   if(is.null(terms) && type %in% c("iterms", "terms")){
-    terms <- dplyr::arrange(model_terms, .data$term)
-    terms <- dplyr::slice(terms, 1)
-    terms <- terms$term
+    terms <- model_terms$term[[order(model_terms$term)[[1]]]]
   } else if(type %in% c("link", "response")){
     terms <- sort(unique(model_terms$term))
   }
 
   # Find the variables corresponding to terms
-  xvars <- dplyr::filter(model_terms, .data$term == terms)
-  xvars <- unlist(unique(purrr::pmap(xvars, function(term, variables) variables)))
+  xvars <- unique(unlist(lapply(model_terms[model_terms$term %in% terms, "variables"], function(x) x)))
 
   # Create grid if not supplied by user
   if(is.null(grid)){
     # Find the minimum and maximum from each model
-    grid <- purrr::map_dfr(models, function(x){
-      purrr::map_dfr(x$var.summary, function(vs){
+    grid <- lapply(models, function(x){
+      res <- lapply(x$var.summary, function(vs){
         if(is.numeric(vs)){
           c(min(vs), max(vs))
         } else {
           rep(vs, 2)
         }
       })
+      as.data.frame(do.call(cbind, res))
     })
+    grid <- do.call(rbind, grid)
     # Combine to get overall minimum and maximum
-    grid <- purrr::imap(grid, function(x, nm) {
-      if(is.numeric(x) && nm %in% xvars) {
-        seq(from = min(x), to = max(x), length.out = grid_size)
+    nms <- names(grid)
+    grid <- lapply(nms, function(nm){
+      if(nm %in% xvars){
+        seq(from = min(grid[, nm]), to = max(grid[, nm]), length.out = grid_size)
       } else {
-        sort(x)[[1]]
+        sort(grid[, nm])[[1]]
       }
     })
+    names(grid) <- nms
 
     # Expand
-    grid <- dplyr::as_tibble(expand.grid(grid))
+    grid <- expand.grid(grid)
   }
 
   # Find the estimates from each model over the grid
@@ -98,11 +99,11 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
     estimate <- if(type %in% c("iterms", "terms")){
       estimate <- pred$fit + if(intercept) attr(pred, "constant") else 0
-      dplyr::as_tibble(estimate)
+      as.data.frame(estimate)
     } else if(type %in% c("link", "response")){
-      dplyr::tibble(!!type := pred$fit)
+      eval(parse(text = paste("data.frame(", type, "= as.numeric(pred$fit))")))
     }
-    estimate <- dplyr::rename_all(estimate, function(x) paste0("estimate_", x))
+    names(estimate) <- paste0("estimate_", names(estimate))
 
     standard_error <- if(type %in% c("iterms", "terms")){
       dplyr::as_tibble(pred$se.fit)
