@@ -40,11 +40,8 @@ This package is under development, so changes to the interface can be expected. 
 Install the current release of metagam from [CRAN](https://cran.r-project.org/) with:
 
 ```{r,eval=FALSE}
-# install.packages("BiocManager")
-BiocManager::install("metagam")
+install.packages("metagam")
 ```
-
-BiocManager is necessary because metagam depends on the Bioconductor package [multtest](https://www.bioconductor.org/packages/multtest/).
 
 Install the current development version of `metagam` from [GitHub](https://github.com/) with:
 
@@ -56,8 +53,8 @@ remotes::install_github("lifebrain/metagam")
 ## Application Example
 
 ```{r}
-library(metagam)
-library(mgcv)
+library("metagam")
+library("mgcv")
 ```
 
 Simulate three datasets and fit a GAM to each of them. Then use `strip_rawdata()` from metagam to remove individual participant data.

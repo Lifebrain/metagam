@@ -106,13 +106,13 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     names(estimate) <- paste0("estimate_", names(estimate))
 
     standard_error <- if(type %in% c("iterms", "terms")){
-      dplyr::as_tibble(pred$se.fit)
+      as.data.frame(pred$se.fit)
     } else if(type %in% c("link", "response")){
-      dplyr::tibble(!!type := pred$se.fit)
+      eval(parse(text = paste("data.frame(", type, "= as.numeric(pred$se.fit))")))
     }
-    standard_error <- dplyr::rename_all(standard_error, function(x) paste0("se_", x))
+    names(standard_error) <- paste0("se_", names(standard_error))
 
-    dplyr::bind_cols(grid, estimate, standard_error)
+    cbind(grid, estimate, standard_error)
   }, .id = "model")
 
 
@@ -123,7 +123,6 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     names_to = c(".value", "term"),
     names_pattern = "([[:alpha:]]+)\\_(.*)")
 
-
   # Now nest the estimates at each grid point
   meta_estimates <- dplyr::group_by_at(cohort_estimates,
                                        dplyr::vars(-"model", -"estimate", -"se"))
@@ -131,7 +130,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   meta_estimates <- dplyr::mutate(
     meta_estimates,
-    meta_model = purrr::map(.data$data, function(x){
+    meta_model = lapply(.data$data, function(x){
       metafor::rma(yi = c(x$estimate), sei = c(x$se), method = method)
     })
     )
@@ -164,27 +163,6 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   # Split by term and meta-analyze p-values
   meta_pvals <- dplyr::group_by(pvals, .data$term)
   meta_pvals <- tidyr::nest(meta_pvals)
-
-  # Create a tibble which contains both the meta-analytic p-values
-  # and the full objects returned by metap functions
-  meta_pvals <- purrr::pmap_dfr(meta_pvals, function(term, data){
-    df <- purrr::imap_dfc(
-      list(
-        sumz = metap::sumz,
-        sump = metap::sump,
-        maximump = metap::maximump,
-        minimump = metap::minimump,
-        logitp = metap::logitp,
-        sumlog = metap::sumlog
-        ),
-      function(f, n){
-        dplyr::tibble(!!n := list(f(pmax(!!data$`p-value`, 1e-16))))
-      })
-    df <- dplyr::mutate_all(df, list(pval = ~ as.numeric(.[[1]]$p)))
-    df <- dplyr::mutate(df, term = term)
-    df <- dplyr::select(df, .data$term, dplyr::ends_with("pval"), dplyr::everything())
-  })
-
 
   result <- list(
     cohort_estimates = cohort_estimates,

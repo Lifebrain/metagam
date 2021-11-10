@@ -48,12 +48,8 @@ Install the current release of metagam from
 [CRAN](https://cran.r-project.org/) with:
 
 ``` r
-# install.packages("BiocManager")
-BiocManager::install("metagam")
+install.packages("metagam")
 ```
-
-BiocManager is necessary because metagam depends on the Bioconductor
-package [multtest](https://www.bioconductor.org/packages/multtest/).
 
 Install the current development version of `metagam` from
 [GitHub](https://github.com/) with:
@@ -66,8 +62,8 @@ remotes::install_github("lifebrain/metagam")
 ## Application Example
 
 ``` r
-library(metagam)
-library(mgcv)
+library("metagam")
+library("mgcv")
 #> Loading required package: nlme
 #> This is mgcv 1.8-38. For overview type 'help("mgcv-package")'.
 ```
@@ -94,30 +90,8 @@ participant data. We can then meta-analyze them using `metagam()`.
 
 ``` r
 meta_analysis <- metagam(models)
-#> 
-#> Attaching package: 'purrr'
-#> The following object is masked from 'package:testthat':
-#> 
-#>     is_null
-#> Loading required package: Matrix
-#> 
-#> Loading the 'metafor' package (version 3.0-2). For an
-#> introduction to the package please type: help(metafor)
 summary(meta_analysis)
-#> Meta-analysis of GAMs from 3 cohorts, using method FE.
-#> 
-#> Smooth terms analyzed: s(x2) .
-#> 
-#> Meta-analytic p-values of smooth terms:
-#> 
-#> |Test                  |s(x2)     |
-#> |:---------------------|:---------|
-#> |Stouffer's sum of z   |2.547e-46 |
-#> |Edgington's sum of p  |6.158e-48 |
-#> |Wilkinson's maximum p |1.000e-48 |
-#> |Wilkinson's minimum p |3.000e-16 |
-#> |logit p method        |1.628e-19 |
-#> |Fisher's sum of logs  |6.219e-45 |
+#> Meta-analysis of GAMs from 3 cohorts, using method FE. Smooth terms analyzed: s(x2).
 ```
 
 For further documentation and vignettes, please visit the [package
