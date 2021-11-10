@@ -31,7 +31,6 @@ Imports:
     ggplot2,
     knitr,
     metafor,
-    metap,
     purrr,
     rlang,
     stringr,
