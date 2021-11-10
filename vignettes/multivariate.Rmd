@@ -51,11 +51,10 @@ mod <- gam(y ~ te(x, z), data = datasets[[1]])
 summary(mod)
 ```
 
-We can get a nice visualization of the term `te(x,z)` using `gratia::draw()`. In this case there seems to be an interaction between x and z, hence making such a tensor interaction term useful.
+We can visualize the term `te(x,z)` using `vis.gam`. See function `draw` from the `gratia` package for even more appealing visualizations. In this case there seems to be an interaction between x and z, hence making such a tensor interaction term useful.
 
 ```{r}
-library(gratia)
-draw(mod)
+vis.gam(mod, view = c("x", "z"), plot.type = "contour")
 ```
 
 ## Fitting GAMs with Tensor Interaction Terms and Removing Rawdata

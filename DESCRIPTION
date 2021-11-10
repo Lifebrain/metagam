@@ -41,7 +41,6 @@ Suggests:
     multtest,
     mgcv,
     gamm4,
-    gratia,
     roxygen2,
     rmarkdown,
     devtools,
