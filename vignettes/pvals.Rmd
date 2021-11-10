@@ -17,11 +17,12 @@ knitr::opts_chunk$set(
 ```{r setup}
 library("metagam")
 library("mgcv")
+library("metafor")
 ```
 
 Previous versions of metagam had built-in aggregation of p-values, using the [metap](https://cran.r-project.org/package=metap) package. However, this had two drawbacks:
 
-- metap depends on multtest, which is a BioConductor package, and this dependency made the installation of metagam unnecessarily complicated.
+- metap depends on multtest, which is a Bioconductor package, and this dependency made the installation of metagam unnecessarily complicated.
 - Aggregation of p-values might not always make sense for smooth terms. (Thanks to Alexandre Loureiro for discovering this!)
 
 This vignette briefly describes the latter issue, and shows how the metap package can be used directly on output from metagam.
@@ -110,3 +111,15 @@ knitr::kable(structure(list(p = list(logitp = 5.61819601706602e-07, maximump = 1
 ```
 
 This happens because combination of p-values is not aware of the direction of the effects. Hence, rather than having this a part of the package, we suggest that users who know what they're doing combine the p-values using metap package.
+
+For comparison, fitting a linear model to each dataset and combining the slopes using `metafor` gives a p-value 0.9296, which makes a lot more sense.
+
+```{r}
+mod1 <- lm(y ~ x, data = dat1)
+mod2 <- lm(y ~ x, data = dat2)
+
+estimates <- c(coef(mod1)[["x"]], coef(mod2)[["x"]])
+sampling_variances <- c(vcov(mod1)[["x", "x"]], vcov(mod2)[["x", "x"]])
+rma(estimates, vi = sampling_variances)
+```
+
