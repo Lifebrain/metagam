@@ -92,7 +92,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   # Find the estimates from each model over the grid
-  cohort_estimates <- furrr::future_map_dfr(models, function(x) {
+  cohort_estimates <- purrr::map_dfr(models, function(x) {
     pred <- stats::predict(x, newdata = grid, type = type,
                            se.fit = TRUE, terms = terms)
 
@@ -112,7 +112,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     standard_error <- dplyr::rename_all(standard_error, function(x) paste0("se_", x))
 
     dplyr::bind_cols(grid, estimate, standard_error)
-  }, .id = "model", .options = furrr::furrr_options(packages = "metafor"))
+  }, .id = "model")
 
 
   # Now do the meta-analysis. First reshape the dataframe.
@@ -130,7 +130,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   meta_estimates <- dplyr::mutate(
     meta_estimates,
-    meta_model = furrr::future_map(.data$data, function(x){
+    meta_model = purrr::map(.data$data, function(x){
       metafor::rma(yi = c(x$estimate), sei = c(x$se), method = method)
     })
     )
@@ -138,7 +138,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   meta_estimates <- dplyr::ungroup(meta_estimates)
   meta_estimates <- dplyr::bind_cols(
     meta_estimates,
-    furrr::future_map_dfr(meta_estimates$meta_model, function(x) {
+    purrr::map_dfr(meta_estimates$meta_model, function(x) {
       pred <- stats::predict(x)
 
       dplyr::tibble(
@@ -147,7 +147,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
         ci.lb = pred$ci.lb,
         ci.ub = pred$ci.ub
       )
-      }, .options = furrr::furrr_options(packages = "metafor")))
+      }))
 
   # Extract p-values
   pvals <- purrr::map_dfr(models, function(x) {
@@ -166,7 +166,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   # Create a tibble which contains both the meta-analytic p-values
   # and the full objects returned by metap functions
-  meta_pvals <- furrr::future_pmap_dfr(meta_pvals, function(term, data){
+  meta_pvals <- purrr::pmap_dfr(meta_pvals, function(term, data){
     df <- purrr::imap_dfc(
       list(
         sumz = metap::sumz,

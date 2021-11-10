@@ -1,3 +1,7 @@
+# metagam version 0.2.0.9000
+
+- Parallelism support removed, because it was buggy. Will refactor the code before considering adding it back.
+
 # metagam version 0.2.0
 
 - Proper support for parallelism added, thanks to Henrik Bengtsson. See example in help("metagam").
