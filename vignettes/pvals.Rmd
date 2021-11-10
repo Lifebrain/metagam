@@ -1,0 +1,112 @@
+---
+title: "Meta-analytic combination of p-values"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Meta-analytic combination of p-values}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library("metagam")
+library("mgcv")
+```
+
+Previous versions of metagam had built-in aggregation of p-values, using the [metap](https://cran.r-project.org/package=metap) package. However, this had two drawbacks:
+
+- metap depends on multtest, which is a BioConductor package, and this dependency made the installation of metagam unnecessarily complicated.
+- Aggregation of p-values might not always make sense for smooth terms. (Thanks to Alexandre Loureiro for discovering this!)
+
+This vignette briefly describes the latter issue, and shows how the metap package can be used directly on output from metagam.
+
+## What can go wrong when combining p-values?
+
+Consider the two datasets below, which have completely opposite effects. 
+
+```{r, echo=FALSE}
+# simulate some data
+library(ggplot2)
+theme_set(theme_bw())
+set.seed(1)
+dat1 <- data.frame(x = runif(100))
+dat1$y <- dat1$x + rnorm(100, sd = .7)
+
+dat2 <- dat1
+dat2$y <- -dat2$x + .1 * dat2$x^2 + rnorm(100, sd = .7)
+
+ggplot(dat1, aes(x = x, y = y)) + 
+  geom_point() + 
+  ggtitle("Dataset 1")
+
+ggplot(dat2, aes(x = x, y = y)) + 
+  geom_point() + 
+  ggtitle("Dataset 2")
+
+```
+
+Fitting a GAM to each dataset separately, we see that the effect is significant at $\alpha = 0.05$ level.
+
+```{r}
+mod1 <- gam(y ~ s(x, bs = "cr"), data = dat1)
+summary(mod1)
+
+mod2 <- gam(y ~ s(x, bs = "cr"), data = dat2)
+summary(mod2)
+```
+
+Now let us try a metagam fit.
+
+```{r}
+models <- list(strip_rawdata(mod1), strip_rawdata(mod2))
+metafit <- metagam(models)
+```
+
+Plotting the meta-analytic fit, we see that the 95 % confidence bands completely cover zero.
+
+```{r}
+ggplot(metafit$meta_estimates, aes(x = x, y = estimate, ymin = ci.lb, ymax = ci.ub)) + 
+  geom_line() + 
+  geom_ribbon(alpha = .3) + 
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+The object returned by `metagam` has a `meta_pvals` element which contains p-values for each term in each individual fit. In this case we have only a single term. 
+
+```{r}
+metafit$meta_pvals
+```
+We extract the p-values by looking into the `data` object.
+
+```{r}
+metafit$meta_pvals$data[[1]]
+pvals <- metafit$meta_pvals$data[[1]]$`p-value`
+```
+
+
+Combining the p-values using any of the methods available in metap, we do however see that the effects are signficiant at $\alpha = 0.05$. 
+
+```{r, eval=FALSE}
+library("metap")
+allmetap(p = pvals, method = "all")
+```
+
+```{r, echo=FALSE}
+knitr::kable(structure(list(p = list(logitp = 5.61819601706602e-07, maximump = 1.25713383795263e-06, 
+    meanp = NA_real_, meanz = 6.75835070011165e-08, minimump = 7.22516917847225e-06, 
+    sumlog = 8.23242533258099e-08, sump = 6.32623953067482e-07, 
+    sumz = structure(4.8107525303013e-08, .Dim = c(1L, 1L))), 
+    valid = list(logitp = 2L, maximump = 2L, meanp = 2L, meanz = 2L, 
+        minimump = 2L, sumlog = 2L, sump = 2L, sumz = 2L), eponym = c("", 
+    "", "", "", "Tippett", "Fisher", "Edgington", "Stouffer")), row.names = c("logitp", 
+"maximump", "meanp", "meanz", "minimump", "sumlog", "sump", "sumz"
+), class = c("allmetap", "data.frame")))
+```
+
+This happens because combination of p-values is not aware of the direction of the effects. Hence, rather than having this a part of the package, we suggest that users who know what they're doing combine the p-values using metap package.
