@@ -1,6 +1,7 @@
 # metagam version 0.2.0.9001
 
 - removed viridis from Suggests, to reduce the number of dependencies.
+- removed gratia from Suggests.
 
 # metagam version 0.2.0.9000
 
