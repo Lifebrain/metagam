@@ -188,10 +188,9 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; R-sq.(adj) =  0.0135   Deviance explained = 2.06%</span>
 <span class="co">#&gt; GCV = 3.9497  Scale est. = 3.9135    n = 514</span></code></pre></div>
-<p>We can get a nice visualization of the term <code>te(x,z)</code> using <code><a href="https://gavinsimpson.github.io/gratia/reference/draw.html">gratia::draw()</a></code>. In this case there seems to be an interaction between x and z, hence making such a tensor interaction term useful.</p>
+<p>We can visualize the term <code>te(x,z)</code> using <code>vis.gam</code>. See function <code>draw</code> from the <code>gratia</code> package for even more appealing visualizations. In this case there seems to be an interaction between x and z, hence making such a tensor interaction term useful.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gavinsimpson.github.io/gratia/">gratia</a></span><span class="op">)</span>
-<span class="fu"><a href="https://gavinsimpson.github.io/gratia/reference/draw.html">draw</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/vis.gam.html">vis.gam</a></span><span class="op">(</span><span class="va">mod</span>, view <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"z"</span><span class="op">)</span>, plot.type <span class="op">=</span> <span class="st">"contour"</span><span class="op">)</span></code></pre></div>
 <p><img src="multivariate_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="fitting-gams-with-tensor-interaction-terms-and-removing-rawdata" class="section level2">
