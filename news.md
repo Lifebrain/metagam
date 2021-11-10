@@ -1,3 +1,7 @@
+# metagam version 0.2.0.9001
+
+- removed viridis from Suggests, to reduce the number of dependencies.
+
 # metagam version 0.2.0.9000
 
 - Parallelism support removed, because it was buggy. Will refactor the code before considering adding it back.

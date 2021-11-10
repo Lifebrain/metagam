@@ -77,7 +77,5 @@ first dataset is almost zero whereas the influence of the second dataset is almo
 on the righthand side.
 
 ```{r}
-library(viridis)
-plot_dominance(meta_analysis) +
-  scale_fill_viridis(discrete = TRUE)
+plot_dominance(meta_analysis)
 ```

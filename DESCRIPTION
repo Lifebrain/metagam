@@ -1,7 +1,7 @@
 Package: metagam
 Type: Package
 Title: Meta-Analysis of Generalized Additive Models
-Version: 0.2.0.9000
+Version: 0.2.0.9001
 Authors@R: c(person("Oystein", "Sorensen", 
                     email = "oystein.sorensen@psykologi.uio.no", 
                     role = c("aut", "cre"),
@@ -46,7 +46,6 @@ Suggests:
     rmarkdown,
     devtools,
     covr,
-    viridis,
     testthat (>= 2.1.0)
 URL: https://lifebrain.github.io/metagam/, https://github.com/Lifebrain/metagam
 BugReports: https://github.com/Lifebrain/metagam/issues
