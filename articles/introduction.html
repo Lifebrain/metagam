@@ -171,7 +171,7 @@
 <code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>cohort1 <span class="op">=</span> <span class="va">fit_no_raw1</span>, 
                cohort2 <span class="op">=</span> <span class="va">fit_no_raw2</span>, 
                cohort3 <span class="op">=</span> <span class="va">fit_no_raw3</span><span class="op">)</span></code></pre></div>
-<p>It is typically most convenient to analyze a single smooth term at a time. We start with the term <code><a href="https://rdrr.io/pkg/mgcv/man/s.html">s(x0)</a></code>, and set <code>grid_size=100</code> to get 100 equally spaced values of <code>x0</code> within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.</p>
+<p>It is typically most convenient to analyze a single smooth term at a time. We start with the term <code>s(x0)</code>, and set <code>grid_size=100</code> to get 100 equally spaced values of <code>x0</code> within the range of values encountered in the three model fits. The summary method prints out some information as well as meta-analytic p-values for the term.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">metafit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span>, terms <span class="op">=</span> <span class="st">"s(x0)"</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: Matrix</span>
