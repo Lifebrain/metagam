@@ -22,6 +22,8 @@
 #' @param nsim Number of simulations to conduct in order to compute p-values and simultaneous
 #' confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
 #' are performed.
+#' @param alpha_seq Vector of significance levels at which to test for whether the smooth
+#' term is exactly zero. Ignored if \code{nsim} is \code{NULL}.
 #' @param intercept logical defining whether or not to include the intercept in each smooth
 #' term. Only applies when \code{type = "iterms"}.
 #' @param restrict_range Character vector of explanatory variables to restrict such that only
@@ -41,7 +43,8 @@
 #' @export
 #' @example /inst/examples/metagam_examples.R
 metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms = NULL,
-                    method = "FE", nsim = NULL, intercept = FALSE, restrict_range = NULL){
+                    method = "FE", nsim = NULL, alpha_seq = 0.05,
+                    intercept = FALSE, restrict_range = NULL){
 
   if(!(type %in% c("iterms", "link", "response"))){
     stop('type must be one of "iterms", "link", and "response"\n')
@@ -66,7 +69,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   # Find the variables corresponding to terms
-  xvars <- unique(unlist(lapply(model_terms[model_terms$term %in% terms, "variables"], function(x) x)))
+  xvars <- unique(model_terms[model_terms$term %in% terms, "variables"])
 
   # Create grid if not supplied by user
   if(is.null(grid)){
@@ -161,6 +164,39 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     do.call(rbind, lapply(splitdat, function(x) unique(x[vars]))),
         do.call(rbind, predictions))
 
+  if(!is.null(nsim)){
+    if(length(terms) > 1) stop("P-value simulations currently only work for a single term.\n")
+
+    crit <- do.call(rbind, lapply(seq_along(models), function(ind){
+      masd <- getmasd(models[[ind]], grid, nsim, terms)
+      r <- unlist(lapply(alpha_seq, function(a){
+        stats::quantile(masd, probs = 1 - a, type = 8, names = FALSE)}))
+      data.frame(crit = r, alpha = alpha_seq, model = ind)
+    }))
+
+    crit <- split(crit, f = crit$alpha)
+
+    sim_ci <- lapply(crit, function(m){
+      dd <- merge(cohort_estimates, m, by = "model")
+      dd$weight <- dd$se * dd$crit
+      dd <- eval(parse(text = paste0("split(dd, f = list(dd$", xvars, ", dd$term))")))
+      res <- do.call(rbind, lapply(dd, function(x){
+        m <- metafor::rma(yi = x$estimate, sei = x$weight, method = method)
+        dd3 <- as.data.frame(stats::predict(m))[, c("pred", "se")]
+        dd3$ci_sim_lb <- dd3$pred - dd3$se
+        dd3$ci_sim_ub <- dd3$pred + dd3$se
+        dd3$se <- NULL
+        dd3
+      }))
+      eval(parse(text = paste0("res$", xvars, "<- grid$", xvars)))
+      res
+    })
+
+    meta_test <- lapply(sim_ci, function(dd) max(dd$ci_sim_lb) > min(dd$ci_sim_ub))
+  } else {
+    meta_test <- sim_ci <- NULL
+  }
+
   # Extract p-values
   pvals <- do.call(rbind, lapply(models, function(x) {
     dat <- as.data.frame(x$s.table)
@@ -174,6 +210,8 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     meta_models = meta_models,
     meta_estimates = meta_estimates,
     pvals = pvals,
+    meta_test = meta_test,
+    sim_ci = sim_ci,
     terms = terms,
     method = method,
     xvars = xvars,
