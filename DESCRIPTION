@@ -37,7 +37,6 @@ Imports:
     tidyr
 RoxygenNote: 7.1.2
 Suggests: 
-    multtest,
     mgcv,
     gamm4,
     roxygen2,
