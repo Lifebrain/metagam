@@ -1,6 +1,7 @@
 ---
 title: "Meta-analytic combination of p-values"
 output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Meta-analytic combination of p-values}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,6 +19,8 @@ knitr::opts_chunk$set(
 library("metagam")
 library("mgcv")
 library("metafor")
+library("ggplot2")
+theme_set(theme_bw())
 ```
 
 Previous versions of metagam had built-in aggregation of p-values, using the [metap](https://cran.r-project.org/package=metap) package. However, this had two drawbacks:
@@ -29,24 +32,26 @@ This vignette briefly describes the latter issue, and shows how the metap packag
 
 ## What can go wrong when combining p-values?
 
-Consider the two datasets below, which have completely opposite effects. 
+Consider the two datasets below, which have completely opposite effects. I have also included the code for simulating the data.
 
 ```{r, echo=FALSE}
-# simulate some data
-library(ggplot2)
-theme_set(theme_bw())
+simulate_data <- function(){
+  dat1 <- data.frame(x = runif(100))
+  dat1$y <- dat1$x + rnorm(100, sd = .7)
+  
+  dat2 <- dat1
+  dat2$y <- -dat2$x + .1 * dat2$x^2 + rnorm(100, sd = .7)
+  
+  list(dat1 = dat1, dat2 = dat2)
+}
 set.seed(1)
-dat1 <- data.frame(x = runif(100))
-dat1$y <- dat1$x + rnorm(100, sd = .7)
+dd <- simulate_data()
 
-dat2 <- dat1
-dat2$y <- -dat2$x + .1 * dat2$x^2 + rnorm(100, sd = .7)
-
-ggplot(dat1, aes(x = x, y = y)) + 
+ggplot(dd$dat1, aes(x = x, y = y)) + 
   geom_point() + 
   ggtitle("Dataset 1")
 
-ggplot(dat2, aes(x = x, y = y)) + 
+ggplot(dd$dat2, aes(x = x, y = y)) + 
   geom_point() + 
   ggtitle("Dataset 2")
 
@@ -55,10 +60,10 @@ ggplot(dat2, aes(x = x, y = y)) +
 Fitting a GAM to each dataset separately, we see that the effect is significant at $\alpha = 0.05$ level.
 
 ```{r}
-mod1 <- gam(y ~ s(x, bs = "cr"), data = dat1)
+mod1 <- gam(y ~ s(x, bs = "cr"), data = dd$dat1)
 summary(mod1)
 
-mod2 <- gam(y ~ s(x, bs = "cr"), data = dat2)
+mod2 <- gam(y ~ s(x, bs = "cr"), data = dd$dat2)
 summary(mod2)
 ```
 
@@ -99,7 +104,7 @@ allmetap(p = pvals, method = "all")
 ```
 
 ```{r, echo=FALSE}
-knitr::kable(structure(list(p = list(logitp = 5.61819601706602e-07, maximump = 1.25713383795263e-06, 
+structure(list(p = list(logitp = 5.61819601706602e-07, maximump = 1.25713383795263e-06, 
     meanp = NA_real_, meanz = 6.75835070011165e-08, minimump = 7.22516917847225e-06, 
     sumlog = 8.23242533258099e-08, sump = 6.32623953067482e-07, 
     sumz = structure(4.8107525303013e-08, .Dim = c(1L, 1L))), 
@@ -107,7 +112,7 @@ knitr::kable(structure(list(p = list(logitp = 5.61819601706602e-07, maximump = 1
         minimump = 2L, sumlog = 2L, sump = 2L, sumz = 2L), eponym = c("", 
     "", "", "", "Tippett", "Fisher", "Edgington", "Stouffer")), row.names = c("logitp", 
 "maximump", "meanp", "meanz", "minimump", "sumlog", "sump", "sumz"
-), class = c("allmetap", "data.frame")))
+), class = c("allmetap", "data.frame"))
 ```
 
 This happens because combination of p-values is not aware of the direction of the effects. Hence, rather than having this a part of the package, we suggest that users who know what they're doing combine the p-values using metap package.
@@ -115,11 +120,85 @@ This happens because combination of p-values is not aware of the direction of th
 For comparison, fitting a linear model to each dataset and combining the slopes using `metafor` gives a p-value 0.9296, which makes a lot more sense.
 
 ```{r}
-mod1 <- lm(y ~ x, data = dat1)
-mod2 <- lm(y ~ x, data = dat2)
+mod1 <- lm(y ~ x, data = dd$dat1)
+mod2 <- lm(y ~ x, data = dd$dat2)
 
 estimates <- c(coef(mod1)[["x"]], coef(mod2)[["x"]])
 sampling_variances <- c(vcov(mod1)[["x", "x"]], vcov(mod2)[["x", "x"]])
 rma(estimates, vi = sampling_variances)
 ```
+
+
+## A better way to compute p-values?
+
+### Simultaneous confidence intervals
+
+Let's create another GAM fit, this time using the `gamSim` function. The dashed lines in the plot correspond to two standard errors above and below the estimate. However, this is a pointwise confidence interval, which for our practical purposes means that under repeated sampling from the population, it will contain the true function less than 95 % of the times. See, e.g., Chapter 6.5 of @Ruppert2003, @Sorensen2021b or [this blog post](https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/). What we need is a simultaneous confidence interval.
+
+```{r}
+set.seed(123)
+dat <- gamSim(verbose = FALSE)
+mod <- gam(y ~ s(x0, bs = "cr"), data = dat)
+plot(mod)
+```
+
+
+
+```{r, echo=TRUE}
+getmasd <- function(mod, grid, nmc = 10000){
+  Vb <- vcov(mod)
+  pred <- predict(mod, grid, se.fit = TRUE)
+  se.fit <- pred$se.fit
+  
+  BUdiff <- rmvn(nmc, mu = rep(0, nrow(Vb)), V = Vb)
+  Cg <- predict(mod, grid, type = "lpmatrix")
+  simDev <- Cg %*% t(BUdiff)
+  absDev <- abs(sweep(simDev, 1, se.fit, FUN = "/"))
+  apply(absDev, 2L, max)
+}
+```
+
+We see that the critical value for a 95 % simultaneous interval is above 2.
+
+```{r}
+grid <- with(dat, data.frame(x0 = seq(min(x0), max(x0), length = 200)))
+masd <- getmasd(mod, grid)
+(crit <- quantile(masd, prob = .95, type = 8))
+```
+
+
+We can plot the two together, and we see that the simultaneous confidence interval is bigger.
+
+```{r}
+fit <- predict(mod, newdata = grid, se.fit = TRUE)
+dat <- data.frame(
+  x0 = grid$x0,
+  pred = fit$fit,
+  ci_pt_lb = fit$fit + qnorm(.025) * fit$se.fit,
+  ci_pt_ub = fit$fit + qnorm(.975) * fit$se.fit,
+  ci_sim_lb = fit$fit - crit * fit$se.fit,
+  ci_sim_ub = fit$fit + crit * fit$se.fit
+)
+
+ggplot(dat, aes(x = x0, y = pred)) + 
+  geom_line() + 
+  geom_ribbon(aes(ymin = ci_pt_lb, ymax = ci_pt_ub), alpha = .3) + 
+  geom_ribbon(aes(ymin = ci_sim_lb, ymax = ci_sim_ub), alpha = .3)
+```
+
+### Combining simultaneous confidence intervals
+
+More will come here when package is further developed.
+
+
+
+
+# References
+
+
+
+
+
+
+
 
