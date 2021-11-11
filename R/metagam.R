@@ -19,6 +19,9 @@
 #' that the first smooth term when listed in alphabetic order is taken.
 #' @param method Method of meta analysis, passed on to \code{metafor::rma.uni}. Defaults to \code{"FE"}. See the documentation to
 #' \code{metafor::rma} for all available options.
+#' @param nsim Number of simulations to conduct in order to compute p-values and simultaneous
+#' confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
+#' are performed.
 #' @param intercept logical defining whether or not to include the intercept in each smooth
 #' term. Only applies when \code{type = "iterms"}.
 #' @param restrict_range Character vector of explanatory variables to restrict such that only
@@ -38,7 +41,7 @@
 #' @export
 #' @example /inst/examples/metagam_examples.R
 metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms = NULL,
-                    method = "FE", intercept = FALSE, restrict_range = NULL){
+                    method = "FE", nsim = NULL, intercept = FALSE, restrict_range = NULL){
 
   if(!(type %in% c("iterms", "link", "response"))){
     stop('type must be one of "iterms", "link", and "response"\n')
@@ -93,8 +96,8 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   # Find the estimates from each model over the grid
-  cohort_estimates <- purrr::map_dfr(models, function(x) {
-    pred <- stats::predict(x, newdata = grid, type = type,
+  cohort_estimates <- lapply(seq_along(models), function(ind) {
+    pred <- stats::predict(models[[ind]], newdata = grid, type = type,
                            se.fit = TRUE, terms = terms)
 
     estimate <- if(type %in% c("iterms", "terms")){
@@ -112,42 +115,48 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     }
     names(standard_error) <- paste0("se_", names(standard_error))
 
-    cbind(grid, estimate, standard_error)
-  }, .id = "model")
-
+    res <- cbind(grid, estimate, standard_error)
+    res$model <- ind
+    res
+  })
+  cohort_estimates <- do.call(rbind, cohort_estimates)
 
   # Now do the meta-analysis. First reshape the dataframe.
-  cohort_estimates <- tidyr::pivot_longer(
+  cohort_estimates <- stats::reshape(
     cohort_estimates,
-    cols = union(dplyr::starts_with("estimate_"), dplyr::starts_with("se_")),
-    names_to = c(".value", "term"),
-    names_pattern = "([[:alpha:]]+)\\_(.*)")
+    varying = c(
+      grep("^estimate_", names(cohort_estimates), value = TRUE),
+      grep("^se_", names(cohort_estimates), value = TRUE)
+      ),
+    timevar = "term",
+    direction = "long",
+    sep = "_")
+  cohort_estimates$id <- NULL
+  cohort_estimates$model <- as.factor(cohort_estimates$model)
 
   # Now nest the estimates at each grid point
-  meta_estimates <- dplyr::group_by_at(cohort_estimates,
-                                       dplyr::vars(-"model", -"estimate", -"se"))
-  meta_estimates <- tidyr::nest(meta_estimates)
+  vars <- setdiff(names(cohort_estimates), c("model", "estimate", "se"))
+  cohort_estimates$grp <- factor(eval(parse(text = paste("paste(", paste0('cohort_estimates$', vars, collapse = ","), ")"))))
+  levels(cohort_estimates$grp) <- order(levels(cohort_estimates$grp))
 
-  meta_estimates <- dplyr::mutate(
-    meta_estimates,
-    meta_model = lapply(.data$data, function(x){
-      metafor::rma(yi = c(x$estimate), sei = c(x$se), method = method)
+  splitdat <- split(cohort_estimates, f = cohort_estimates$grp)
+  meta_models <- lapply(
+    splitdat, function(x){
+      metafor::rma(yi = x$estimate, sei = x$se, method = method)
     })
+
+  predictions <- lapply(meta_models, function(x){
+    pred <- stats::predict(x)
+    data.frame(
+      estimate = pred$pred,
+      se = pred$se,
+      ci.lb = pred$ci.lb,
+      ci.ub = pred$ci.ub
     )
+  })
 
-  meta_estimates <- dplyr::ungroup(meta_estimates)
-  meta_estimates <- dplyr::bind_cols(
-    meta_estimates,
-    purrr::map_dfr(meta_estimates$meta_model, function(x) {
-      pred <- stats::predict(x)
-
-      dplyr::tibble(
-        estimate = pred$pred,
-        se = pred$se,
-        ci.lb = pred$ci.lb,
-        ci.ub = pred$ci.ub
-      )
-      }))
+  meta_estimates <- cbind(do.call(rbind, lapply(splitdat, function(x) unique(x[vars]))),
+        do.call(rbind, predictions))
 
   # Extract p-values
   pvals <- purrr::map_dfr(models, function(x) {
@@ -166,6 +175,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   result <- list(
     cohort_estimates = cohort_estimates,
+    meta_models = meta_models,
     meta_estimates = meta_estimates,
     pvals = pvals,
     meta_pvals = meta_pvals,

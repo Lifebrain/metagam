@@ -24,14 +24,14 @@ The metagam package offers a way to visualize the heterogeneity of the estimated
 
 
 ```{r}
-library(metagam)
+library("metagam")
 ```
 
 
 We start by simulating 5 datasets using the `gamSim()` function from mgcv. We use the response $y$ and the explanatory variable $x_{2}$, but add an additional shift $\beta x_{2}^{2}$ where $\beta_{2}$ differs between datasets, yielding heterogeneous data.
 
 ```{r}
-library(mgcv)
+library("mgcv")
 set.seed(1233)
 shifts <- c(0, .5, 1, 0, -1)
 datasets <- lapply(shifts, function(x) {
