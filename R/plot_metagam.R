@@ -23,13 +23,13 @@ plot.metagam <- function(x, ...)
   }
 
   metadat <- if(x$type %in% c("iterms", "terms")){
-    dplyr::filter(x$meta_estimates, .data$term == !!x$terms)
+    x$meta_estimates[x$meta_estimates$term == x$terms, ]
   } else {
     x$meta_estimates
   }
 
   dat <- if(x$type %in% c("iterms", "terms")){
-    dplyr::filter(x$cohort_estimates, .data$term == !!x$terms)
+    x$cohort_estimates[x$cohort_estimates$term == x$terms, ]
   } else {
     x$cohort_estimates
   }

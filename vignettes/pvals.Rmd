@@ -83,24 +83,17 @@ ggplot(metafit$meta_estimates, aes(x = x, y = estimate, ymin = ci.lb, ymax = ci.
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
-The object returned by `metagam` has a `meta_pvals` element which contains p-values for each term in each individual fit. In this case we have only a single term. 
+The object returned by `metagam` has a `pvals` element which contains p-values for each term in each individual fit.
 
 ```{r}
-metafit$meta_pvals
+metafit$pvals
 ```
-We extract the p-values by looking into the `data` object.
-
-```{r}
-metafit$meta_pvals$data[[1]]
-pvals <- metafit$meta_pvals$data[[1]]$`p-value`
-```
-
 
 Combining the p-values using any of the methods available in metap, we do however see that the effects are signficiant at $\alpha = 0.05$. 
 
 ```{r, eval=FALSE}
 library("metap")
-allmetap(p = pvals, method = "all")
+allmetap(p = metafit$pvals$`p-value`, method = "all")
 ```
 
 ```{r, echo=FALSE}

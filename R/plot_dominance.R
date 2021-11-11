@@ -50,11 +50,9 @@ plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
     position = "stacked"
   }
 
-
-
-  dat <- dplyr::filter(x$cohort_estimates, .data$term == !!term)
-  dat <- dplyr::rename_at(dat, dplyr::vars(axis), ~ "x")
-  dat <- dplyr::mutate(dat, y = 1 / .data$se^2)
+  dat <- x$cohort_estimates[x$cohort_estimates$term == term, ]
+  names(dat)[names(dat) == axis] <- "x"
+  dat$y <- 1 / dat$se^2
 
   if(is.null(width)){
     width <- min(abs(diff(dat[["x"]])))

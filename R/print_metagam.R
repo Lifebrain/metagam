@@ -38,7 +38,7 @@ printfun <- function(x){
   if(x$type %in% c("terms", "iterms")){
     cat(paste0("Smooth terms analyzed: ", paste(x$terms, collapse = ", "), "."))
   } else if (x$type %in% c("link", "response")){
-    cat(paste0(stringr::str_to_title(x$type), "function analyzed."))
+    cat(paste0(x$type, "function analyzed."))
   } else {
     stop("Unknown type", x$type, ".")
   }

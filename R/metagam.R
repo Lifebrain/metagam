@@ -48,7 +48,9 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   # Find the terms from each model
-  model_terms <- do.call(rbind, lapply(models, function(x) x$term_df))
+  model_terms <- do.call(rbind, lapply(models, function(x) {
+    data.frame(term = names(x$term_list), variables = unlist(x$term_list))
+  }))
 
   # Check if the user-specified term exists
   if(!is.null(terms) && !all(ind <- terms %in% model_terms$term)){
@@ -155,30 +157,23 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     )
   })
 
-  meta_estimates <- cbind(do.call(rbind, lapply(splitdat, function(x) unique(x[vars]))),
+  meta_estimates <- cbind(
+    do.call(rbind, lapply(splitdat, function(x) unique(x[vars]))),
         do.call(rbind, predictions))
 
   # Extract p-values
-  pvals <- purrr::map_dfr(models, function(x) {
-    dat <- x$s.table
-    tmp_terms <- rownames(dat)
-    dat <- dplyr::as_tibble(dat)
-    dat <- dplyr::mutate(dat, term = tmp_terms)
-    dat <- dplyr::filter(dat, .data$term %in% terms)
-    dat <- dplyr::select(dat, .data$term, dplyr::everything())
-    dat
-  }, .id = "model")
-
-  # Split by term and meta-analyze p-values
-  meta_pvals <- dplyr::group_by(pvals, .data$term)
-  meta_pvals <- tidyr::nest(meta_pvals)
+  pvals <- do.call(rbind, lapply(models, function(x) {
+    dat <- as.data.frame(x$s.table)
+    dat$term <- rownames(dat)
+    dat <- dat[dat$term %in% terms, ]
+    dat[, c("term", setdiff(names(dat), "term"))]
+  }))
 
   result <- list(
     cohort_estimates = cohort_estimates,
     meta_models = meta_models,
     meta_estimates = meta_estimates,
     pvals = pvals,
-    meta_pvals = meta_pvals,
     terms = terms,
     method = method,
     xvars = xvars,

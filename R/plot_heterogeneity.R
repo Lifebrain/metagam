@@ -117,10 +117,8 @@ plot_heterogeneity_p <- function(data, axis, alpha_thresh){
 plot_heterogeneity_q <- function(data, axis, alpha_thresh){
   # TODO: øystein, please check whether this is the correct approximation
 
-  data <- dplyr::mutate(data,
-                        z = -0.862 + sqrt(0.743 - 2.404 * log(.data$QEp)),
-                        Qse = .data$QE / .data$z
-  )
+  data$z <- -0.862 + sqrt(0.743 - 2.404 * log(data$QEp))
+  data$Qse <- data$QE / data$z
 
   ggplot2::ggplot(data = data,
                   ggplot2::aes(x = .data$x, y = .data$QE)) +
