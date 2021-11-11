@@ -12,6 +12,7 @@ metagam(
   terms = NULL,
   method = "FE",
   nsim = NULL,
+  alpha_seq = 0.05,
   intercept = FALSE,
   restrict_range = NULL
 )
@@ -45,6 +46,9 @@ that the first smooth term when listed in alphabetic order is taken.}
 \item{nsim}{Number of simulations to conduct in order to compute p-values and simultaneous
 confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
 are performed.}
+
+\item{alpha_seq}{Vector of significance levels at which to test for whether the smooth
+term is exactly zero. Ignored if \code{nsim} is \code{NULL}.}
 
 \item{intercept}{logical defining whether or not to include the intercept in each smooth
 term. Only applies when \code{type = "iterms"}.}

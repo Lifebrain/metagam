@@ -41,6 +41,6 @@ navbar:
       href: articles/heterogeneity.html
     - text: Multivariate smooth terms
       href: articles/multivariate.html
-    - text: Meta-analytic combination of p-values
+    - text: Simultaneous confidence intervals and p-values
       href: articles/pvals.html
 

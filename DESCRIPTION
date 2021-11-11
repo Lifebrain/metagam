@@ -27,13 +27,13 @@ Description: Meta-analysis of generalized additive
 License: GPL-3
 Encoding: UTF-8
 Imports: 
+    mgcv,
     ggplot2,
     knitr,
     metafor,
     rlang
 RoxygenNote: 7.1.2
 Suggests: 
-    mgcv,
     gamm4,
     roxygen2,
     rmarkdown,
