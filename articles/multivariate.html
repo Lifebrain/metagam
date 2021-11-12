@@ -66,6 +66,9 @@
     <li>
       <a href="../articles/multivariate.html">Multivariate smooth terms</a>
     </li>
+    <li>
+      <a href="../articles/pvals.html">Simultaneous confidence intervals and p-values</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -242,18 +245,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span>
 <span class="co">#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Smooth terms analyzed: te(x,z) .</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Meta-analytic p-values of smooth terms:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; |Test                  |te(x,z)   |</span>
-<span class="co">#&gt; |:---------------------|:---------|</span>
-<span class="co">#&gt; |Stouffer's sum of z   |6.626e-02 |</span>
-<span class="co">#&gt; |Edgington's sum of p  |1.775e-01 |</span>
-<span class="co">#&gt; |Wilkinson's maximum p |1.951e-01 |</span>
-<span class="co">#&gt; |Wilkinson's minimum p |1.918e-02 |</span>
-<span class="co">#&gt; |logit p method        |4.375e-02 |</span>
-<span class="co">#&gt; |Fisher's sum of logs  |3.148e-02 |</span></code></pre></div>
+<span class="co">#&gt; Smooth terms analyzed: te(x,z).</span></code></pre></div>
 <p>We can then plot the corresponding meta-analytic fit:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span></code></pre></div>

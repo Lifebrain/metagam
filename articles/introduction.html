@@ -66,6 +66,9 @@
     <li>
       <a href="../articles/multivariate.html">Multivariate smooth terms</a>
     </li>
+    <li>
+      <a href="../articles/pvals.html">Simultaneous confidence intervals and p-values</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -99,7 +102,7 @@
 
     
     
-<p>The purpose of the metagam package is to meta-analyze generalized additive models (GAMs), including generalized additive mixed models (GAMMs). The main application we have in mind is the case in which researchers at different locations have the same type of data, but are not allowed to share the rawdata. The metagam package offers an opportunity to gain statistical power by fitting similar GAMs to the data in each location, removing individual participant data from the model objects such that they can be shared to a common location, and finally obtaining a meta-analytic GAM fit from the individual models. The methodology is described in detail in a paper which will soon (as of January 2020) be public.</p>
+<p>The purpose of the metagam package is to meta-analyze generalized additive models (GAMs), including generalized additive mixed models (GAMMs). The main application we have in mind is the case in which researchers at different locations have the same type of data, but are not allowed to share the rawdata. The metagam package offers an opportunity to gain statistical power by fitting similar GAMs to the data in each location, removing individual participant data from the model objects such that they can be shared to a common location, and finally obtaining a meta-analytic GAM fit from the individual models. The methodology is described in detail in <span class="citation">Sorensen et al. (2021)</span>.</p>
 <p>The reason the methods in metagam are needed, is that current meta-analytic approaches mainly focusing on combining model parameters, e.g., regression coefficients or correlations. This approach works well in many cases, but there are many important problems for which it is impractical or impossible to use parametric models. GAMs offer a flexible way to fit various functional forms <span class="citation">Wood (2017)</span>. Some current meta-analytic approaches to GAMs have required exactly the same basis functions and knot placement to be used in the model fitted to each dataset, but this is in general suboptimal and when the range of some explanatory variable differs between cohorts, it may often lead to models that are not identifiable. metagam hence instead combines the model fits (predictions) over some grid specified by the user.</p>
 <div id="basic-usage-example" class="section level1">
 <h1 class="hasAnchor">
@@ -177,18 +180,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span>
 <span class="co">#&gt; Meta-analysis of GAMs from 3 cohorts, using method FE.</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Smooth terms analyzed: s(x0) .</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Meta-analytic p-values of smooth terms:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; |Test                  |s(x0)     |</span>
-<span class="co">#&gt; |:---------------------|:---------|</span>
-<span class="co">#&gt; |Stouffer's sum of z   |1.499e-05 |</span>
-<span class="co">#&gt; |Edgington's sum of p  |1.176e-04 |</span>
-<span class="co">#&gt; |Wilkinson's maximum p |2.721e-04 |</span>
-<span class="co">#&gt; |Wilkinson's minimum p |2.777e-04 |</span>
-<span class="co">#&gt; |logit p method        |2.190e-05 |</span>
-<span class="co">#&gt; |Fisher's sum of logs  |2.038e-05 |</span></code></pre></div>
+<span class="co">#&gt; Smooth terms analyzed: s(x0).</span></code></pre></div>
 <p>The default plotting function shows the fits on the separate datasets together with the meta-analytic fit.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span></code></pre></div>
@@ -199,6 +191,9 @@
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
+<div id="ref-Sorensen2021">
+<p>Sorensen, Oystein, Andreas M. Brandmaier, Didac Macia, Klaus Ebmeier, Paolo Ghisletta, Rogier A. Kievit, Athanasia M. Mowinckel, Kristine B. Walhovd, Rene Westerhausen, and Anders Fjell. 2021. “Meta-Analysis of Generalized Additive Models in Neuroimaging Studies.” <em>NeuroImage</em> 224 (January): 117416. <a href="https://doi.org/10.1016/j.neuroimage.2020.117416">https://doi.org/10.1016/j.neuroimage.2020.117416</a>.</p>
+</div>
 <div id="ref-Wood2017">
 <p>Wood, S. N. 2017. <em>Generalized Additive Models: An Introduction with R</em>. 2nd ed. Chapman; Hall/CRC.</p>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Heterogeneity p-plot — plot_heterogeneity_p • metagam</title>
+<title>Get maximum of the absolute standard deviations — getmasd • metagam</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Heterogeneity p-plot — plot_heterogeneity_p" />
-<meta property="og:description" content="Internal function to plot
-the heterogeneity p values" />
+<meta property="og:title" content="Get maximum of the absolute standard deviations — getmasd" />
+<meta property="og:description" content="This code is based on Dr. Gavin Simpson's blog post https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -135,40 +134,41 @@ the heterogeneity p values" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Heterogeneity p-plot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Lifebrain/metagam/blob/master/R/plot_heterogeneity.R'><code>R/plot_heterogeneity.R</code></a></small>
-    <div class="hidden name"><code>plot_heterogeneity_p.Rd</code></div>
+    <h1>Get maximum of the absolute standard deviations</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Lifebrain/metagam/blob/master/R/misc.R'><code>R/misc.R</code></a></small>
+    <div class="hidden name"><code>getmasd.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Internal function to plot
-the heterogeneity p values</p>
+    <p>This code is based on Dr. Gavin Simpson's blog post https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_heterogeneity_p</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>axis</span>, <span class='va'>alpha_thresh</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getmasd</span><span class='op'>(</span><span class='va'>mod</span>, <span class='va'>grid</span>, <span class='va'>nmc</span>, <span class='va'>terms</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>data made by <code><a href='make_heterogeneity_data.html'>make_heterogeneity_data</a></code>.</p></td>
+      <th>mod</th>
+      <td><p>Object of class "striprawdata", returned from <code><a href='strip_rawdata.html'>strip_rawdata</a></code>.</p></td>
     </tr>
     <tr>
-      <th>axis</th>
-      <td><p>Character specifying which variable to plot. Defaults to <code>NULL</code>; if <code>x</code> was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.</p></td>
+      <th>grid</th>
+      <td><p>Grid of values over which to create a simultaneous confidence interval.</p></td>
     </tr>
     <tr>
-      <th>alpha_thresh</th>
-      <td><p>Significance level. Defaults to <code>.05</code>.</p></td>
+      <th>nmc</th>
+      <td><p>Number of Monte Carlo samples.</p></td>
+    </tr>
+    <tr>
+      <th>terms</th>
+      <td><p>Character vector of smooth terms.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>ggproto object</p>
+    <p>A vector of maxima of absolute standard deviations.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
