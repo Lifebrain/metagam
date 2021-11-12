@@ -5,13 +5,12 @@
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam?branch=master)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![codecov](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.org/package=metagam)
 [![R-CMD-check](https://github.com/Lifebrain/metagam/workflows/R-CMD-check/badge.svg)](https://github.com/Lifebrain/metagam/actions)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 ## Overview
@@ -91,7 +90,9 @@ participant data. We can then meta-analyze them using `metagam()`.
 ``` r
 meta_analysis <- metagam(models)
 summary(meta_analysis)
-#> Meta-analysis of GAMs from 3 cohorts, using method FE. Smooth terms analyzed: s(x2).
+#> Meta-analysis of GAMs from 3 cohorts, using method FE.
+#> 
+#> Smooth terms analyzed: s(x2).
 ```
 
 For further documentation and vignettes, please visit the [package
