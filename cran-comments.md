@@ -1,5 +1,7 @@
 ## Comments
 
+NOTE: The first submission went to manual inspection due to possible wrong URL. This has been corrected now.
+
 This is a resubmission containing:
 
 * Removal of a large number of dependencies, by writing more of the code using base R.
