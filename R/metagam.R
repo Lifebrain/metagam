@@ -134,8 +134,11 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
       ),
     timevar = "term",
     direction = "long",
-    sep = "_")
+    sep = "_",
+    split = list(regexp = "_", include = TRUE, fixed = TRUE)
+    )
   cohort_estimates$id <- NULL
+  names(cohort_estimates)[names(cohort_estimates) %in% c("estimate_", "se_")] <- c("estimate", "se")
   cohort_estimates$model <- as.factor(cohort_estimates$model)
 
   # Now nest the estimates at each grid point
