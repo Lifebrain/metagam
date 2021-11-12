@@ -2,15 +2,15 @@
 
 This is a resubmission containing:
 
-* A bug fix allowing parallel processing with future to work.
-* Example of parallel processing.
-* Updated citation info.
+* Removal of a large number of dependencies, by writing more of the code using base R.
+* Completely revised method for computing p-values.
+* Support for simultaneous confidence intervals.
+* New vignette on p-values and simultaneous confidence intervals.
+* Removed "lazyData" specification in DESCRIPTION, which caused a NOTE on CRAN.
 
 ## Test environments
-* local OS X install, R 4.0.3
-* ubuntu 16.04 (on travis-ci), R 4.0.3
-* R-hub, Linux
-* R-devel, Windows.
+* local OS X install, R 4.1.2
+* os X, Windows, and Linux on GitHub Actions.
 
 ## R CMD check results
 

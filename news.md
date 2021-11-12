@@ -1,3 +1,7 @@
+# metagam version 0.3.0
+
+- This is a major revision of the package containing the changes described since 0.2.0 below.
+
 # metagam version 0.2.0.9002
 
 - Large number of dependencies removed, to make the metagam less sensitive to errors in other packages and to make it easier to install on different platforms.
