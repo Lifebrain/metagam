@@ -46,24 +46,22 @@ get_sim_ci <- function(m, cohort_estimates, xvars, method, grid){
 }
 
 
-get_meta_sim_ci <- function(models, alpha_seq, masd_list,
+get_meta_sim_ci <- function(models, ci_alpha, masd_list,
                             cohort_estimates, xvars, method, grid){
-  crit <- do.call(rbind, lapply(seq_along(models), get_crit_models, alpha_seq, masd_list))
-  crit <- split(crit, f = crit$alpha)
-  lapply(crit, get_sim_ci, cohort_estimates, xvars, method, grid)
+  crit <- do.call(rbind, lapply(seq_along(models), get_crit_models, ci_alpha, masd_list))
+  get_sim_ci(crit, cohort_estimates, xvars, method, grid)
 }
 
 get_crit <- function(a, ind, masd_list){
   stats::quantile(masd_list[[ind]], probs = 1 - a, type = 8, names = FALSE)
   }
 
-get_crit_models <- function(ind, alpha_seq, masd_list){
-  r <- unlist(lapply(alpha_seq, get_crit, ind, masd_list))
-  data.frame(crit = r, alpha = alpha_seq, model = ind)
+get_crit_models <- function(ind, ci_alpha, masd_list){
+  data.frame(crit = get_crit(ci_alpha, ind, masd_list), alpha = ci_alpha, model = ind)
 }
 
 testfun <- function(a, models, masd_list, cohort_estimates, xvars, method, grid){
   sim_ci <- get_meta_sim_ci(models, a, masd_list,
-                            cohort_estimates, xvars, method, grid)[[1]]
+                            cohort_estimates, xvars, method, grid)
   max(sim_ci$ci_sim_lb) - min(sim_ci$ci_sim_ub)
 }

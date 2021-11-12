@@ -12,7 +12,7 @@ metagam(
   terms = NULL,
   method = "FE",
   nsim = NULL,
-  alpha_seq = 0.05,
+  ci_alpha = 0.05,
   intercept = FALSE,
   restrict_range = NULL
 )
@@ -47,8 +47,7 @@ that the first smooth term when listed in alphabetic order is taken.}
 confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
 are performed.}
 
-\item{alpha_seq}{Vector of significance levels at which to test for whether the smooth
-term is exactly zero. Ignored if \code{nsim} is \code{NULL}.}
+\item{ci_alpha}{Significance level for simultaneous confidence bands. Ignored if \code{nsim} is \code{NULL}, and defaults to 0.05.}
 
 \item{intercept}{logical defining whether or not to include the intercept in each smooth
 term. Only applies when \code{type = "iterms"}.}
@@ -99,4 +98,9 @@ summary(meta_analysis)
 
 ## We can plot the fit
 plot(meta_analysis)
+
+## We can also compute p-values and simultaneous confidence intervals, by setting the nsim argument.
+## For details, see the separate vignette.
+meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
+summary(meta_analysis)
 }

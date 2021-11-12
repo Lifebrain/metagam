@@ -1,3 +1,10 @@
+# metagam version 0.2.0.9002
+
+- Large number of dependencies removed, to make the metagam less sensitive to errors in other packages and to make it easier to install on different platforms.
+- Simultaneous confidence intervals have been added.
+- Computation of p-values has been completely revised. The previous method would give nonsensical answers in cases where the effects pointed in different directions in different datasets.
+- A vignette on p-values and simultaneous confidence intervals has been added.
+
 # metagam version 0.2.0.9001
 
 - removed viridis from Suggests, to reduce the number of dependencies.

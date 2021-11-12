@@ -182,14 +182,14 @@ models <- lapply(datasets, function(dat){
 })
 
 meta_analysis <- metagam(models, terms = "s(x2)", grid_size = 100,
-                         nsim = 10000, alpha_seq = .05)
+                         nsim = 10000, ci_alpha = .05)
 ```
 
 
 Convenience functions will be added later, but for now it is a bit manual. Notice that the outer bands are bigger.
 
 ```{r}
-sim_conf <- meta_analysis$sim_ci$`0.05`
+sim_conf <- meta_analysis$sim_ci
 ptw_conf <- meta_analysis$meta_estimates
 ggplot(sim_conf, aes(x = x2)) + 
   geom_line(aes(y = pred)) + 
@@ -198,10 +198,10 @@ ggplot(sim_conf, aes(x = x2)) +
 ```
 
 
-We can also obtain the p-value:
+The p-value is printed with the model summary. In order to get more digits after the decimal point in the p-value, increase the `nsim` argument.
 
 ```{r}
-meta_analysis$meta_pval
+summary(meta_analysis)
 ```
 
 
@@ -219,7 +219,7 @@ pvals <- parLapply(
       mod <- mgcv::gam(y ~ s(x, bs = "cr"), data = dat)
       metagam::strip_rawdata(mod)
       })
-    metagam::metagam(models, nsim = 1000, alpha_seq = .05)$meta_pval
+    metagam::metagam(models, nsim = 1000, ci_alpha = .05)$meta_pval
   }
 )
 stopCluster(cl)
@@ -242,7 +242,7 @@ pvals <- parLapply(
       mod <- mgcv::gam(y ~ s(x, bs = "cr"), data = dat)
       metagam::strip_rawdata(mod)
       })
-    metagam::metagam(models, nsim = 1000, alpha_seq = .05)$meta_pval
+    metagam::metagam(models, nsim = 1000, ci_alpha = .05)$meta_pval
   }
 )
 stopCluster(cl)

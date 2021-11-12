@@ -22,8 +22,7 @@
 #' @param nsim Number of simulations to conduct in order to compute p-values and simultaneous
 #' confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
 #' are performed.
-#' @param alpha_seq Vector of significance levels at which to test for whether the smooth
-#' term is exactly zero. Ignored if \code{nsim} is \code{NULL}.
+#' @param ci_alpha Significance level for simultaneous confidence bands. Ignored if \code{nsim} is \code{NULL}, and defaults to 0.05.
 #' @param intercept logical defining whether or not to include the intercept in each smooth
 #' term. Only applies when \code{type = "iterms"}.
 #' @param restrict_range Character vector of explanatory variables to restrict such that only
@@ -43,7 +42,7 @@
 #' @export
 #' @example /inst/examples/metagam_examples.R
 metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms = NULL,
-                    method = "FE", nsim = NULL, alpha_seq = 0.05,
+                    method = "FE", nsim = NULL, ci_alpha = 0.05,
                     intercept = FALSE, restrict_range = NULL){
 
   if(!(type %in% c("iterms", "link", "response"))){
@@ -170,7 +169,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     masd_list <- lapply(seq_along(models), function(ind){
       getmasd(models[[ind]], grid, nsim, terms)
     })
-    sim_ci <- get_meta_sim_ci(models, alpha_seq, masd_list,
+    sim_ci <- get_meta_sim_ci(models, ci_alpha, masd_list,
                               cohort_estimates, xvars, method, grid)
 
     meta_pval <- if(testfun(1/nsim, models, masd_list,

@@ -33,13 +33,17 @@ print.metagam <- function(x, ...){
 
 
 printfun <- function(x){
-  cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ". ", sep = "")
+  cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
   if(x$type %in% c("terms", "iterms")){
-    cat(paste0("Smooth terms analyzed: ", paste(x$terms, collapse = ", "), "."))
+    cat(paste0("Smooth terms analyzed: ", paste(x$terms, collapse = ", "), ". "))
   } else if (x$type %in% c("link", "response")){
-    cat(paste0(x$type, "function analyzed."))
+    cat(paste0(x$type, "function analyzed. "))
   } else {
-    stop("Unknown type", x$type, ".")
+    stop("Unknown type", x$type, ". ")
+  }
+
+  if(!is.null(x$meta_pval)){
+    cat("P-value for smooth term:", x$meta_pval, "\n\n")
   }
 }
