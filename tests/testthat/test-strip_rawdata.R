@@ -1,5 +1,4 @@
 library(mgcv)
-library(gamm4)
 # Create a basic model with mgcv
 set.seed(123)
 ndat <- 3
@@ -64,16 +63,11 @@ test_that("strip_rawdata.gamm works", {
 
 
 test_that("strip_rawdata.gamm4 works", {
-  fullfits <- lapply(1:ndat, function(x){
-    dat <- gamSim(n = n, verbose = FALSE)
-    dat$ID <- sample(1:3, size = n, replace = TRUE)
-    b <- gamm4(y ~ s(x0, bs = 'cr') + s(x1, bs = 'cr'), data = dat,
-               random = ~(1|ID))
-  })
+  fullfits_gamm4 <- readRDS("../testdata/fullfits_gamm4.rda")
 
-  stripfits <- lapply(fullfits, strip_rawdata)
+  stripfits <- lapply(fullfits_gamm4, strip_rawdata)
 
-  test_predictions(lapply(fullfits, function(x) x$gam), stripfits)
+  test_predictions(lapply(fullfits_gamm4, function(x) x$gam), stripfits)
   lapply(stripfits, function(x) expect_s3_class(x, "striprawdata"))
 })
 
