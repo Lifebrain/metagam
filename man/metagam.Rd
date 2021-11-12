@@ -11,6 +11,8 @@ metagam(
   type = "iterms",
   terms = NULL,
   method = "FE",
+  nsim = NULL,
+  ci_alpha = 0.05,
   intercept = FALSE,
   restrict_range = NULL
 )
@@ -40,6 +42,12 @@ that the first smooth term when listed in alphabetic order is taken.}
 
 \item{method}{Method of meta analysis, passed on to \code{metafor::rma.uni}. Defaults to \code{"FE"}. See the documentation to
 \code{metafor::rma} for all available options.}
+
+\item{nsim}{Number of simulations to conduct in order to compute p-values and simultaneous
+confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
+are performed.}
+
+\item{ci_alpha}{Significance level for simultaneous confidence bands. Ignored if \code{nsim} is \code{NULL}, and defaults to 0.05.}
 
 \item{intercept}{logical defining whether or not to include the intercept in each smooth
 term. Only applies when \code{type = "iterms"}.}
@@ -90,4 +98,9 @@ summary(meta_analysis)
 
 ## We can plot the fit
 plot(meta_analysis)
+
+## We can also compute p-values and simultaneous confidence intervals, by setting the nsim argument.
+## For details, see the separate vignette.
+meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
+summary(meta_analysis)
 }

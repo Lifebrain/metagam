@@ -19,6 +19,10 @@
 #' that the first smooth term when listed in alphabetic order is taken.
 #' @param method Method of meta analysis, passed on to \code{metafor::rma.uni}. Defaults to \code{"FE"}. See the documentation to
 #' \code{metafor::rma} for all available options.
+#' @param nsim Number of simulations to conduct in order to compute p-values and simultaneous
+#' confidence bands for the meta-analytic fit. Defaults to \code{NULL}, which means that no simulations
+#' are performed.
+#' @param ci_alpha Significance level for simultaneous confidence bands. Ignored if \code{nsim} is \code{NULL}, and defaults to 0.05.
 #' @param intercept logical defining whether or not to include the intercept in each smooth
 #' term. Only applies when \code{type = "iterms"}.
 #' @param restrict_range Character vector of explanatory variables to restrict such that only
@@ -38,14 +42,17 @@
 #' @export
 #' @example /inst/examples/metagam_examples.R
 metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms = NULL,
-                    method = "FE", intercept = FALSE, restrict_range = NULL){
+                    method = "FE", nsim = NULL, ci_alpha = 0.05,
+                    intercept = FALSE, restrict_range = NULL){
 
   if(!(type %in% c("iterms", "link", "response"))){
     stop('type must be one of "iterms", "link", and "response"\n')
   }
 
   # Find the terms from each model
-  model_terms <- purrr::map_dfr(models, function(x) x$term_df)
+  model_terms <- do.call(rbind, lapply(models, function(x) {
+    data.frame(term = names(x$term_list), variables = unlist(x$term_list))
+  }))
 
   # Check if the user-specified term exists
   if(!is.null(terms) && !all(ind <- terms %in% model_terms$term)){
@@ -55,141 +62,148 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   # If terms are not supplied and type is "iterms" or "terms", find the smooth terms
   # Otherwise use all terms
   if(is.null(terms) && type %in% c("iterms", "terms")){
-    terms <- dplyr::arrange(model_terms, .data$term)
-    terms <- dplyr::slice(terms, 1)
-    terms <- terms$term
+    terms <- model_terms$term[[order(model_terms$term)[[1]]]]
   } else if(type %in% c("link", "response")){
     terms <- sort(unique(model_terms$term))
   }
 
   # Find the variables corresponding to terms
-  xvars <- dplyr::filter(model_terms, .data$term == terms)
-  xvars <- unlist(unique(purrr::pmap(xvars, function(term, variables) variables)))
+  xvars <- unique(model_terms[model_terms$term %in% terms, "variables"])
 
   # Create grid if not supplied by user
   if(is.null(grid)){
     # Find the minimum and maximum from each model
-    grid <- purrr::map_dfr(models, function(x){
-      purrr::map_dfr(x$var.summary, function(vs){
+    grid <- lapply(models, function(x){
+      res <- lapply(x$var.summary, function(vs){
         if(is.numeric(vs)){
           c(min(vs), max(vs))
         } else {
           rep(vs, 2)
         }
       })
+      as.data.frame(do.call(cbind, res))
     })
+    grid <- do.call(rbind, grid)
     # Combine to get overall minimum and maximum
-    grid <- purrr::imap(grid, function(x, nm) {
-      if(is.numeric(x) && nm %in% xvars) {
-        seq(from = min(x), to = max(x), length.out = grid_size)
+    nms <- names(grid)
+    grid <- lapply(nms, function(nm){
+      if(nm %in% xvars){
+        seq(from = min(grid[, nm]), to = max(grid[, nm]), length.out = grid_size)
       } else {
-        sort(x)[[1]]
+        sort(grid[, nm])[[1]]
       }
     })
+    names(grid) <- nms
 
     # Expand
-    grid <- dplyr::as_tibble(expand.grid(grid))
+    grid <- expand.grid(grid)
   }
 
   # Find the estimates from each model over the grid
-  cohort_estimates <- purrr::map_dfr(models, function(x) {
-    pred <- stats::predict(x, newdata = grid, type = type,
+  cohort_estimates <- lapply(seq_along(models), function(ind) {
+    pred <- stats::predict(models[[ind]], newdata = grid, type = type,
                            se.fit = TRUE, terms = terms)
 
     estimate <- if(type %in% c("iterms", "terms")){
       estimate <- pred$fit + if(intercept) attr(pred, "constant") else 0
-      dplyr::as_tibble(estimate)
+      as.data.frame(estimate)
     } else if(type %in% c("link", "response")){
-      dplyr::tibble(!!type := pred$fit)
+      eval(parse(text = paste("data.frame(", type, "= as.numeric(pred$fit))")))
     }
-    estimate <- dplyr::rename_all(estimate, function(x) paste0("estimate_", x))
+    names(estimate) <- paste0("estimate_", names(estimate))
 
     standard_error <- if(type %in% c("iterms", "terms")){
-      dplyr::as_tibble(pred$se.fit)
+      as.data.frame(pred$se.fit)
     } else if(type %in% c("link", "response")){
-      dplyr::tibble(!!type := pred$se.fit)
+      eval(parse(text = paste("data.frame(", type, "= as.numeric(pred$se.fit))")))
     }
-    standard_error <- dplyr::rename_all(standard_error, function(x) paste0("se_", x))
+    names(standard_error) <- paste0("se_", names(standard_error))
 
-    dplyr::bind_cols(grid, estimate, standard_error)
-  }, .id = "model")
-
+    res <- cbind(grid, estimate, standard_error)
+    res$model <- ind
+    res
+  })
+  cohort_estimates <- do.call(rbind, cohort_estimates)
 
   # Now do the meta-analysis. First reshape the dataframe.
-  cohort_estimates <- tidyr::pivot_longer(
+  cohort_estimates <- stats::reshape(
     cohort_estimates,
-    cols = union(dplyr::starts_with("estimate_"), dplyr::starts_with("se_")),
-    names_to = c(".value", "term"),
-    names_pattern = "([[:alpha:]]+)\\_(.*)")
-
+    varying = c(
+      grep("^estimate_", names(cohort_estimates), value = TRUE),
+      grep("^se_", names(cohort_estimates), value = TRUE)
+      ),
+    timevar = "term",
+    direction = "long",
+    sep = "_")
+  cohort_estimates$id <- NULL
+  cohort_estimates$model <- as.factor(cohort_estimates$model)
 
   # Now nest the estimates at each grid point
-  meta_estimates <- dplyr::group_by_at(cohort_estimates,
-                                       dplyr::vars(-"model", -"estimate", -"se"))
-  meta_estimates <- tidyr::nest(meta_estimates)
+  vars <- setdiff(names(cohort_estimates), c("model", "estimate", "se"))
+  cohort_estimates$grp <- factor(eval(parse(text = paste("paste(", paste0('cohort_estimates$', vars, collapse = ","), ")"))))
+  levels(cohort_estimates$grp) <- order(levels(cohort_estimates$grp))
 
-  meta_estimates <- dplyr::mutate(
-    meta_estimates,
-    meta_model = purrr::map(.data$data, function(x){
-      metafor::rma(yi = c(x$estimate), sei = c(x$se), method = method)
+  splitdat <- split(cohort_estimates, f = cohort_estimates$grp)
+  meta_models <- lapply(
+    splitdat, function(x){
+      metafor::rma(yi = x$estimate, sei = x$se, method = method)
     })
+
+  predictions <- lapply(meta_models, function(x){
+    pred <- stats::predict(x)
+    data.frame(
+      estimate = pred$pred,
+      se = pred$se,
+      ci.lb = pred$ci.lb,
+      ci.ub = pred$ci.ub
     )
-
-  meta_estimates <- dplyr::ungroup(meta_estimates)
-  meta_estimates <- dplyr::bind_cols(
-    meta_estimates,
-    purrr::map_dfr(meta_estimates$meta_model, function(x) {
-      pred <- stats::predict(x)
-
-      dplyr::tibble(
-        estimate = pred$pred,
-        se = pred$se,
-        ci.lb = pred$ci.lb,
-        ci.ub = pred$ci.ub
-      )
-      }))
-
-  # Extract p-values
-  pvals <- purrr::map_dfr(models, function(x) {
-    dat <- x$s.table
-    tmp_terms <- rownames(dat)
-    dat <- dplyr::as_tibble(dat)
-    dat <- dplyr::mutate(dat, term = tmp_terms)
-    dat <- dplyr::filter(dat, .data$term %in% terms)
-    dat <- dplyr::select(dat, .data$term, dplyr::everything())
-    dat
-  }, .id = "model")
-
-  # Split by term and meta-analyze p-values
-  meta_pvals <- dplyr::group_by(pvals, .data$term)
-  meta_pvals <- tidyr::nest(meta_pvals)
-
-  # Create a tibble which contains both the meta-analytic p-values
-  # and the full objects returned by metap functions
-  meta_pvals <- purrr::pmap_dfr(meta_pvals, function(term, data){
-    df <- purrr::imap_dfc(
-      list(
-        sumz = metap::sumz,
-        sump = metap::sump,
-        maximump = metap::maximump,
-        minimump = metap::minimump,
-        logitp = metap::logitp,
-        sumlog = metap::sumlog
-        ),
-      function(f, n){
-        dplyr::tibble(!!n := list(f(pmax(!!data$`p-value`, 1e-16))))
-      })
-    df <- dplyr::mutate_all(df, list(pval = ~ as.numeric(.[[1]]$p)))
-    df <- dplyr::mutate(df, term = term)
-    df <- dplyr::select(df, .data$term, dplyr::ends_with("pval"), dplyr::everything())
   })
 
+  meta_estimates <- cbind(
+    do.call(rbind, lapply(splitdat, function(x) unique(x[vars]))),
+        do.call(rbind, predictions))
+
+  if(!is.null(nsim)){
+    if(length(terms) > 1) stop("P-value simulations currently only work for a single term.\n")
+
+    masd_list <- lapply(seq_along(models), function(ind){
+      getmasd(models[[ind]], grid, nsim, terms)
+    })
+    sim_ci <- get_meta_sim_ci(models, ci_alpha, masd_list,
+                              cohort_estimates, xvars, method, grid)
+
+    meta_pval <- if(testfun(1/nsim, models, masd_list,
+                            cohort_estimates, xvars, method, grid) > 0){
+      paste0("<", 1/nsim)
+    } else {
+      tryCatch({
+        opt <- stats::uniroot(testfun, interval = c(1/nsim, .99), models = models,
+                              masd_list = masd_list, cohort_estimates = cohort_estimates,
+                              xvars = xvars, method = method, grid = grid)
+        paste0(round(opt$root, floor(log10(nsim)) + 1))
+        },
+        error = function(e) "NA")
+    }
+
+  } else {
+    meta_pval <- sim_ci <- NULL
+  }
+
+  # Extract p-values
+  pvals <- do.call(rbind, lapply(models, function(x) {
+    dat <- as.data.frame(x$s.table)
+    dat$term <- rownames(dat)
+    dat <- dat[dat$term %in% terms, ]
+    dat[, c("term", setdiff(names(dat), "term"))]
+  }))
 
   result <- list(
     cohort_estimates = cohort_estimates,
+    meta_models = meta_models,
     meta_estimates = meta_estimates,
     pvals = pvals,
-    meta_pvals = meta_pvals,
+    meta_pval = meta_pval,
+    sim_ci = sim_ci,
     terms = terms,
     method = method,
     xvars = xvars,

@@ -18,7 +18,7 @@ num.datasets <- 5
 ## Simulation
 
 ```{r}
-library(metagam)
+library("metagam")
 ```
 
 Create `r num.datasets` datasets from standard gam example #1. The noise parameter is scaled, such that the first GAM has lowest noise and the last has highest noise. In a dominance plot, we plot the relative contributions of each dataset on the prediction. By the way we generated the data, we expect largest influence by dataset 1 and lowest by dataset `r num.datasets`.

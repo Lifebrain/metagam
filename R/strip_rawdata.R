@@ -60,10 +60,10 @@ strip_rawdata.gam <- function(model, path = NULL, save_ranges = TRUE, ...){
                          "cp.smooth", "cr.smooth", "cyclic.smooth", "t2.smooth")
 
 
-  purrr::walk(model$smooth, function(x){
+  lapply(model$smooth, function(x){
     check_smooths(x, supported_smooths)
     if(inherits(x, c("tensor.smooth", "t2.smooth"))){
-      purrr::walk(x$margin, check_smooths, supported_smooths)
+      lapply(x$margin, check_smooths, supported_smooths)
     }
   })
 
@@ -71,9 +71,8 @@ strip_rawdata.gam <- function(model, path = NULL, save_ranges = TRUE, ...){
   mgcv_output <- utils::capture.output(summary(model))
 
   # Terms with respective variables
-  term_tab <- purrr::map_dfr(model$smooth, function(x) {
-    dplyr::tibble(term = x[["label"]], variables = list(x[["term"]]))
-    })
+  term_list <- lapply(model$smooth, function(x) x[["term"]])
+  names(term_list) <- lapply(model$smooth, function(x) x[["label"]])
 
   # Find p-values of smooth terms
   s.table <- summary(model)$s.table
@@ -121,8 +120,8 @@ strip_rawdata.gam <- function(model, path = NULL, save_ranges = TRUE, ...){
     Vp = model$Vp,
     Vc = model$Vc,
     n = nrow(model$model),
-    smooth_terms = term_tab$term,
-    term_df = term_tab,
+    smooth_terms = names(term_list),
+    term_list = term_list,
     s.table = s.table,
     mgcv_output = mgcv_output
   )
@@ -143,6 +142,8 @@ check_smooths <- function(x, supported_smooths){
     stop(paste0("metagam currently supports the following splines:\n",
                 paste(supported_smooths, collapse = "\n"),
                 "\n\nSee the Details section in the documentation for strip_rawdata()."))
+  0
+
 }
 
 

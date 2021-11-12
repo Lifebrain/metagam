@@ -30,7 +30,6 @@ plot_heterogeneity <- function(x, axis = NULL, term = NULL,
     axis <- x$xvars
   }
 
-
   if(is.null(term)){
     if(x$type %in% c("iterms", "terms")){
       term <- x$terms
@@ -70,11 +69,12 @@ plot_heterogeneity <- function(x, axis = NULL, term = NULL,
 make_heterogeneity_data <- function(x, axis, term)
 {
   dat <- x$meta_estimates
-  dat <- dplyr::filter(dat, .data$term == !!term)
-  dat <- dplyr::mutate(dat,
-                       QE = purrr::map_dbl(.data$meta_model, ~ .$QE),
-                       QEp = purrr::map_dbl(.data$meta_model, ~ .$QEp))
-  dat <- dplyr::rename_at(dat, dplyr::vars(axis), ~ "x")
+  mods <- x$meta_models
+  dat <- dat[dat$term == term, ]
+  dat$QE <- unlist(lapply(mods, function(x) x$QE))
+  dat$QEp <- unlist(lapply(mods, function(x) x$QEp))
+
+  names(dat)[names(dat) == axis] <- "x"
 
   return(dat)
 }
@@ -117,10 +117,8 @@ plot_heterogeneity_p <- function(data, axis, alpha_thresh){
 plot_heterogeneity_q <- function(data, axis, alpha_thresh){
   # TODO: øystein, please check whether this is the correct approximation
 
-  data <- dplyr::mutate(data,
-                        z = -0.862 + sqrt(0.743 - 2.404 * log(.data$QEp)),
-                        Qse = .data$QE / .data$z
-  )
+  data$z <- -0.862 + sqrt(0.743 - 2.404 * log(data$QEp))
+  data$Qse <- data$QE / data$z
 
   ggplot2::ggplot(data = data,
                   ggplot2::aes(x = .data$x, y = .data$QE)) +

@@ -10,14 +10,6 @@
 print.summary.metagam <- function(x, digits = 8, ...){
 
   printfun(x)
-
-  cat("Meta-analytic p-values of smooth terms:")
-  print(
-    knitr::kable(
-      dplyr::mutate_at(x$meta_pvals, dplyr::vars(-.data$Test), ~ sprintf("%.3e", .))
-      )
-    )
-
   cat("\n\n")
 
   invisible(x)
@@ -44,10 +36,14 @@ printfun <- function(x){
   cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
   if(x$type %in% c("terms", "iterms")){
-    cat("Smooth terms analyzed:", paste(x$terms, collapse = ", "), ".\n\n")
+    cat(paste0("Smooth terms analyzed: ", paste(x$terms, collapse = ", "), ". "))
   } else if (x$type %in% c("link", "response")){
-    cat(stringr::str_to_title(x$type), "function analyzed.\n\n")
+    cat(paste0(x$type, "function analyzed. "))
   } else {
-    stop("Unknown type", x$type, ".\n\n")
+    stop("Unknown type", x$type, ". ")
+  }
+
+  if(!is.null(x$meta_pval)){
+    cat("P-value for smooth term:", x$meta_pval, "\n\n")
   }
 }
