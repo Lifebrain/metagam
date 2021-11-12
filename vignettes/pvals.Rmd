@@ -89,7 +89,7 @@ The object returned by `metagam` has a `pvals` element which contains p-values f
 metafit$pvals
 ```
 
-Combining the p-values using any of the methods available in metap, we do however see that the effects are signficiant at $\alpha = 0.05$. 
+Combining the p-values using any of the methods available in metap, we do however see that the effects are significant at $\alpha = 0.05$. 
 
 ```{r, eval=FALSE}
 library("metap")
