@@ -1,3 +1,7 @@
+# metagam version 0.3.0.9000
+
+- Fixed a bug which caused metagam to crash when there were special characters (in particular '_' and '.') in variable names.
+
 # metagam version 0.3.0
 
 - This is a major revision of the package containing the changes described since 0.2.0 below.
