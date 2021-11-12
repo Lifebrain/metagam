@@ -198,13 +198,64 @@ ggplot(sim_conf, aes(x = x2)) +
 ```
 
 
-We can also get the result of significance testing at the alpha level provided. `TRUE` means "Reject H0", `FALSE` means "Don't reject H0".
+We can also obtain the p-value:
 
 ```{r}
-meta_analysis$meta_test
+meta_analysis$meta_pval
 ```
 
 
+### Does it work?
+
+We shouldn't trust a single example, so here we will show some simulations. We do this by simulating a case where the true relationship is zero, and check if the distribution of p-values is close to uniform?
+
+```{r, eval=FALSE, echo=FALSE}
+library(parallel)
+cl <- makeCluster(10)
+pvals <- parLapply(
+  cl = cl, X = 1:100, fun = function(x){
+    models <- lapply(1:5, function(i){
+      dat <- data.frame(x = runif(100), y = rnorm(100))
+      mod <- mgcv::gam(y ~ s(x, bs = "cr"), data = dat)
+      metagam::strip_rawdata(mod)
+      })
+    metagam::metagam(models, nsim = 1000, alpha_seq = .05)$meta_pval
+  }
+)
+stopCluster(cl)
+png("figures/quantile_plot.png")
+plot(qunif(seq(from = 0, to = 1, length.out = 100)), 
+     sort(as.numeric(unlist(pvals))),
+     xlab = "Theoretical quantile",
+     ylab = "Data quantile")
+dev.off()
+```
+
+
+```{r, eval=FALSE}
+library(parallel)
+cl <- makeCluster(10)
+pvals <- parLapply(
+  cl = cl, X = 1:100, fun = function(x){
+    models <- lapply(1:5, function(i){
+      dat <- data.frame(x = runif(100), y = rnorm(100))
+      mod <- mgcv::gam(y ~ s(x, bs = "cr"), data = dat)
+      metagam::strip_rawdata(mod)
+      })
+    metagam::metagam(models, nsim = 1000, alpha_seq = .05)$meta_pval
+  }
+)
+stopCluster(cl)
+
+plot(qunif(seq(from = 0, to = 1, length.out = 100)), 
+     sort(as.numeric(unlist(pvals))),
+     xlab = "Theoretical quantile",
+     ylab = "Data quantile")
+```
+
+![](figures/quantile_plot.png)
+
+The quantile plot above looks sufficiently satisfactory to include this in the package. We will conduct much more extensive simulation studies in a future paper.
 
 # References
 
