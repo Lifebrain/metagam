@@ -191,7 +191,7 @@
 <span class="co">#&gt;       term      edf   Ref.df        F      p-value</span>
 <span class="co">#&gt; s(x)  s(x) 1.000000 1.000000 24.25930 3.612591e-06</span>
 <span class="co">#&gt; s(x)1 s(x) 1.236565 1.436059 10.64571 1.121220e-03</span></code></pre></div>
-<p>Combining the p-values using any of the methods available in metap, we do however see that the effects are signficiant at <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<p>Combining the p-values using any of the methods available in metap, we do however see that the effects are significant at <span class="math inline">\(\alpha = 0.05\)</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://www.dewey.myzen.co.uk/meta/meta.html">"metap"</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/metap/man/allmetap.html">allmetap</a></span><span class="op">(</span>p <span class="op">=</span> <span class="va">metafit</span><span class="op">$</span><span class="va">pvals</span><span class="op">$</span><span class="va">`p-value`</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
