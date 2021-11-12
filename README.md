@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![codecov](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://codecov.io/gh/Lifebrain/metagam)
+[![codecov](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Lifebrain/metagam)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.org/package=metagam)
 [![R-CMD-check](https://github.com/Lifebrain/metagam/workflows/R-CMD-check/badge.svg)](https://github.com/Lifebrain/metagam/actions)
