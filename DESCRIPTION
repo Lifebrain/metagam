@@ -29,12 +29,12 @@ Encoding: UTF-8
 Imports: 
     mgcv,
     ggplot2,
-    knitr,
     metafor,
     rlang
 RoxygenNote: 7.1.2
 Suggests: 
     roxygen2,
+    knitr,
     rmarkdown,
     devtools,
     covr,
