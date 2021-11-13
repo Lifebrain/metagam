@@ -80,6 +80,23 @@ test_that("metagam fails with wrong input", {
 
 })
 
+test_that("metagam works with tensor interactions", {
+  set.seed(123)
+  datasets <- lapply(1:5, function(x) gamSim(eg = 2, n = 50, verbose = FALSE)$data)
+
+  fits <- lapply(datasets, function(dat){
+    b <- gam(y ~ te(x, z), data = dat)
+    strip_rawdata(b)
+  })
+
+  metafit <- metagam(fits, grid_size = 10)
+  expect_s3_class(metafit, "metagam")
+  expect_equal(round(metafit$meta_estimates$ci.lb[1:4], 10),
+               c(-0.2802061066, -0.0279839076, -0.1800437287, -0.290758912))
+
+  expect_error(metagam(fits, grid_size = 10, nsim = 100))
+})
+
 
 test_that("metagam accepts strange variable names", {
   fits <- lapply(1:ndat, function(x){

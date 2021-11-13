@@ -168,6 +168,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   if(!is.null(nsim)){
     if(length(terms) > 1) stop("P-value simulations currently only work for a single term.\n")
+    if(length(xvars) > length(terms)) stop("P-value simulations currently only work for univariate terms.\n")
 
     masd_list <- lapply(seq_along(models), function(ind){
       getmasd(models[[ind]], grid, nsim, terms)
