@@ -81,7 +81,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
           rep(vs, 2)
         }
       })
-      as.data.frame(do.call(cbind, res))
+      as.data.frame(res)
     })
     grid <- do.call(rbind, grid)
     # Combine to get overall minimum and maximum
@@ -143,10 +143,10 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   # Now nest the estimates at each grid point
   vars <- setdiff(names(cohort_estimates), c("model", "estimate", "se"))
-  cohort_estimates$grp <- factor(eval(parse(text = paste("paste(", paste0('cohort_estimates$', vars, collapse = ","), ")"))))
-  levels(cohort_estimates$grp) <- order(levels(cohort_estimates$grp))
+  grp <- factor(eval(parse(text = paste("paste(", paste0('cohort_estimates$', vars, collapse = ","), ")"))))
+  levels(grp) <- order(levels(grp))
 
-  splitdat <- split(cohort_estimates, f = cohort_estimates$grp)
+  splitdat <- split(cohort_estimates, f = grp)
   meta_models <- lapply(
     splitdat, function(x){
       metafor::rma(yi = x$estimate, sei = x$se, method = method)
