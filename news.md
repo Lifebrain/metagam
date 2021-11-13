@@ -1,3 +1,7 @@
+# metagam version 0.3.1
+
+- 'knitr' moved from Imports to Suggests.
+
 # metagam version 0.3.0.9000
 
 - Fixed a bug which caused metagam to crash when there were special characters (in particular '_' and '.') in variable names.

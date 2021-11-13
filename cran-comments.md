@@ -1,14 +1,6 @@
 ## Comments
 
-NOTE: The first submission went to manual inspection due to possible wrong URL. This has been corrected now.
-
-This is a resubmission containing:
-
-* Removal of a large number of dependencies, by writing more of the code using base R.
-* Completely revised method for computing p-values.
-* Support for simultaneous confidence intervals.
-* New vignette on p-values and simultaneous confidence intervals.
-* Removed "lazyData" specification in DESCRIPTION, which caused a NOTE on CRAN.
+This is a resubmission which fixes a bug that was introduced in the last version. It also moves 'knitr' from Imports to Suggests to avoid a NOTE.
 
 ## Test environments
 * local OS X install, R 4.1.2
