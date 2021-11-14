@@ -4,7 +4,7 @@
 \alias{getmasd}
 \title{Get maximum of the absolute standard deviations}
 \usage{
-getmasd(mod, grid, nmc, terms)
+getmasd(mod, grid, nmc, terms, intercept_se = FALSE)
 }
 \arguments{
 \item{mod}{Object of class "striprawdata", returned from \code{\link{strip_rawdata}}.}
@@ -14,6 +14,9 @@ getmasd(mod, grid, nmc, terms)
 \item{nmc}{Number of Monte Carlo samples.}
 
 \item{terms}{Character vector of smooth terms.}
+
+\item{intercept_se}{Logical defining whether to include the squared standard deviation of the intercept in the
+covariance matrix for the smooth term. Defaults to \code{FALSE}.}
 }
 \value{
 A vector of maxima of absolute standard deviations.
