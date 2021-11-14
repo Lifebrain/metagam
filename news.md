@@ -1,3 +1,7 @@
+# metagam version 0.3.1.9000
+
+- Standard error of intercept is now included in simulations for p-values and simultaneous confidence intervals when type="iterms".
+
 # metagam version 0.3.1
 
 - 'knitr' moved from Imports to Suggests.
