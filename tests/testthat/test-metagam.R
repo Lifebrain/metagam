@@ -16,7 +16,6 @@ test_that("metagam works", {
   expect_s3_class(metafits, "metagam")
   expect_equal(metafits$terms, "s(x0)")
 
-
   # Now with second term
   metafits <- metagam(fits, grid_size = 10, terms = "s(x1)")
   expect_s3_class(metafits, "metagam")
@@ -40,6 +39,64 @@ test_that("metagam works", {
 
 })
 
+test_that("metagam runs with categorical covariates", {
+  models <- lapply(1:ndat, function(x){
+    dat <- gamSim(n = n, verbose = FALSE)
+    dat$z <- factor(sample(1:3, size = nrow(dat), replace = TRUE))
+    b <- gam(y ~ s(x0, bs = "cr") + z, data = dat)
+    strip_rawdata(b)
+  })
+  expect_s3_class(metagam(models, grid_size = 10), "metagam")
+
+  models <- lapply(1:ndat, function(x){
+    dat <- gamSim(n = n, verbose = FALSE)
+    dat$z <- factor(sample(1:3, size = nrow(dat), replace = TRUE))
+    b <- gam(y ~ s(x0, by = z, bs = "cr"), data = dat)
+    strip_rawdata(b)
+  })
+  expect_s3_class(metagam(models, grid_size = 10), "metagam")
+
+  models <- lapply(1:ndat, function(x){
+    dat <- gamSim(n = n, verbose = FALSE)
+    dat$z <- ordered(sample(1:3, size = nrow(dat), replace = TRUE))
+    b <- gam(y ~ s(x0, bs = "cr") + z, data = dat)
+    strip_rawdata(b)
+  })
+  expect_s3_class(metagam(models, grid_size = 10), "metagam")
+
+  models <- lapply(1:ndat, function(x){
+    dat <- gamSim(n = n, verbose = FALSE)
+    dat$grp <- ordered(sample(1:3, size = nrow(dat), replace = TRUE))
+    dat$z <- ordered(sample(1:3, size = nrow(dat), replace = TRUE))
+    b <- gam(y ~ s(x0, by = grp, bs = "cr") + z, data = dat)
+    strip_rawdata(b)
+  })
+  expect_s3_class(metagam(models, grid_size = 10), "metagam")
+})
+
+test_that("metagam fails with wrong input", {
+  expect_error(metagam(fits, grid_size = 10, type = "knil"))
+  expect_error(metagam(fits, grid_size = 10, terms = "abbb"))
+
+})
+
+test_that("metagam works with tensor interactions", {
+  set.seed(123)
+  datasets <- lapply(1:5, function(x) gamSim(eg = 2, n = 50, verbose = FALSE)$data)
+
+  fits <- lapply(datasets, function(dat){
+    b <- gam(y ~ te(x, z), data = dat)
+    strip_rawdata(b)
+  })
+
+  metafit <- metagam(fits, grid_size = 10)
+  expect_s3_class(metafit, "metagam")
+  expect_equal(round(metafit$meta_estimates$ci.lb[1:4], 10),
+               c(-0.2802061066, -0.0279839076, -0.1800437287, -0.290758912))
+
+  expect_error(metagam(fits, grid_size = 10, nsim = 100))
+})
+
 
 test_that("metagam accepts strange variable names", {
   fits <- lapply(1:ndat, function(x){
@@ -49,6 +106,6 @@ test_that("metagam accepts strange variable names", {
     strip_rawdata(b)
   })
 
-  m <- metagam(fits, nsim = 3)
+  expect_s3_class(metagam(fits, nsim = 3), "metagam")
 
 })

@@ -81,7 +81,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
           rep(vs, 2)
         }
       })
-      as.data.frame(do.call(cbind, res))
+      as.data.frame(res)
     })
     grid <- do.call(rbind, grid)
     # Combine to get overall minimum and maximum
@@ -143,10 +143,10 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   # Now nest the estimates at each grid point
   vars <- setdiff(names(cohort_estimates), c("model", "estimate", "se"))
-  cohort_estimates$grp <- factor(eval(parse(text = paste("paste(", paste0('cohort_estimates$', vars, collapse = ","), ")"))))
-  levels(cohort_estimates$grp) <- order(levels(cohort_estimates$grp))
+  grp <- factor(eval(parse(text = paste("paste(", paste0('cohort_estimates$', vars, collapse = ","), ")"))))
+  levels(grp) <- order(levels(grp))
 
-  splitdat <- split(cohort_estimates, f = cohort_estimates$grp)
+  splitdat <- split(cohort_estimates, f = grp)
   meta_models <- lapply(
     splitdat, function(x){
       metafor::rma(yi = x$estimate, sei = x$se, method = method)
@@ -168,6 +168,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
 
   if(!is.null(nsim)){
     if(length(terms) > 1) stop("P-value simulations currently only work for a single term.\n")
+    if(length(xvars) > length(terms)) stop("P-value simulations currently only work for univariate terms.\n")
 
     masd_list <- lapply(seq_along(models), function(ind){
       getmasd(models[[ind]], grid, nsim, terms)
