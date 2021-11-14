@@ -6,14 +6,17 @@
 #' @param grid Grid of values over which to create a simultaneous confidence interval.
 #' @param nmc Number of Monte Carlo samples.
 #' @param terms Character vector of smooth terms.
+#' @param intercept_se Logical defining whether to include the squared standard deviation of the intercept in the
+#' covariance matrix for the smooth term. Defaults to \code{FALSE}.
 #'
 #' @return A vector of maxima of absolute standard deviations.
 #' @export
 #' @keywords internal
 #'
-getmasd <- function(mod, grid, nmc, terms){
+getmasd <- function(mod, grid, nmc, terms, intercept_se = FALSE){
   Vb <- stats::vcov(mod)
   inds <- grep(gsub(")", "\\)", gsub("(", "\\(", terms, fixed = TRUE), fixed = TRUE), colnames(Vb))
+  if(intercept_se) inds <- c(inds, grep("Intercept", colnames(Vb)))
   Vb <- Vb[inds, inds]
   pred <- stats::predict(mod, grid, se.fit = TRUE, terms = terms, type = "iterms")
   se.fit <- pred$se.fit
