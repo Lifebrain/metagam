@@ -13,7 +13,6 @@ metagam(
   method = "FE",
   nsim = NULL,
   ci_alpha = 0.05,
-  intercept = FALSE,
   restrict_range = NULL
 )
 }
@@ -55,9 +54,6 @@ simultaneous confidence bands for the meta-analytic fit. Defaults to
 
 \item{ci_alpha}{Significance level for simultaneous confidence bands. Ignored
 if \code{nsim} is \code{NULL}, and defaults to 0.05.}
-
-\item{intercept}{Logical defining whether or not to include the intercept in
-each smooth term. Only applies when \code{type = "iterms"}.}
 
 \item{restrict_range}{Character vector of explanatory variables to restrict
 such that only values within the range for each cohort contribute to the
