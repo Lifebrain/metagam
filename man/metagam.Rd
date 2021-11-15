@@ -105,11 +105,13 @@ meta_analysis <- metagam(models, terms = "s(x1)", grid_size = 30)
 ## We can print some information
 summary(meta_analysis)
 
-## We can plot the fit
+## We can plot the meta-analytic fit together with the individual fits
 plot(meta_analysis)
 
 ## We can also compute p-values and simultaneous confidence intervals, by setting the nsim argument.
 ## For details, see the separate vignette.
-meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
-summary(meta_analysis)
+\dontrun{
+  meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
+  summary(meta_analysis)
+}
 }
