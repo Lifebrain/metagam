@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -143,13 +143,7 @@
     <p>Heterogeneity Plot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_heterogeneity</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  axis <span class='op'>=</span> <span class='cn'>NULL</span>,
-  term <span class='op'>=</span> <span class='cn'>NULL</span>,
-  type <span class='op'>=</span> <span class='st'>"Q"</span>,
-  alpha_thresh <span class='op'>=</span> <span class='fl'>0.05</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_heterogeneity</span><span class='op'>(</span><span class='va'>x</span>, term <span class='op'>=</span> <span class='cn'>NULL</span>, type <span class='op'>=</span> <span class='st'>"Q"</span>, alpha_thresh <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,12 +151,6 @@
     <tr>
       <th>x</th>
       <td><p>Object returned by <code><a href='metagam.html'>metagam</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>axis</th>
-      <td><p>Character specifying which variable to plot. Defaults to <code>NULL</code>; if <code>x</code> was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.</p></td>
     </tr>
     <tr>
       <th>term</th>

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -240,13 +240,13 @@
 <p>Assuming all GAM fits without individual participant data have been gathered in a single location and put a list named <code>fits</code> (which we did above), a meta-analytic can now be computed using <code><a href="../reference/metagam.html">metagam()</a></code>. If no grid is provided, <code><a href="../reference/metagam.html">metagam()</a></code> sets up a grid in which the argument <code>grid_size</code> determines the number of unique values of each term. Using the default <code>grid_size = 100</code> in this case means that the grid has 100 x 100 = 10,000 rows. Performing meta-analysis at each of these points might take a few moments, so we set <code>grid_size = 20</code> to get a first rough estimate.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">metafit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">fits</span>, grid_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></code></pre></div>
-<p>The summary method prints out the p-values of the smooth terms:</p>
+<p>The summary method prints out some information about the model fit.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span>
-<span class="co">#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.</span>
+<span class="co">#&gt; Meta-analysis of GAMs from  cohorts, using method FE.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Smooth terms analyzed: te(x,z).</span></code></pre></div>
-<p>We can then plot the corresponding meta-analytic fit:</p>
+<p>We can then plot the corresponding meta-analytic fit. The plot can be made more fine-grained by increasing the <code>grid_size</code> argument to <code>metagam</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span></code></pre></div>
 <p><img src="multivariate_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>

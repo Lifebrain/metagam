@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -143,7 +143,7 @@
     <p>This code is based on Dr. Gavin Simpson's blog post https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getmasd</span><span class='op'>(</span><span class='va'>mod</span>, <span class='va'>grid</span>, <span class='va'>nmc</span>, <span class='va'>terms</span>, intercept_se <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getmasd</span><span class='op'>(</span><span class='va'>mod</span>, <span class='va'>newdat</span>, <span class='va'>nsim</span>, <span class='va'>term</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,21 +153,16 @@
       <td><p>Object of class "striprawdata", returned from <code><a href='strip_rawdata.html'>strip_rawdata</a></code>.</p></td>
     </tr>
     <tr>
-      <th>grid</th>
+      <th>newdat</th>
       <td><p>Grid of values over which to create a simultaneous confidence interval.</p></td>
     </tr>
     <tr>
-      <th>nmc</th>
+      <th>nsim</th>
       <td><p>Number of Monte Carlo samples.</p></td>
     </tr>
     <tr>
-      <th>terms</th>
+      <th>term</th>
       <td><p>Character vector of smooth terms.</p></td>
-    </tr>
-    <tr>
-      <th>intercept_se</th>
-      <td><p>Logical defining whether to include the squared standard deviation of the intercept in the
-covariance matrix for the smooth term. Defaults to <code>FALSE</code>.</p></td>
     </tr>
     </table>
 

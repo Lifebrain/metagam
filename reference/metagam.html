@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -152,7 +152,6 @@
   method <span class='op'>=</span> <span class='st'>"FE"</span>,
   nsim <span class='op'>=</span> <span class='cn'>NULL</span>,
   ci_alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
-  intercept <span class='op'>=</span> <span class='cn'>FALSE</span>,
   restrict_range <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
@@ -206,17 +205,13 @@ all available options.</p></td>
       <th>nsim</th>
       <td><p>Number of simulations to conduct in order to compute p-values and
 simultaneous confidence bands for the meta-analytic fit. Defaults to
-<code>NULL</code>, which means that no simulations are performed.</p></td>
+<code>NULL</code>, which means that no simulations are performed. Only used if
+<code>type="iterms"</code>.</p></td>
     </tr>
     <tr>
       <th>ci_alpha</th>
       <td><p>Significance level for simultaneous confidence bands. Ignored
 if <code>nsim</code> is <code>NULL</code>, and defaults to 0.05.</p></td>
-    </tr>
-    <tr>
-      <th>intercept</th>
-      <td><p>Logical defining whether or not to include the intercept in
-each smooth term. Only applies when <code>type = "iterms"</code>.</p></td>
     </tr>
     <tr>
       <th>restrict_range</th>
@@ -266,9 +261,11 @@ implemented.</p></td>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## We can print some information</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meta_analysis</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Meta-analysis of GAMs from 5 cohorts, using method FE.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Meta-analysis of GAMs from  cohorts, using method FE.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Smooth terms analyzed: s(x1). </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Smooth terms analyzed: s(x1).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## We can plot the meta-analytic fit together with the individual fits</span></span>

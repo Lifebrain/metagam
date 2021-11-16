@@ -47,7 +47,8 @@
 
 
 <meta property="og:title" content="Plot estimated smooth terms — plot.metagam" />
-<meta property="og:description" content="Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort." />
+<meta property="og:description" content="Plot the meta-analytic estimate of a smooth term along with the separate fits
+in each cohort." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -140,11 +141,12 @@
     </div>
 
     <div class="ref-description">
-    <p>Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.</p>
+    <p>Plot the meta-analytic estimate of a smooth term along with the separate fits
+in each cohort.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for metagam</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, term <span class='op'>=</span> <span class='cn'>NULL</span>, ci <span class='op'>=</span> <span class='st'>"none"</span>, legend <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,6 +156,24 @@
       <td><p>Object returned by <code><a href='metagam.html'>metagam</a></code>.</p></td>
     </tr>
     <tr>
+      <th>term</th>
+      <td><p>The smooth term to plot. Defaults to <code>NULL</code>, which means
+that the first term is plotted.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>Type of confidence bands to plot around the meta-analytic fit.
+Defaults to "none", which means the no bands are plotted. Other options are
+"simultaneous", "pointwise", and "both". Simultaneous confidence bands
+require that <code><a href='metagam.html'>metagam</a></code> was run with <code>nsim</code> not equal to
+<code>NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>legend</th>
+      <td><p>Logical specifying whether or not to plot a legend. Defaults to
+<code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Other arguments to plot.</p></td>
     </tr>
@@ -161,13 +181,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
-fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
-color codes.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function currently works for meta-analytic estimates of a single smooth term, which can be either
-univariate or bivariate. It also works for alternatively meta-analysis of response or link functions.</p>
+    <p>The function is called for its side effect of producing a plot.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lifebrain.github.io/metagam/'>metagam</a></span><span class='op'>)</span></span>
@@ -192,9 +206,11 @@ univariate or bivariate. It also works for alternatively meta-analysis of respon
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## We can print some information</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meta_analysis</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Meta-analysis of GAMs from 5 cohorts, using method FE.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Meta-analysis of GAMs from  cohorts, using method FE.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Smooth terms analyzed: s(x1). </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Smooth terms analyzed: s(x1).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## We can plot the meta-analytic fit together with the individual fits</span></span>

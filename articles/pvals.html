@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -111,9 +111,7 @@
 <span class="co">#&gt; Loading required package: Matrix</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Loading the 'metafor' package (version 3.0-2). For an</span>
-<span class="co">#&gt; introduction to the package please type: help(metafor)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="co">#&gt; introduction to the package please type: help(metafor)</span></code></pre></div>
 <p>Previous versions of metagam had built-in aggregation of p-values, using the <a href="https://cran.r-project.org/package=metap">metap</a> package. However, this had two drawbacks:</p>
 <ul>
 <li>metap depends on multtest, which is a Bioconductor package, and this dependency made the installation of metagam unnecessarily complicated.</li>
@@ -124,7 +122,7 @@
 <h2 class="hasAnchor">
 <a href="#what-can-go-wrong-when-combining-p-values" class="anchor"></a>What can go wrong when combining p-values?</h2>
 <p>Consider the two datasets below, which have completely opposite effects. I have also included the code for simulating the data.</p>
-<p><img src="pvals_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="pvals_files/figure-html/unnamed-chunk-2-2.png" width="700"></p>
+<p><img src="pvals_files/figure-html/unnamed-chunk-2-1.png" width="384"><img src="pvals_files/figure-html/unnamed-chunk-2-2.png" width="384"></p>
 <p>Fitting a GAM to each dataset separately, we see that the effect is significant at <span class="math inline">\(\alpha = 0.05\)</span> level.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">$</span><span class="va">dat1</span><span class="op">)</span>
@@ -180,21 +178,23 @@
 <span class="va">metafit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></code></pre></div>
 <p>Plotting the meta-analytic fit, we see that the 95 % confidence bands completely cover zero.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">$</span><span class="va">meta_estimates</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">estimate</span>, ymin <span class="op">=</span> <span class="va">ci.lb</span>, ymax <span class="op">=</span> <span class="va">ci.ub</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></code></pre></div>
-<p><img src="pvals_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">metafit</span>, ci <span class="op">=</span> <span class="st">"pointwise"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="pvals_files/figure-html/unnamed-chunk-5-1.png" width="384"></p>
 <p>The object returned by <code>metagam</code> has a <code>pvals</code> element which contains p-values for each term in each individual fit.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">metafit</span><span class="op">$</span><span class="va">pvals</span>
-<span class="co">#&gt;       term      edf   Ref.df        F      p-value</span>
-<span class="co">#&gt; s(x)  s(x) 1.000000 1.000000 24.25930 3.612591e-06</span>
-<span class="co">#&gt; s(x)1 s(x) 1.236565 1.436059 10.64571 1.121220e-03</span></code></pre></div>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt;      edf Ref.df       F      p-value</span>
+<span class="co">#&gt; s(x)   1      1 24.2593 3.612591e-06</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt;           edf   Ref.df        F    p-value</span>
+<span class="co">#&gt; s(x) 1.236565 1.436059 10.64571 0.00112122</span></code></pre></div>
 <p>Combining the p-values using any of the methods available in metap, we do however see that the effects are significant at <span class="math inline">\(\alpha = 0.05\)</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://www.dewey.myzen.co.uk/meta/meta.html">"metap"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/metap/man/allmetap.html">allmetap</a></span><span class="op">(</span>p <span class="op">=</span> <span class="va">metafit</span><span class="op">$</span><span class="va">pvals</span><span class="op">$</span><span class="va">`p-value`</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/metap/man/allmetap.html">allmetap</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">$</span><span class="va">pvals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span>, <span class="st">"p-value"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, 
+         method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;                     p valid    eponym
 #&gt; logitp   5.618196e-07     2          
 #&gt; maximump 1.257134e-06     2          
@@ -244,19 +244,19 @@
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x0</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
-<p><img src="pvals_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<p>We see that the critical value for a 95 % simultaneous interval is above 2.</p>
+<p><img src="pvals_files/figure-html/unnamed-chunk-10-1.png" width="384"></p>
+<p>We see that the critical value for a 95 % simultaneous interval is above 2. (Note that <code>nsim</code> is set relatively low to avoid the vignette compilation taking too long. In a real application it should be probably be higher.)</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">masd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmasd.html">getmasd</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">grid</span>, <span class="fl">10000</span>, terms <span class="op">=</span> <span class="st">"s(x0)"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">newdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">masd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmasd.html">getmasd</a></span><span class="op">(</span><span class="va">mod</span>, newdat <span class="op">=</span> <span class="va">newdat</span>, nsim <span class="op">=</span> <span class="fl">1000</span>, term <span class="op">=</span> <span class="st">"s(x0)"</span><span class="op">)</span>
 <span class="op">(</span><span class="va">crit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">masd</span>, prob <span class="op">=</span> <span class="fl">.95</span>, type <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;      95% </span>
-<span class="co">#&gt; 2.405748</span></code></pre></div>
+<span class="co">#&gt; 2.356271</span></code></pre></div>
 <p>We can plot the two together, and we see that the simultaneous confidence interval is bigger.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/predict.rma.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">grid</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/predict.rma.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">newdat</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  x0 <span class="op">=</span> <span class="va">grid</span><span class="op">$</span><span class="va">x0</span>,
+  x0 <span class="op">=</span> <span class="va">newdat</span><span class="op">$</span><span class="va">x0</span>,
   pred <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">fit</span>,
   ci_pt_lb <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">fit</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.025</span><span class="op">)</span> <span class="op">*</span> <span class="va">fit</span><span class="op">$</span><span class="va">se.fit</span>,
   ci_pt_ub <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">fit</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span> <span class="op">*</span> <span class="va">fit</span><span class="op">$</span><span class="va">se.fit</span>,
@@ -264,16 +264,27 @@
   ci_sim_ub <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">fit</span> <span class="op">+</span> <span class="va">crit</span> <span class="op">*</span> <span class="va">fit</span><span class="op">$</span><span class="va">se.fit</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x0</span>, y <span class="op">=</span> <span class="va">pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">ci_pt_lb</span>, ymax <span class="op">=</span> <span class="va">ci_pt_ub</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">ci_sim_lb</span>, ymax <span class="op">=</span> <span class="va">ci_sim_ub</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></code></pre></div>
-<p><img src="pvals_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x0</span>, <span class="va">dat</span><span class="op">$</span><span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>,
+     ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">ci_sim_lb</span>, <span class="va">dat</span><span class="op">$</span><span class="va">ci_sim_ub</span><span class="op">)</span>, 
+     xlab <span class="op">=</span> <span class="st">"x0"</span>, ylab <span class="op">=</span> <span class="st">"s(x0)"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html">polygon</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x0</span><span class="op">)</span>, <span class="va">dat</span><span class="op">$</span><span class="va">x0</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">ci_sim_ub</span><span class="op">)</span>, <span class="va">dat</span><span class="op">$</span><span class="va">ci_sim_lb</span><span class="op">)</span>,
+  col <span class="op">=</span> <span class="st">"gray80"</span>, border <span class="op">=</span> <span class="cn">NA</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html">polygon</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x0</span><span class="op">)</span>, <span class="va">dat</span><span class="op">$</span><span class="va">x0</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">ci_pt_ub</span><span class="op">)</span>, <span class="va">dat</span><span class="op">$</span><span class="va">ci_pt_lb</span><span class="op">)</span>,
+  col <span class="op">=</span> <span class="st">"gray60"</span>, border <span class="op">=</span> <span class="cn">NA</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x0</span>, <span class="va">dat</span><span class="op">$</span><span class="va">pred</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"bottom"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Pointwise"</span>, <span class="st">"Simultaneous"</span><span class="op">)</span>,
+       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gray60"</span>, <span class="st">"gray80"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="pvals_files/figure-html/unnamed-chunk-12-1.png" width="384"></p>
 </div>
 <div id="combining-simultaneous-confidence-intervals" class="section level3">
 <h3 class="hasAnchor">
 <a href="#combining-simultaneous-confidence-intervals" class="anchor"></a>Combining simultaneous confidence intervals</h3>
-<p>In the current version of metagam, it is possible to combine simultaneous confidence intervals for each separate fit. The critical value multiplied by the standard errors is then used as the weight when it is meta analytically combined. Significance testing can be done by checking if it is possible to fit a constant function within the simultaneous confidence bands, which is the same as checking whether the maximum of the lower band across the range of x-values is larger than the minimum of the upper band across the range of x-values. We illustrate it here.</p>
+<p>In metagam, it is possible to combine simultaneous confidence intervals for each separate fit. The critical value multiplied by the standard errors is then used as the weight when it is meta analytically combined. Significance testing can be done by checking if it is possible to fit a constant function within the simultaneous confidence bands, which is the same as checking whether the maximum of the lower band across the range of x-values is larger than the minimum of the upper band across the range of x-values. We illustrate it here.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">124</span><span class="op">)</span>
 <span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">5</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
@@ -285,21 +296,18 @@
 
 <span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span>, terms <span class="op">=</span> <span class="st">"s(x2)"</span>, grid_size <span class="op">=</span> <span class="fl">100</span>,
                          nsim <span class="op">=</span> <span class="fl">10000</span>, ci_alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></code></pre></div>
-<p>Convenience functions will be added later, but for now it is a bit manual. Notice that the outer bands are bigger.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sim_conf</span> <span class="op">&lt;-</span> <span class="va">meta_analysis</span><span class="op">$</span><span class="va">sim_ci</span>
-<span class="va">ptw_conf</span> <span class="op">&lt;-</span> <span class="va">meta_analysis</span><span class="op">$</span><span class="va">meta_estimates</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">sim_conf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">ci_sim_lb</span>, ymax <span class="op">=</span> <span class="va">ci_sim_ub</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ptw_conf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">ci.lb</span>, ymax <span class="op">=</span> <span class="va">ci.ub</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></code></pre></div>
-<p><img src="pvals_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">meta_analysis</span>, ci <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></code></pre></div>
+<p><img src="pvals_files/figure-html/unnamed-chunk-14-1.png" width="576"></p>
 <p>The p-value is printed with the model summary. In order to get more digits after the decimal point in the p-value, increase the <code>nsim</code> argument.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">meta_analysis</span><span class="op">)</span>
-<span class="co">#&gt; Meta-analysis of GAMs from 5 cohorts, using method FE.</span>
+<span class="co">#&gt; Meta-analysis of GAMs from  cohorts, using method FE.</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Smooth terms analyzed: s(x2). P-value for smooth term: &lt;1e-04</span></code></pre></div>
+<span class="co">#&gt; Smooth terms analyzed: s(x2).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; P-values for smooth terms:</span>
+<span class="co">#&gt; s(x2): &lt; 1e-04</span></code></pre></div>
 </div>
 <div id="does-it-work" class="section level3">
 <h3 class="hasAnchor">
@@ -315,7 +323,8 @@
       <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
       <span class="fu">metagam</span><span class="fu">::</span><span class="fu"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
       <span class="op">}</span><span class="op">)</span>
-    <span class="fu">metagam</span><span class="fu">::</span><span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span>, nsim <span class="op">=</span> <span class="fl">1000</span>, ci_alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span><span class="op">$</span><span class="va">meta_pval</span>
+    <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">metagam</span><span class="fu">::</span><span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span>, nsim <span class="op">=</span> <span class="fl">1000</span>, ci_alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
+    <span class="va">fit</span><span class="op">$</span><span class="va">simulation_results</span><span class="op">$</span><span class="va">`s(x)`</span><span class="op">$</span><span class="va">pval</span>
   <span class="op">}</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
@@ -323,7 +332,8 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">qunif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0</span>, to <span class="op">=</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, 
      <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">pvals</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
      xlab <span class="op">=</span> <span class="st">"Theoretical quantile"</span>,
-     ylab <span class="op">=</span> <span class="st">"Data quantile"</span><span class="op">)</span></code></pre></div>
+     ylab <span class="op">=</span> <span class="st">"Data quantile"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/quantile_plot.png"></p>
 <p>The quantile plot above looks sufficiently satisfactory to include this in the package. We will conduct much more extensive simulation studies in a future paper.</p>
 </div>

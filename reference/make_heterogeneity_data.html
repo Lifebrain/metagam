@@ -81,7 +81,7 @@ data for heterogeneity plots" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -145,7 +145,7 @@ data for heterogeneity plots" />
 data for heterogeneity plots</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_heterogeneity_data</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>axis</span>, <span class='va'>term</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>make_heterogeneity_data</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>term</span>, <span class='va'>xvar</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,12 +153,6 @@ data for heterogeneity plots</p>
     <tr>
       <th>x</th>
       <td><p>Object returned by <code><a href='metagam.html'>metagam</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>axis</th>
-      <td><p>Character specifying which variable to plot. Defaults to <code>NULL</code>; if <code>x</code> was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.</p></td>
     </tr>
     <tr>
       <th>term</th>
@@ -169,7 +163,7 @@ was fitted with a single term, this one is taken.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>tibble/data.frame</p>
+    <p>data.frame</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

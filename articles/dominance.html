@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9001</span>
       </span>
     </div>
 
@@ -111,7 +111,9 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## simulate datasets</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">num.datasets</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">num.datasets</span><span class="op">)</span>, 
+  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gamSim.html">gamSim</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Delete all data in the first dataset that has values lower than .2 on the dimension <code>x2</code>. Thus, we expect a low (i.e., zero) contribution of the first dataset on low values of dimensions <code>x2</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">datasets</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
@@ -127,21 +129,30 @@
 <h2 class="hasAnchor">
 <a href="#fit-gams" class="anchor"></a>Fit GAMs</h2>
 <p>Next, we fit the individual GAMs for each of the eight datasets.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## fit a generalized additive model to each dataset separately</span>
+<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="kw">function</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">{</span>
+  <span class="co">## Full fit using mgcv</span>
+  <span class="va">gamfit</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x0</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x1</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">x2</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+  <span class="co">## Extract the necessary components for performing a meta-analysis</span>
+  <span class="co">## This removes all subject-specific data</span>
+  <span class="fu"><a href="../reference/strip_rawdata.html">strip_rawdata</a></span><span class="op">(</span><span class="va">gamfit</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="meta-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#meta-analysis" class="anchor"></a>Meta-Analysis</h2>
-<p>Then, we analyze the term <code>s(x2)</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span>, grid_size <span class="op">=</span> <span class="fl">500</span>, terms <span class="op">=</span> <span class="st">"s(x2)"</span>, intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>Then, we analyze the term <code>s(x2)</code>. You can increase the resolution of the next plot by increasing <code>grid_size</code>, but we keep it low here to reduce the build time of the package.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span>, grid_size <span class="op">=</span> <span class="fl">50</span>, terms <span class="op">=</span> <span class="st">"s(x2)"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="dominance-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dominance-analysis" class="anchor"></a>Dominance Analysis</h2>
 <p>Finally, we create a dominance plot that tells us how much the points on axis <code>x2</code> are influenced by the individual GAMs. Since <code>plot_dominance</code> returns a ggplot object, we can modify the colors using, e.g. the viridis package. We see that the influence of the GAMs is graded according to the simulated noise levels. Second, we see that on the left-hand side, the influence of the first dataset is almost zero whereas the influence of the second dataset is almost zero on the righthand side.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_dominance.html">plot_dominance</a></span><span class="op">(</span><span class="va">meta_analysis</span><span class="op">)</span></code></pre></div>
-<p><img src="dominance_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="dominance_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
   </div>
 
