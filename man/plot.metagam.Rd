@@ -15,7 +15,11 @@ that the first term is plotted.}
 \item{ci}{Type of confidence bands to plot around the meta-analytic fit.
 Defaults to "none", which means the no bands are plotted. Other options are
 "simultaneous", "pointwise", and "both". Simultaneous confidence bands
-require that \code{\link{metagam}} was run with \code{nsim} not equal to \code{NULL}.}
+require that \code{\link{metagam}} was run with \code{nsim} not equal to
+\code{NULL}.}
+
+\item{legend}{Logical specifying whether or not to plot a legend. Defaults to
+\code{FALSE}.}
 
 \item{...}{Other arguments to plot.}
 }

@@ -4,14 +4,10 @@
 \alias{plot_heterogeneity_p}
 \title{Heterogeneity p-plot}
 \usage{
-plot_heterogeneity_p(data, axis, alpha_thresh)
+plot_heterogeneity_p(data, xvar, alpha_thresh)
 }
 \arguments{
 \item{data}{data made by \code{\link{make_heterogeneity_data}}.}
-
-\item{axis}{Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.}
 
 \item{alpha_thresh}{Significance level. Defaults to \code{.05}.}
 }

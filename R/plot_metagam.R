@@ -9,7 +9,10 @@
 #' @param ci Type of confidence bands to plot around the meta-analytic fit.
 #'   Defaults to "none", which means the no bands are plotted. Other options are
 #'   "simultaneous", "pointwise", and "both". Simultaneous confidence bands
-#'   require that \code{\link{metagam}} was run with \code{nsim} not equal to \code{NULL}.
+#'   require that \code{\link{metagam}} was run with \code{nsim} not equal to
+#'   \code{NULL}.
+#' @param legend Logical specifying whether or not to plot a legend. Defaults to
+#'   \code{FALSE}.
 #' @param ... Other arguments to plot.
 #'
 #' @return The function is called for its side effect of producing a plot.
@@ -45,7 +48,7 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
     })
 
     if(ci %in% c("pointwise", "both")){
-      alpha_quantiles = qnorm(c(ci.lb = x$ci_alpha / 2, ci.ub = 1 - x$ci_alpha / 2))
+      alpha_quantiles = stats::qnorm(c(ci.lb = x$ci_alpha / 2, ci.ub = 1 - x$ci_alpha / 2))
       for(i in seq_along(alpha_quantiles)){
         eval(parse(text = paste0("metadat$", names(alpha_quantiles)[[i]], "<- metadat$estimate +",
               alpha_quantiles[[i]], "* metadat$se")))
@@ -81,7 +84,7 @@ plot_bivariate_smooth <- function(metadat, xvars, type, term, ci){
   graphics::contour(x = xl, z = zl, col = "blue", lwd = 2,
                     add = TRUE, method = "edge",
                     vfont = c("sans serif", "plain"))
-  title(ifelse(type == "iterms", term, type))
+  graphics::title(ifelse(type == "iterms", term, type))
 
 }
 
@@ -98,19 +101,19 @@ plot_univariate_smooth <- function(metadat, dat, xvar, type, term, ci, legend){
        xlim = range(metadat[[xvar]]),
        ylim = range(rd))
   if(ci %in% c("both", "simultaneous")){
-    polygon(x = c(rev(metadat$x), metadat$x),
+    graphics::polygon(x = c(rev(metadat$x), metadat$x),
             y = c(rev(metadat[, "ci.sim.ub"]), metadat[, "ci.sim.lb"]),
             col = "gray80", border = NA)
   }
   if(ci %in% c("both", "pointwise")){
-    polygon(x = c(rev(metadat$x), metadat$x),
+    graphics::polygon(x = c(rev(metadat$x), metadat$x),
             y = c(rev(metadat[, "ci.ub"]), metadat[, "ci.lb"]),
             col = "gray60", border = NA)
   }
-  lines(metadat[[xvar]], metadat[["estimate"]])
+  graphics::lines(metadat[[xvar]], metadat[["estimate"]])
   iter <- seq_along(dat)
   for(i in iter){
-    lines(dat[[i]][[xvar]], dat[[i]][["fit"]], lty = 2, col = i + 1L)
+    graphics::lines(dat[[i]][[xvar]], dat[[i]][["fit"]], lty = 2, col = i + 1L)
   }
 
   if(legend){

@@ -4,20 +4,16 @@
 \alias{make_heterogeneity_data}
 \title{Prepare heterogeneity data}
 \usage{
-make_heterogeneity_data(x, axis, term)
+make_heterogeneity_data(x, term, xvar)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
-
-\item{axis}{Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.}
 
 \item{term}{Character specifying which smooth term to plot. Defaults to \code{NULL}; if \code{x}
 was fitted with a single term, this one is taken.}
 }
 \value{
-tibble/data.frame
+data.frame
 }
 \description{
 Internal function to prepare

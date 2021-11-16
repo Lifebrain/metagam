@@ -24,13 +24,7 @@
 #'
 plot_dominance <- function(x, term = NULL, relative = TRUE, width = NULL)
 {
-
-  if(is.null(term)){
-    term <- names(x$term_list)[[1]]
-  }
-  if(length(x$term_list[[term]]$xvars) > 1){
-    stop("plot_heterogeneity() currently only works for analyzing a single univariate term.")
-  }
+  term <- find_plot_term(x, term)
   xvar <- x$term_list[[term]]$xvars
 
   dat <- do.call(rbind, lapply(seq_along(x$cohort_estimates), function(ind) {

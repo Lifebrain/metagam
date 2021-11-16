@@ -146,7 +146,7 @@ create_newdat <- function(xvar = NULL, term_list = NULL, grid, type){
 get_sim_ci <- function(models, cohort_estimates, masd_list,
                        term, xvar, ci_alpha, method, grid){
   sim_cohort_estimates <- Map(function(model, cohort_estimate, masd){
-    cohort_estimate$crit.width <- quantile(masd, probs = 1 - ci_alpha, type = 8) * cohort_estimate$se.fit
+    cohort_estimate$crit.width <- stats::quantile(masd, probs = 1 - ci_alpha, type = 8) * cohort_estimate$se.fit
     cohort_estimate
   },
   model = models,

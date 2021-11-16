@@ -29,8 +29,7 @@ Encoding: UTF-8
 Imports: 
     mgcv,
     ggplot2,
-    metafor,
-    rlang
+    metafor
 RoxygenNote: 7.1.2
 Suggests: 
     roxygen2,
