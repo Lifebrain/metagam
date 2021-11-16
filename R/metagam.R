@@ -27,7 +27,8 @@
 #'   all available options.
 #' @param nsim Number of simulations to conduct in order to compute p-values and
 #'   simultaneous confidence bands for the meta-analytic fit. Defaults to
-#'   \code{NULL}, which means that no simulations are performed.
+#'   \code{NULL}, which means that no simulations are performed. Only used if
+#'   \code{type="iterms"}.
 #' @param ci_alpha Significance level for simultaneous confidence bands. Ignored
 #'   if \code{nsim} is \code{NULL}, and defaults to 0.05.
 #' @param restrict_range Character vector of explanatory variables to restrict
@@ -87,28 +88,17 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     )
   }
 
-  if(!is.null(nsim)){
-    if(type != "iterm") stop("To get simultaneous confidence intervals set type='iterms'.")
+  if(!is.null(nsim) && type == "iterms"){
     simulation_results <- simulate(term_list, grid, models, nsim, cohort_estimates, ci_alpha)
   } else {
     simulation_results <- NULL
   }
 
-  # Extract p-values from original fits
-  pvals <- do.call(rbind, Map(function(model, cohort) {
-    dat <- as.data.frame(model$s.table)
-    dat$term <- rownames(dat)
-    dat <- dat[dat$term %in% terms, ]
-    dat[, c("term", setdiff(names(dat), "term"))]
-    dat$cohort <- cohort
-    dat
-  }, model = models, cohort = seq_along(models)))
-
   result <- list(
     cohort_estimates = cohort_estimates,
     meta_models = meta_models,
     simulation_results = simulation_results,
-    pvals = pvals,
+    pvals = lapply(cohort_estimates, attr, "s.table"),
     term_list = term_list,
     method = method,
     type = type

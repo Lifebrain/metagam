@@ -83,7 +83,7 @@ create_grid <- function(models, term_list, grid_size){
 
 
 extract_model_fits <- function(model, term_list, grid){
-  if(type == "iterms"){
+  res <- if(type == "iterms"){
     Map(function(term, xvar){
       newdat <- create_newdat(xvar = xvar, grid = grid, type = type)
 
@@ -103,6 +103,8 @@ extract_model_fits <- function(model, term_list, grid){
     newdat$se.fit <- pred$se.fit
     newdat
   }
+  attr(res, "s.table") <- model$s.table
+  res
 }
 
 fit_meta_models <- function(fits, se.fits, method){

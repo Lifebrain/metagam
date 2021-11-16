@@ -17,7 +17,7 @@ models <- lapply(datasets, function(dat){
 
 grid = NULL
 grid_size = 30
-type = "iterms"
+type = "link"
 terms = c("s(x0)", "s(x1)")
 method = "FE"
 nsim = 100
