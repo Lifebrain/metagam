@@ -36,14 +36,19 @@ printfun <- function(x){
   cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
   if(x$type %in% c("terms", "iterms")){
-    cat(paste0("Smooth terms analyzed: ", paste(names(x$term_list), collapse = ", "), ". "))
+    cat(paste0("Smooth terms analyzed: ", paste(names(x$term_list), collapse = ", "), ".\n\n"))
   } else if (x$type %in% c("link", "response")){
-    cat(paste0(x$type, "function analyzed. "))
+    cat(paste0(x$type, "function analyzed.\n\n"))
   } else {
     stop("Unknown type", x$type, ". ")
   }
 
-  if(!is.null(x$meta_pval)){
-    cat("P-value for smooth term:", x$meta_pval, "\n\n")
+  if(!is.null(x$simulation_results)){
+    pval <- lapply(x$simulation_results, function(x) x$pval)
+
+    cat("P-values for smooth terms:\n")
+    for(term in names(pval)){
+      cat(paste0(term, ": ", pval[[term]]))
+    }
   }
 }

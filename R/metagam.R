@@ -101,6 +101,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     pvals = lapply(cohort_estimates, attr, "s.table"),
     term_list = term_list,
     method = method,
+    ci_alpha = ci_alpha,
     type = type
   )
   class(result) <- "metagam"

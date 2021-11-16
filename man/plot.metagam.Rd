@@ -4,12 +4,18 @@
 \alias{plot.metagam}
 \title{Plot estimated smooth terms}
 \usage{
-\method{plot}{metagam}(x, term = NULL, ...)
+\method{plot}{metagam}(x, term = NULL, ci = "none", legend = FALSE, ...)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
 
-\item{term}{The smooth term to plot. Defaults to \code{NULL}, which means that the first term is plotted.}
+\item{term}{The smooth term to plot. Defaults to \code{NULL}, which means
+that the first term is plotted.}
+
+\item{ci}{Type of confidence bands to plot around the meta-analytic fit.
+Defaults to "none", which means the no bands are plotted. Other options are
+"simultaneous", "pointwise", and "both". Simultaneous confidence bands
+require that \code{\link{metagam}} was run with \code{nsim} not equal to \code{NULL}.}
 
 \item{...}{Other arguments to plot.}
 }
@@ -17,7 +23,8 @@
 The function is called for its side effect of producing a plot.
 }
 \description{
-Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
+Plot the meta-analytic estimate of a smooth term along with the separate fits
+in each cohort.
 }
 \examples{
 library(metagam)
