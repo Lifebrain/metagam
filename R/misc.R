@@ -29,7 +29,7 @@ getmasd <- function(mod, newdat, nsim, term){
 
 # Find the terms from each model
 find_terms <- function(models, type, terms){
-  unique(lapply(models, function(model) {
+  dd <- unique(lapply(models, function(model) {
     if(type == "iterms"){
       if(!is.null(terms)){
         model_terms <- model$term_list[names(model$term_list) %in% terms]
@@ -50,6 +50,7 @@ find_terms <- function(models, type, terms){
       xvars = unlist(model_terms), terms = names(model_terms)
     )
   }))[[1]]
+  split(dd, f = dd$terms)
 }
 
 
@@ -69,7 +70,7 @@ create_grid <- function(models, term_list, grid_size){
   })
   grid <- lapply(xvars, function(xvar){
     val <- unlist(lapply(ranges, function(range) range[[xvar]]))
-    if(xvar %in% term_list$xvars){
+    if(xvar %in% unlist(lapply(term_list, function(x) x$xvars))){
       seq(from = min(val), to = max(val), length.out = grid_size)
     } else if(is.numeric(val)){
       min(val)
@@ -82,20 +83,20 @@ create_grid <- function(models, term_list, grid_size){
 }
 
 
-extract_model_fits <- function(model, term_list, grid){
+extract_model_fits <- function(model, term_list, grid, type){
   res <- if(type == "iterms"){
     Map(function(term, xvar){
       newdat <- create_newdat(xvar = xvar, grid = grid, type = type)
 
       pred <- stats::predict(model, newdata = newdat, type = type,
                              se.fit = TRUE, terms = term)
-      if(intercept) pred$fit <- pred$fit + attr(pred, "constant")
+
       newdat$fit <- as.numeric(pred$fit)
       newdat$se.fit <- as.numeric(pred$se.fit)
       newdat
     },
-    term = term_list$terms,
-    xvar = term_list$xvars)
+    term = names(term_list),
+    xvar = lapply(term_list, function(x) x$xvar))
   } else if(type %in% c("link", "response")){
     newdat <- create_newdat(term_list = term_list, grid = grid, type = type)
     pred <- stats::predict(model, newdata = newdat, type = type, se.fit = TRUE)
@@ -135,14 +136,15 @@ create_newdat <- function(xvar = NULL, term_list = NULL, grid, type){
     eval(parse(text = paste0("newdat$", xvar, "<- grid$", xvar)))
     as.data.frame(newdat)
   } else {
-    newdat <- lapply(grid[!names(grid) %in% term_list$xvars], function(x) x[[1]])
-    for(xvar in term_list$xvars) eval(parse(text = paste0("newdat$", xvar, "<- grid$", xvar)))
+    xv <- unlist(lapply(term_list, function(x) x$xvars))
+    newdat <- lapply(grid[!names(grid) %in% xv], function(x) x[[1]])
+    for(xvar in xv) eval(parse(text = paste0("newdat$", xvar, "<- grid$", xvar)))
     expand.grid(newdat)
   }
 }
 
 get_sim_ci <- function(models, cohort_estimates, masd_list,
-                       term, xvar, ci_alpha){
+                       term, xvar, ci_alpha, method, grid){
   sim_cohort_estimates <- Map(function(model, cohort_estimate, masd){
     cohort_estimate$crit.width <- quantile(masd, probs = 1 - ci_alpha, type = 8) * cohort_estimate$se.fit
     cohort_estimate
@@ -156,19 +158,21 @@ get_sim_ci <- function(models, cohort_estimates, masd_list,
                                    lapply(sim_cohort_estimates, function(x) x[["crit.width"]]),
                                    method)
   cbind(
-    create_newdat(xvar = xvar, grid = grid, type = type),
+    create_newdat(xvar = xvar, grid = grid, type = "iterms"),
     get_predictions(sim_ci_models))
 }
 
 
-simulate <- function(term_list, grid, models, nsim, cohort_estimates, ci_alpha){
+simulate <- function(term_list, grid, models, nsim, cohort_estimates, ci_alpha, method){
   Map(function(term, xvar){
     newdat <- create_newdat(xvar = xvar, grid = grid, type = "iterms")
     masd_list <- lapply(models, getmasd, newdat, nsim, term)
-    meta_sim_ci <- get_sim_ci(models, cohort_estimates, masd_list, term, xvar, ci_alpha)
+    meta_sim_ci <- get_sim_ci(models, cohort_estimates, masd_list,
+                              term, xvar, ci_alpha, method, grid)
 
     optfun <- function(sig){
-      dd <- get_sim_ci(models, cohort_estimates, masd_list, term, xvar, sig)
+      dd <- get_sim_ci(models, cohort_estimates, masd_list,
+                       term, xvar, sig, method, grid)
       max(dd$estimate - dd$se) - min(dd$estimate + dd$se)
     }
 
@@ -183,6 +187,6 @@ simulate <- function(term_list, grid, models, nsim, cohort_estimates, ci_alpha){
 
     list(meta_sim_ci = meta_sim_ci, pval = pval)
   },
-  term = term_list$terms,
-  xvar = term_list$xvars)
+  term = names(term_list),
+  xvar = lapply(term_list, function(x) x$xvar))
 }

@@ -63,7 +63,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
     grid <- create_grid(models, term_list, grid_size)
   }
   cohort_estimates <- lapply(models, function(model){
-    extract_model_fits(model, term_list, grid)
+    extract_model_fits(model, term_list, grid, type)
   })
 
   if(type == "iterms"){
@@ -75,7 +75,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
         create_newdat(xvar = xvar, grid = grid, type = type),
         get_predictions(meta_models))
       list(meta_models = meta_models, predictions = predictions)
-    }, term = term_list$terms, xvar = term_list$xvars)
+    }, term = names(term_list), xvar = lapply(term_list, function(x) x$xvars))
   } else {
     fits <- lapply(cohort_estimates, function(x) x[["fit"]])
     ses <- lapply(cohort_estimates, function(x) x[["se.fit"]])
@@ -89,7 +89,7 @@ metagam <- function(models, grid = NULL, grid_size = 100, type = "iterms", terms
   }
 
   if(!is.null(nsim) && type == "iterms"){
-    simulation_results <- simulate(term_list, grid, models, nsim, cohort_estimates, ci_alpha)
+    simulation_results <- simulate(term_list, grid, models, nsim, cohort_estimates, ci_alpha, method)
   } else {
     simulation_results <- NULL
   }

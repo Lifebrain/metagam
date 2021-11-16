@@ -16,27 +16,35 @@ models <- lapply(datasets, function(dat){
 })
 
 grid = NULL
-grid_size = 30
-type = "link"
-terms = c("s(x0)", "s(x1)")
+grid_size = 10
+type = "iterms"
+terms = NULL
 method = "FE"
 nsim = 100
 ci_alpha = 0.05
-intercept = FALSE
+
 restrict_range = NULL
 devtools::load_all()
 
-meta_analysis <- metagam(models, terms = c("s(x0)", "s(x1)"), grid_size = 30)
+meta_analysis <- metagam(models, terms = c("s(x0)", "s(x1)"), grid_size = 30, nsim = 10)
 
-## We can print some information
-summary(meta_analysis)
+set.seed(123)
+datasets <- lapply(1:5, function(x) gamSim(eg = 2, n = 50, verbose = FALSE)$data)
 
-## We can plot the meta-analytic fit together with the individual fits
-plot(meta_analysis)
+models <- lapply(datasets, function(dat){
+  b <- gam(y ~ te(x, z), data = dat)
+  strip_rawdata(b)
+})
 
-## We can also compute p-values and simultaneous confidence intervals, by setting the nsim argument.
-## For details, see the separate vignette.
-\dontrun{
-  meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
-  summary(meta_analysis)
-}
+
+metafit <- metagam(models, grid_size = 10)
+expect_s3_class(metafit, "metagam")
+expect_equal(round(metafit$meta_estimates$ci.lb[1:4], 10),
+             c(-0.2802061066, -0.0279839076, -0.1800437287, -0.290758912))
+
+expect_equal(round(metafit$meta_estimates$estimate[40:50], 10),
+             c(-0.0618375179, 0.4791554907, 0.4050419988, 0.3156138636, 0.272017788,
+               0.1986136027, 0.0434866897, -0.1151385155, -0.1873485645, 0.0244868197,
+               0.2823631963))
+
+expect_error(metagam(fits, grid_size = 10, nsim = 100))
