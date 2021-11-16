@@ -12,6 +12,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dev = "svg")
 num.datasets <- 5
 ```
 
@@ -26,7 +27,9 @@ Create `r num.datasets` datasets from standard gam example #1. The noise paramet
 ```{r}
 ## simulate datasets
 set.seed(123)
-datasets <- lapply(1:num.datasets, function(x) mgcv::gamSim(scale = x, verbose = FALSE))
+datasets <- lapply(
+  seq_len(num.datasets), 
+  function(x) mgcv::gamSim(scale = x, verbose = FALSE))
 ```
 
 Delete all data in the first dataset that has values lower than .2 on the dimension `x2`. Thus, we expect a low (i.e., zero) contribution of the first dataset on low values of dimensions `x2`.
@@ -49,7 +52,7 @@ datasets[[2]] <- df
 
 Next, we fit the individual GAMs for each of the eight datasets.
 
-```{r pressure, echo=FALSE}
+```{r}
 ## fit a generalized additive model to each dataset separately
 models <- lapply(datasets, function(dat){
   ## Full fit using mgcv
@@ -62,10 +65,10 @@ models <- lapply(datasets, function(dat){
 
 ## Meta-Analysis
 
-Then, we analyze the term `s(x2)`.
+Then, we analyze the term `s(x2)`. You can increase the resolution of the next plot by increasing `grid_size`, but we keep it low here to reduce the build time of the package.
 
 ```{r}
-meta_analysis <- metagam(models, grid_size = 500, terms = "s(x2)", intercept = TRUE)
+meta_analysis <- metagam(models, grid_size = 50, terms = "s(x2)")
 ```
 
 ## Dominance Analysis

@@ -1,19 +1,16 @@
 #' Dominance plot
 #'
 #' Plots the (relative) contribution of the individual GAMs to each data point
-#' on a given axis. It shows whether and how parts of the axis are dominated
-#' by certain individual GAMs.
+#' on a given axis. It shows whether and how parts of the axis are dominated by
+#' certain individual GAMs.
 #'
 #' @param x Object returned by \code{\link{metagam}}.
-#' @param axis Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
-#' fitted with a single term, the explanatory variable corresponding to this term
-#' is selected.
-#' @param term Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
-#' was fitted with a single term, this one is taken.
-#' @param relative Logical specifying whether to have relative or absolute scales.
-#' Defaults to \code{TRUE}.
-#' @param width Width of bars. Default to \code{NULL}, which means it is automatically
-#' determined based on the minimum grid spacing in \code{x}.
+#' @param term Character specifying which smooth term to plot. Default to
+#'   \code{NULL} which means that the first term (in alphabetic order) is taken.
+#' @param relative Logical specifying whether to have relative or absolute
+#'   scales. Defaults to \code{TRUE}.
+#' @param width Width of bars. Default to \code{NULL}, which means it is
+#'   automatically determined based on the minimum grid spacing in \code{x}.
 #'
 #' @return A ggplot object.
 #'
@@ -25,48 +22,42 @@
 #' # vignette("Dominance")
 #'
 #'
-plot_dominance <- function(x, axis = NULL, term = NULL, relative = TRUE,
-                            width = NULL)
+plot_dominance <- function(x, term = NULL, relative = TRUE, width = NULL)
 {
 
-  if(is.null(axis)){
-    axis <- x$xvars
-  }
-
   if(is.null(term)){
-    term <- x$terms
+    term <- names(x$term_list)[[1]]
   }
-
-  if(length(axis) > 1 || length(term) > 1){
-    stop("plot_heterogeneity() currently only works for analyzing a single univariate term\n",
-         "please run metagam() with type='iterms'.\n\n")
+  if(length(x$term_list[[term]]$xvars) > 1){
+    stop("plot_heterogeneity() currently only works for analyzing a single univariate term.")
   }
+  xvar <- x$term_list[[term]]$xvars
 
-  # position = fill gives percent stacked bar,
-  # otherwise fo position = stacked
-  if (isTRUE(relative)) {
-    position = "fill"
-  } else {
-    position = "stacked"
-  }
+  dat <- do.call(rbind, lapply(seq_along(x$cohort_estimates), function(ind) {
+    dd <- x$cohort_estimates[[ind]][[term]]
+    dd$influence <- dd$se^(-2)
+    dd$cohort <- ind
+    dd <- dd[, c(xvar, "influence", "cohort")]
+    names(dd)[names(dd) == xvar] <- "x"
+    dd
+    }))
 
-  dat <- x$cohort_estimates[x$cohort_estimates$term == term, ]
-  names(dat)[names(dat) == axis] <- "x"
-  dat$y <- 1 / dat$se^2
-
+  dat$cohort <- factor(dat$cohort)
   if(is.null(width)){
     width <- min(abs(diff(dat[["x"]])))
   }
+  if(relative){
+    position <- "fill"
+  } else {
+    position <- "stack"
+  }
 
-  gp <- ggplot2::ggplot(dat,
-                        ggplot2::aes(x = .data$x, y = .data$y,
-                                     fill = .data$model, width = width)) +
-    ggplot2::geom_bar(position=position,stat="identity")+
+  ggplot2::ggplot(dat, ggplot2::aes_(x =~ x, y =~ influence, fill =~ cohort)) +
+    ggplot2::geom_bar(position = position, stat = "identity", width = width) +
     ggplot2::theme_minimal() +
     ggplot2::ylab("Relative Influence") +
-    ggplot2::xlab(axis) +
+    ggplot2::xlab(xvar) +
     ggplot2::labs(fill = "Cohort")
 
-  return(gp)
 
 }

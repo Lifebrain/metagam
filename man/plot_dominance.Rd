@@ -4,31 +4,27 @@
 \alias{plot_dominance}
 \title{Dominance plot}
 \usage{
-plot_dominance(x, axis = NULL, term = NULL, relative = TRUE, width = NULL)
+plot_dominance(x, term = NULL, relative = TRUE, width = NULL)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
 
-\item{axis}{Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.}
+\item{term}{Character specifying which smooth term to plot. Default to
+\code{NULL} which means that the first term (in alphabetic order) is taken.}
 
-\item{term}{Character specifying which smooth term to plot. Default to \code{NULL}; if \code{x}
-was fitted with a single term, this one is taken.}
+\item{relative}{Logical specifying whether to have relative or absolute
+scales. Defaults to \code{TRUE}.}
 
-\item{relative}{Logical specifying whether to have relative or absolute scales.
-Defaults to \code{TRUE}.}
-
-\item{width}{Width of bars. Default to \code{NULL}, which means it is automatically
-determined based on the minimum grid spacing in \code{x}.}
+\item{width}{Width of bars. Default to \code{NULL}, which means it is
+automatically determined based on the minimum grid spacing in \code{x}.}
 }
 \value{
 A ggplot object.
 }
 \description{
 Plots the (relative) contribution of the individual GAMs to each data point
-on a given axis. It shows whether and how parts of the axis are dominated
-by certain individual GAMs.
+on a given axis. It shows whether and how parts of the axis are dominated by
+certain individual GAMs.
 }
 \examples{
 # See the vignette, either at https://lifebrain.github.io/metagam/articles/articles/dominance.html
