@@ -83,13 +83,13 @@ Assuming all GAM fits without individual participant data have been gathered in 
 metafit <- metagam(fits, grid_size = 20)
 ```
 
-The summary method prints out the p-values of the smooth terms:
+The summary method prints out some information about the model fit.
 
 ```{r}
 summary(metafit)
 ```
 
-We can then plot the corresponding meta-analytic fit:
+We can then plot the corresponding meta-analytic fit. The plot can be made more fine-grained by increasing the `grid_size` argument to `metagam`.
 
 ```{r}
 plot(metafit)

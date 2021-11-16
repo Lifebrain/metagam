@@ -4,24 +4,20 @@
 \alias{plot.metagam}
 \title{Plot estimated smooth terms}
 \usage{
-\method{plot}{metagam}(x, ...)
+\method{plot}{metagam}(x, term = NULL, ...)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
 
+\item{term}{The smooth term to plot. Defaults to \code{NULL}, which means that the first term is plotted.}
+
 \item{...}{Other arguments to plot.}
 }
 \value{
-A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
-fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
-color codes.
+The function is called for its side effect of producing a plot.
 }
 \description{
 Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
-}
-\details{
-This function currently works for meta-analytic estimates of a single smooth term, which can be either
-univariate or bivariate. It also works for alternatively meta-analysis of response or link functions.
 }
 \examples{
 library(metagam)

@@ -6,12 +6,8 @@
 #' @param term The smooth term to plot. Defaults to \code{NULL}, which means that the first term is plotted.
 #' @param ... Other arguments to plot.
 #'
-#' @return A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
-#' fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
-#' color codes.
+#' @return The function is called for its side effect of producing a plot.
 #'
-#' @details This function currently works for meta-analytic estimates of a single smooth term, which can be either
-#' univariate or bivariate. It also works for alternatively meta-analysis of response or link functions.
 #'
 #' @export
 #'
@@ -32,7 +28,9 @@ plot.metagam <- function(x, term = NULL, ...)
     x$meta_models$predictions
   }
 
-  dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
+  xvars <- x$term_list[[term]]$xvars
+  if(length(xvars) == 1){
+    dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
       if(x$type %in% c("iterms", "terms")){
         x$cohort_estimates[[ind]][[term]]
       } else {
@@ -40,28 +38,26 @@ plot.metagam <- function(x, term = NULL, ...)
       }
     })
 
-  xvars <- x$term_list[[term]]$xvars
-  if(length(xvars) == 1){
     plot_univariate_smooth(metadat, dat, xvars, x$type, term)
   } else if(length(xvars) == 2){
-    gp <- plot_bivariate_smooth(metadat, x$xvars, x$type, x$terms)
+    gp <- plot_bivariate_smooth(metadat, xvars, x$type, term)
   } else {
     stop("plot.metagam currently only works for univariate or bivariate terms.")
   }
 
 }
 
-plot_bivariate_smooth <- function(metadat, xvars, type, terms){
+plot_bivariate_smooth <- function(metadat, xvars, type, term){
 
-  var1 <- sym(xvars[[1]])
-  var2 <- sym(xvars[[2]])
-  ggplot2::ggplot(metadat, ggplot2::aes(x = !!var1, y = !!var2,
-                                                 z = .data$estimate)) +
-    ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
-    ggplot2::geom_contour() +
-    ggplot2::labs(fill = if(type == "iterms") terms else type) +
-    ggplot2::theme_minimal() +
-    ggplot2::scale_fill_distiller(palette = "RdBu", type = "div")
+  xl <- lapply(xvars, function(x) sort(unique(metadat[[x]])))
+  names(xl) <- c("x", "y")
+  zl <- matrix(metadat$estimate, nrow = length(unique(metadat$x)))
+  graphics::image(x = xl, z = zl,
+                  xlab = xvars[[1]], ylab = xvars[[2]])
+  graphics::contour(x = xl, z = zl, col = "blue", lwd = 2,
+                    add = TRUE, method = "edge",
+                    vfont = c("sans serif", "plain"))
+  title(ifelse(type == "iterms", term, type))
 
 }
 
