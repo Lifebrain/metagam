@@ -36,7 +36,7 @@ printfun <- function(x){
   cat("Meta-analysis of GAMs from ", x$cohorts, " cohorts, using method ", x$method, ".\n\n", sep = "")
 
   if(x$type %in% c("terms", "iterms")){
-    cat(paste0("Smooth terms analyzed: ", paste(x$terms, collapse = ", "), ". "))
+    cat(paste0("Smooth terms analyzed: ", paste(names(x$term_list), collapse = ", "), ". "))
   } else if (x$type %in% c("link", "response")){
     cat(paste0(x$type, "function analyzed. "))
   } else {

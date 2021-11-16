@@ -3,6 +3,7 @@
 #' Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
 #'
 #' @param x Object returned by \code{\link{metagam}}.
+#' @param term The smooth term to plot. Defaults to \code{NULL}, which means that the first term is plotted.
 #' @param ... Other arguments to plot.
 #'
 #' @return A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
@@ -16,35 +17,37 @@
 #'
 #' @example /inst/examples/metagam_examples.R
 #'
-plot.metagam <- function(x, ...)
+plot.metagam <- function(x, term = NULL, ...)
 {
-  if(length(x$terms) > 1){
+  if(!is.null(term) && length(term) > 1){
     stop("plot.metagam currently only works for a single term.")
+  }
+  if(is.null(term)){
+    term <- names(x$term_list)[[1]]
   }
 
   metadat <- if(x$type %in% c("iterms", "terms")){
-    x$meta_estimates[x$meta_estimates$term == x$terms, ]
+    x$meta_models[[term]]$predictions
   } else {
-    x$meta_estimates
+    x$meta_models$predictions
   }
 
-  dat <- if(x$type %in% c("iterms", "terms")){
-    x$cohort_estimates[x$cohort_estimates$term == x$terms, ]
-  } else {
-    x$cohort_estimates
-  }
+  dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
+      if(x$type %in% c("iterms", "terms")){
+        x$cohort_estimates[[ind]][[term]]
+      } else {
+        x$cohort_estimates[[ind]]
+      }
+    })
 
-
-  if(length(x$xvars) == 1){
-    gp <- plot_univariate_smooth(metadat, dat, x$xvars, x$type, x$terms)
-  } else if(length(x$xvars) == 2){
+  xvars <- x$term_list[[term]]$xvars
+  if(length(xvars) == 1){
+    plot_univariate_smooth(metadat, dat, xvars, x$type, term)
+  } else if(length(xvars) == 2){
     gp <- plot_bivariate_smooth(metadat, x$xvars, x$type, x$terms)
   } else {
     stop("plot.metagam currently only works for univariate or bivariate terms.")
   }
-
-
-  return(gp)
 
 }
 
@@ -62,14 +65,17 @@ plot_bivariate_smooth <- function(metadat, xvars, type, terms){
 
 }
 
-plot_univariate_smooth <- function(metadat, dat, xvars, type, terms){
+plot_univariate_smooth <- function(metadat, dat, xvar, type, term){
+  plot(metadat[[xvar]], metadat[["estimate"]], type = "l",
+       xlab = xvar,
+       ylab = ifelse(type == "iterms", term, type),
+       xlim = range(metadat[[xvar]]),
+       ylim = range(c(metadat[["estimate"]], unlist(lapply(dat, function(x) x[["fit"]])))))
+  iter <- seq_along(dat)
+  for(i in iter){
+    lines(dat[[i]][[xvar]], dat[[i]][["fit"]], lty = 2, col = i + 1L)
+  }
+  legend("topright", legend = seq_along(dat), col = iter + 1L, lty = 2,
+         title = "Dataset")
 
-  var <- sym(xvars[[1]])
-  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = !!var, y = .data$estimate)) +
-    ggplot2::geom_line(ggplot2::aes(group = .data$model, color = .data$model),
-                       linetype = "dashed") +
-    ggplot2::geom_line(data = metadat) +
-    ggplot2::ylab(if(type == "iterms") terms else type) +
-    ggplot2::theme_minimal() +
-    ggplot2::labs(color = "Dataset")
 }
