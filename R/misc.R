@@ -134,7 +134,7 @@ create_newdat <- function(xvar = NULL, term_list = NULL, grid, type){
   if(type == "iterms"){
     newdat <- lapply(grid[!names(grid) %in% xvar], function(x) x[[1]])
     eval(parse(text = paste0("newdat$", xvar, "<- grid$", xvar)))
-    as.data.frame(newdat)
+    expand.grid(newdat)
   } else {
     xv <- unlist(lapply(term_list, function(x) x$xvars))
     newdat <- lapply(grid[!names(grid) %in% xv], function(x) x[[1]])

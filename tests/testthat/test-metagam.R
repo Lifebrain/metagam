@@ -132,17 +132,12 @@ test_that("metagam works with tensor interactions", {
   metafit <- metagam(fits, grid_size = 10)
   expect_s3_class(metafit, "metagam")
   expect_equal(
-    round(metafit$meta_models$`te(x,z)`$predictions, 7),
-    structure(list(x = c(0.0041069, 0.1143859, 0.2246648, 0.3349437,
-                         0.4452226, 0.5555015, 0.6657805, 0.7760594, 0.8863383, 0.9966172
-    ), z = c(0.0004653, 0.1107408, 0.2210162, 0.3312916, 0.441567,
-             0.5518424, 0.6621178, 0.7723932, 0.8826686, 0.992944), estimate = c(0.9504116,
-                                                                                 0.7657057, 0.5031237, 0.3166651, 0.1986136, -0.0075251, -0.2241866,
-                                                                                 -0.1831964, 0.4431801, 0.86367), se = c(0.6278777, 0.3433318,
-                                                                                                                         0.2596968, 0.2041106, 0.1908302, 0.191533, 0.2102218, 0.2760856,
-                                                                                                                         0.4458813, 0.8470536)), row.names = c("1", "2", "3", "4", "5",
-                                                                                                                                                               "6", "7", "8", "9", "10"), class = "data.frame")
-  )
+    round(metafit$meta_models$`te(x,z)`$predictions, 7)[95:97,],
+    structure(list(x = c(0.4452226, 0.5555015, 0.6657805), z = c(0.992944,
+                                                                 0.992944, 0.992944), estimate = c(0.2823632, 0.5081124, 0.4287619
+                                                                 ), se = c(0.3568622, 0.3613073, 0.386653)), row.names = c("95",
+                                                                                                                           "96", "97"), class = "data.frame")
+    )
 
   metafit <- metagam(fits, grid_size = 10, type = "link")
   expect_equal(
