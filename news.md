@@ -1,3 +1,7 @@
+# metagam version 0.3.1.9001
+
+- A large number of internal changes which make package maintenance easier and the package more stable.
+
 # metagam version 0.3.1.9000
 
 - Standard error of intercept is now included in simulations for p-values and simultaneous confidence intervals when type="iterms".

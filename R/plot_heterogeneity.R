@@ -2,9 +2,6 @@
 #'
 #'
 #' @param x Object returned by \code{\link{metagam}}.
-#' @param axis Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
-#' fitted with a single term, the explanatory variable corresponding to this term
-#' is selected.
 #' @param term Character specifying which smooth term to plot. Defaults to \code{NULL}; if \code{x}
 #' was fitted with a single term, this one is taken.
 #' @param type Character specifying which type of plot. Either \code{"Q"} for the test statistic
@@ -22,33 +19,19 @@
 #' # vignette("heterogeneity")
 #'
 #'
-plot_heterogeneity <- function(x, axis = NULL, term = NULL,
-                               type = "Q", alpha_thresh = .05)
+plot_heterogeneity <- function(x, term = NULL, type = "Q", alpha_thresh = .05)
 {
 
-  if(is.null(axis)){
-    axis <- x$xvars
-  }
+  term <- find_plot_term(x, term)
+  xvar <- x$term_list[[term]]$xvars
 
-  if(is.null(term)){
-    if(x$type %in% c("iterms", "terms")){
-      term <- x$terms
-    } else {
-      term <- x$type
-    }
-  }
-
-  if(length(axis) > 1 || length(term) > 1){
-    stop("plot_heterogeneity() currently only works for analyzing a single univariate term\n",
-         "please run metagam() with type='iterms'.\n\n")
-  }
   type <- match.arg(type, c("p", "Q"))
 
-  dat <- make_heterogeneity_data(x, axis = axis, term = term)
+  dat <- make_heterogeneity_data(x, term = term, xvar = xvar)
 
   gp <- switch(type,
-         "p" = plot_heterogeneity_p(dat, axis, alpha_thresh),
-         "Q" = plot_heterogeneity_q(dat, axis, alpha_thresh)
+         "p" = plot_heterogeneity_p(dat, xvar, alpha_thresh),
+         "Q" = plot_heterogeneity_q(dat, xvar, alpha_thresh)
          )
 
   return(gp)
@@ -63,18 +46,24 @@ plot_heterogeneity <- function(x, axis = NULL, term = NULL,
 #'
 #' @inheritParams plot_heterogeneity
 #'
-#' @return tibble/data.frame
+#' @return data.frame
 #'
 #' @keywords internal
-make_heterogeneity_data <- function(x, axis, term)
+make_heterogeneity_data <- function(x, term, xvar)
 {
-  dat <- x$meta_estimates
-  mods <- x$meta_models
-  dat <- dat[dat$term == term, ]
+  if(x$type == "iterms"){
+    dat <- x$meta_models[[term]]$predictions
+    mods <- x$meta_models[[term]]$meta_models
+  } else {
+    dat <- x$meta_models$predictions
+    mods <- x$meta_models$meta_models
+  }
+
+
   dat$QE <- unlist(lapply(mods, function(x) x$QE))
   dat$QEp <- unlist(lapply(mods, function(x) x$QEp))
 
-  names(dat)[names(dat) == axis] <- "x"
+  names(dat)[names(dat) == xvar] <- "x"
 
   return(dat)
 }
@@ -91,15 +80,14 @@ make_heterogeneity_data <- function(x, axis, term)
 #'
 #' @keywords internal
 #'
-plot_heterogeneity_p <- function(data, axis, alpha_thresh){
+plot_heterogeneity_p <- function(data, xvar, alpha_thresh){
   ggplot2::ggplot(data = data,
-                  ggplot2::aes(x = .data$x, y = .data$QEp)) +
+                  ggplot2::aes_(x =~ x, y =~ QEp)) +
     ggplot2::geom_line() +
     ggplot2::geom_hline(yintercept = alpha_thresh, lty = 2) +
     ggplot2::scale_y_continuous(trans = 'log2') +
     ggplot2::theme_minimal() +
-    ggplot2::labs(y = "Heterogeneity (p)",
-                  x = axis)
+    ggplot2::labs(y = "Heterogeneity (p)", x = xvar)
 }
 
 #' Heterogeneity Q-plot
@@ -114,22 +102,30 @@ plot_heterogeneity_p <- function(data, axis, alpha_thresh){
 #'
 #' @keywords internal
 #'
-plot_heterogeneity_q <- function(data, axis, alpha_thresh){
-  # TODO: øystein, please check whether this is the correct approximation
+plot_heterogeneity_q <- function(data, xvar, alpha_thresh){
+
 
   data$z <- -0.862 + sqrt(0.743 - 2.404 * log(data$QEp))
   data$Qse <- data$QE / data$z
+  data$ymin <- data$QE + stats::qnorm(alpha_thresh / 2) * data$Qse
+  data$ymax <- data$QE + stats::qnorm(1 - alpha_thresh / 2) * data$Qse
 
   ggplot2::ggplot(data = data,
-                  ggplot2::aes(x = .data$x, y = .data$QE)) +
-    ggplot2::geom_ribbon(
-      mapping = ggplot2::aes(
-        ymin = .data$QE + stats::qnorm(!!alpha_thresh / 2) * .data$Qse,
-        ymax = .data$QE + stats::qnorm(1 - !!alpha_thresh / 2) * .data$Qse),
-      alpha = .3
-    ) +
+                  ggplot2::aes_(x =~ x, y =~ QE)) +
+    ggplot2::geom_ribbon(mapping = ggplot2::aes_(ymin =~ ymin, ymax =~ ymax), alpha = .3) +
     ggplot2::geom_line() +
     ggplot2::theme_minimal() +
-    ggplot2::labs(y = "Heterogeneity (Q)",
-                  x = axis)
+    ggplot2::labs(y = "Heterogeneity (Q)", x = xvar)
+}
+
+
+
+find_plot_term <- function(x, term){
+  if(is.null(term)){
+    term <- names(x$term_list)[[1]]
+  }
+  if(length(x$term_list[[term]]$xvars) > 1){
+    stop("plot_heterogeneity() currently only works for analyzing a single univariate term.")
+  }
+  term
 }

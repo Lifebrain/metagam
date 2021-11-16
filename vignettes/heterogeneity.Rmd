@@ -63,17 +63,10 @@ Next, we meta-analyze the models. Since we only have a single smooth term, we us
 meta_analysis <- metagam(models, type = "response")
 ```
 
-Next, we plot the separate estimates together with the meta-analytic fit. We clearly see that dataset 3, which had a positive shift $\beta=1 x_{2}^2$, lies above the others for $x_{2}$ close to 1, and opposite for dataset 5.
+Next, we plot the separate estimates together with the meta-analytic fit. We see that dataset 3, which had a positive shift $\beta=1 x_{2}^2$, lies above the others for $x_{2}$ close to 1, and opposite for dataset 5.
 
 ```{r}
-plot(meta_analysis)
-```
-
-The plotting function for the meta-analysis object is a ggplot2-object, and can thus be altered using standard ggplot syntax. To learn more about customization of ggplot2-objects, please [see the ggplot2 documentation](https://ggplot2.tidyverse.org/).
-
-```{r}
-plot(meta_analysis) + 
-  ggplot2::scale_colour_brewer(palette = "Set1")
+plot(meta_analysis, legend = TRUE)
 ```
 
 

@@ -1,75 +1,126 @@
 #' Plot estimated smooth terms
 #'
-#' Plot the meta-analytic estimate of a smooth term along with the separate fits in each cohort.
+#' Plot the meta-analytic estimate of a smooth term along with the separate fits
+#' in each cohort.
 #'
 #' @param x Object returned by \code{\link{metagam}}.
+#' @param term The smooth term to plot. Defaults to \code{NULL}, which means
+#'   that the first term is plotted.
+#' @param ci Type of confidence bands to plot around the meta-analytic fit.
+#'   Defaults to "none", which means the no bands are plotted. Other options are
+#'   "simultaneous", "pointwise", and "both". Simultaneous confidence bands
+#'   require that \code{\link{metagam}} was run with \code{nsim} not equal to
+#'   \code{NULL}.
+#' @param legend Logical specifying whether or not to plot a legend. Defaults to
+#'   \code{FALSE}.
 #' @param ... Other arguments to plot.
 #'
-#' @return A ggplot object plotting a smooth term of interest along an axis. The meta-analytic
-#' fit is shown as a solid black line, and the cohort fits are shown as dashed lines, separated by
-#' color codes.
+#' @return The function is called for its side effect of producing a plot.
 #'
-#' @details This function currently works for meta-analytic estimates of a single smooth term, which can be either
-#' univariate or bivariate. It also works for alternatively meta-analysis of response or link functions.
 #'
 #' @export
 #'
 #' @example /inst/examples/metagam_examples.R
 #'
-plot.metagam <- function(x, ...)
+plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
 {
-  if(length(x$terms) > 1){
+  if(!is.null(term) && length(term) > 1){
     stop("plot.metagam currently only works for a single term.")
+  }
+  if(is.null(term)){
+    term <- names(x$term_list)[[1]]
   }
 
   metadat <- if(x$type %in% c("iterms", "terms")){
-    x$meta_estimates[x$meta_estimates$term == x$terms, ]
+    x$meta_models[[term]]$predictions
   } else {
-    x$meta_estimates
+    x$meta_models$predictions
   }
 
-  dat <- if(x$type %in% c("iterms", "terms")){
-    x$cohort_estimates[x$cohort_estimates$term == x$terms, ]
-  } else {
-    x$cohort_estimates
-  }
+  xvars <- x$term_list[[term]]$xvars
+  if(length(xvars) == 1){
+    dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
+      if(x$type %in% c("iterms", "terms")){
+        x$cohort_estimates[[ind]][[term]]
+      } else {
+        x$cohort_estimates[[ind]]
+      }
+    })
 
+    if(ci %in% c("pointwise", "both")){
+      alpha_quantiles = stats::qnorm(c(ci.lb = x$ci_alpha / 2, ci.ub = 1 - x$ci_alpha / 2))
+      for(i in seq_along(alpha_quantiles)){
+        eval(parse(text = paste0("metadat$", names(alpha_quantiles)[[i]], "<- metadat$estimate +",
+              alpha_quantiles[[i]], "* metadat$se")))
+      }
+    }
+    if(ci %in% c("simultaneous", "both")){
+      if(is.null(x$simulation_results)){
+        stop("Simultaneous confidence bands require that metagam was run with nsim not equal to NULL.")
+      }
 
-  if(length(x$xvars) == 1){
-    gp <- plot_univariate_smooth(metadat, dat, x$xvars, x$type, x$terms)
-  } else if(length(x$xvars) == 2){
-    gp <- plot_bivariate_smooth(metadat, x$xvars, x$type, x$terms)
+      metadat$ci.sim.lb <- x$simulation_results[[term]]$meta_sim_ci$estimate -
+        x$simulation_results[[term]]$meta_sim_ci$se
+      metadat$ci.sim.ub <- x$simulation_results[[term]]$meta_sim_ci$estimate +
+        x$simulation_results[[term]]$meta_sim_ci$se
+    }
+
+    plot_univariate_smooth(metadat, dat, xvars, x$type, term, ci, legend)
+  } else if(length(xvars) == 2){
+    gp <- plot_bivariate_smooth(metadat, xvars, x$type, term)
   } else {
     stop("plot.metagam currently only works for univariate or bivariate terms.")
   }
 
+}
 
-  return(gp)
+plot_bivariate_smooth <- function(metadat, xvars, type, term, ci){
+
+  xl <- lapply(xvars, function(x) sort(unique(metadat[[x]])))
+  names(xl) <- c("x", "y")
+  zl <- matrix(metadat$estimate, nrow = length(unique(metadat$x)))
+  graphics::image(x = xl, z = zl,
+                  xlab = xvars[[1]], ylab = xvars[[2]])
+  graphics::contour(x = xl, z = zl, col = "blue", lwd = 2,
+                    add = TRUE, method = "edge",
+                    vfont = c("sans serif", "plain"))
+  graphics::title(ifelse(type == "iterms", term, type))
 
 }
 
-plot_bivariate_smooth <- function(metadat, xvars, type, terms){
+plot_univariate_smooth <- function(metadat, dat, xvar, type, term, ci, legend){
 
-  var1 <- sym(xvars[[1]])
-  var2 <- sym(xvars[[2]])
-  ggplot2::ggplot(metadat, ggplot2::aes(x = !!var1, y = !!var2,
-                                                 z = .data$estimate)) +
-    ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
-    ggplot2::geom_contour() +
-    ggplot2::labs(fill = if(type == "iterms") terms else type) +
-    ggplot2::theme_minimal() +
-    ggplot2::scale_fill_distiller(palette = "RdBu", type = "div")
+  rd <- range(metadat[["estimate"]], unlist(lapply(dat, function(x) x[["fit"]])))
+  if(ci != "none"){
+    rd <- c(rd, range(metadat[, grep("^ci", names(metadat))]))
+  }
 
-}
+  plot(metadat[[xvar]], metadat[["estimate"]], type = "l",
+       xlab = xvar,
+       ylab = ifelse(type == "iterms", term, type),
+       xlim = range(metadat[[xvar]]),
+       ylim = range(rd))
+  if(ci %in% c("both", "simultaneous")){
+    graphics::polygon(x = c(rev(metadat$x), metadat$x),
+            y = c(rev(metadat[, "ci.sim.ub"]), metadat[, "ci.sim.lb"]),
+            col = "gray80", border = NA)
+  }
+  if(ci %in% c("both", "pointwise")){
+    graphics::polygon(x = c(rev(metadat$x), metadat$x),
+            y = c(rev(metadat[, "ci.ub"]), metadat[, "ci.lb"]),
+            col = "gray60", border = NA)
+  }
+  graphics::lines(metadat[[xvar]], metadat[["estimate"]])
+  iter <- seq_along(dat)
+  for(i in iter){
+    graphics::lines(dat[[i]][[xvar]], dat[[i]][["fit"]], lty = 2, col = i + 1L)
+  }
 
-plot_univariate_smooth <- function(metadat, dat, xvars, type, terms){
+  if(legend){
+    legend("topright", legend = seq_along(dat), col = iter + 1L, lty = 2,
+           title = "Dataset")
+  }
 
-  var <- sym(xvars[[1]])
-  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = !!var, y = .data$estimate)) +
-    ggplot2::geom_line(ggplot2::aes(group = .data$model, color = .data$model),
-                       linetype = "dashed") +
-    ggplot2::geom_line(data = metadat) +
-    ggplot2::ylab(if(type == "iterms") terms else type) +
-    ggplot2::theme_minimal() +
-    ggplot2::labs(color = "Dataset")
+
+
 }

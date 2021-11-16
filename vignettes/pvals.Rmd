@@ -11,7 +11,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 4
 )
 ```
 
@@ -19,8 +20,6 @@ knitr::opts_chunk$set(
 library("metagam")
 library("mgcv")
 library("metafor")
-library("ggplot2")
-theme_set(theme_bw())
 ```
 
 Previous versions of metagam had built-in aggregation of p-values, using the [metap](https://cran.r-project.org/package=metap) package. However, this had two drawbacks:
@@ -47,13 +46,13 @@ simulate_data <- function(){
 set.seed(1)
 dd <- simulate_data()
 
-ggplot(dd$dat1, aes(x = x, y = y)) + 
-  geom_point() + 
-  ggtitle("Dataset 1")
 
-ggplot(dd$dat2, aes(x = x, y = y)) + 
-  geom_point() + 
-  ggtitle("Dataset 2")
+for(i in seq_along(dd)){
+  plot(dd[[i]]$x, dd[[i]]$y, 
+       xlab = "x", ylab = "y", main = paste("Dataset", i))
+}
+
+
 
 ```
 
@@ -77,10 +76,7 @@ metafit <- metagam(models)
 Plotting the meta-analytic fit, we see that the 95 % confidence bands completely cover zero.
 
 ```{r}
-ggplot(metafit$meta_estimates, aes(x = x, y = estimate, ymin = ci.lb, ymax = ci.ub)) + 
-  geom_line() + 
-  geom_ribbon(alpha = .3) + 
-  geom_hline(yintercept = 0, linetype = "dashed")
+plot(metafit, ci = "pointwise", legend = FALSE)
 ```
 
 The object returned by `metagam` has a `pvals` element which contains p-values for each term in each individual fit.
@@ -93,7 +89,8 @@ Combining the p-values using any of the methods available in metap, we do howeve
 
 ```{r, eval=FALSE}
 library("metap")
-allmetap(p = metafit$pvals$`p-value`, method = "all")
+allmetap(p = unlist(lapply(metafit$pvals, function(x) as.data.frame(x)[, "p-value"])), 
+         method = "all")
 ```
 
 ```{r, echo=FALSE}
@@ -135,14 +132,11 @@ mod <- gam(y ~ s(x0, bs = "cr"), data = dat)
 plot(mod)
 ```
 
-
-
-
-We see that the critical value for a 95 % simultaneous interval is above 2.
+We see that the critical value for a 95 % simultaneous interval is above 2. (Note that `nsim` is set relatively low to avoid the vignette compilation taking too long. In a real application it should be probably be higher.)
 
 ```{r}
-grid <- with(dat, data.frame(x0 = seq(min(x0), max(x0), length = 200)))
-masd <- getmasd(mod, grid, 10000, terms = "s(x0)")
+newdat <- with(dat, data.frame(x0 = seq(min(x0), max(x0), length = 200)))
+masd <- getmasd(mod, newdat = newdat, nsim = 1000, term = "s(x0)")
 (crit <- quantile(masd, prob = .95, type = 8))
 ```
 
@@ -150,9 +144,9 @@ masd <- getmasd(mod, grid, 10000, terms = "s(x0)")
 We can plot the two together, and we see that the simultaneous confidence interval is bigger.
 
 ```{r}
-fit <- predict(mod, newdata = grid, se.fit = TRUE)
+fit <- predict(mod, newdata = newdat, se.fit = TRUE)
 dat <- data.frame(
-  x0 = grid$x0,
+  x0 = newdat$x0,
   pred = fit$fit,
   ci_pt_lb = fit$fit + qnorm(.025) * fit$se.fit,
   ci_pt_ub = fit$fit + qnorm(.975) * fit$se.fit,
@@ -160,16 +154,28 @@ dat <- data.frame(
   ci_sim_ub = fit$fit + crit * fit$se.fit
 )
 
-ggplot(dat, aes(x = x0, y = pred)) + 
-  geom_line() + 
-  geom_ribbon(aes(ymin = ci_pt_lb, ymax = ci_pt_ub), alpha = .3) + 
-  geom_ribbon(aes(ymin = ci_sim_lb, ymax = ci_sim_ub), alpha = .3)
+plot(dat$x0, dat$pred, type = "l",
+     ylim = range(dat$ci_sim_lb, dat$ci_sim_ub), 
+     xlab = "x0", ylab = "s(x0)")
+polygon(
+  x = c(rev(dat$x0), dat$x0), y = c(rev(dat$ci_sim_ub), dat$ci_sim_lb),
+  col = "gray80", border = NA
+)
+polygon(
+  x = c(rev(dat$x0), dat$x0), y = c(rev(dat$ci_pt_ub), dat$ci_pt_lb),
+  col = "gray60", border = NA
+)
+lines(dat$x0, dat$pred)
+
+legend(x = "bottom", legend = c("Pointwise", "Simultaneous"),
+       fill = c("gray60", "gray80"))
+
 ```
 
 
 ### Combining simultaneous confidence intervals
 
-In the current version of metagam, it is possible to combine simultaneous confidence intervals for each separate fit. The critical value multiplied by the standard errors is then used as the weight when it is meta analytically combined. Significance testing can be done by checking if it is possible to fit a constant function within the simultaneous confidence bands, which is the same as checking whether the maximum of the lower band across the range of x-values is larger than the minimum of the upper band across the range of x-values. We illustrate it here.
+In metagam, it is possible to combine simultaneous confidence intervals for each separate fit. The critical value multiplied by the standard errors is then used as the weight when it is meta analytically combined. Significance testing can be done by checking if it is possible to fit a constant function within the simultaneous confidence bands, which is the same as checking whether the maximum of the lower band across the range of x-values is larger than the minimum of the upper band across the range of x-values. We illustrate it here.
 
 
 ```{r}
@@ -186,15 +192,8 @@ meta_analysis <- metagam(models, terms = "s(x2)", grid_size = 100,
 ```
 
 
-Convenience functions will be added later, but for now it is a bit manual. Notice that the outer bands are bigger.
-
-```{r}
-sim_conf <- meta_analysis$sim_ci
-ptw_conf <- meta_analysis$meta_estimates
-ggplot(sim_conf, aes(x = x2)) + 
-  geom_line(aes(y = pred)) + 
-  geom_ribbon(aes(ymin = ci_sim_lb, ymax = ci_sim_ub), alpha = .3) + 
-  geom_ribbon(data = ptw_conf, aes(ymin = ci.lb, ymax = ci.ub), alpha = .3)
+```{r, fig.height=6, fig.width=6}
+plot(meta_analysis, ci = "both")
 ```
 
 
@@ -219,7 +218,8 @@ pvals <- parLapply(
       mod <- mgcv::gam(y ~ s(x, bs = "cr"), data = dat)
       metagam::strip_rawdata(mod)
       })
-    metagam::metagam(models, nsim = 1000, ci_alpha = .05)$meta_pval
+    fit <- metagam::metagam(models, nsim = 1000, ci_alpha = .05)
+    fit$simulation_results$`s(x)`$pval
   }
 )
 stopCluster(cl)
@@ -228,6 +228,7 @@ plot(qunif(seq(from = 0, to = 1, length.out = 100)),
      sort(as.numeric(unlist(pvals))),
      xlab = "Theoretical quantile",
      ylab = "Data quantile")
+abline(0, 1)
 dev.off()
 ```
 
@@ -242,7 +243,8 @@ pvals <- parLapply(
       mod <- mgcv::gam(y ~ s(x, bs = "cr"), data = dat)
       metagam::strip_rawdata(mod)
       })
-    metagam::metagam(models, nsim = 1000, ci_alpha = .05)$meta_pval
+    fit <- metagam::metagam(models, nsim = 1000, ci_alpha = .05)
+    fit$simulation_results$`s(x)`$pval
   }
 )
 stopCluster(cl)
@@ -251,6 +253,7 @@ plot(qunif(seq(from = 0, to = 1, length.out = 100)),
      sort(as.numeric(unlist(pvals))),
      xlab = "Theoretical quantile",
      ylab = "Data quantile")
+abline(0, 1)
 ```
 
 ![](figures/quantile_plot.png)

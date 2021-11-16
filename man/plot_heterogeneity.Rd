@@ -4,20 +4,10 @@
 \alias{plot_heterogeneity}
 \title{Heterogeneity Plot}
 \usage{
-plot_heterogeneity(
-  x,
-  axis = NULL,
-  term = NULL,
-  type = "Q",
-  alpha_thresh = 0.05
-)
+plot_heterogeneity(x, term = NULL, type = "Q", alpha_thresh = 0.05)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
-
-\item{axis}{Character specifying which variable to plot. Defaults to \code{NULL}; if \code{x} was
-fitted with a single term, the explanatory variable corresponding to this term
-is selected.}
 
 \item{term}{Character specifying which smooth term to plot. Defaults to \code{NULL}; if \code{x}
 was fitted with a single term, this one is taken.}

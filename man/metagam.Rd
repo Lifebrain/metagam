@@ -13,7 +13,6 @@ metagam(
   method = "FE",
   nsim = NULL,
   ci_alpha = 0.05,
-  intercept = FALSE,
   restrict_range = NULL
 )
 }
@@ -51,13 +50,11 @@ all available options.}
 
 \item{nsim}{Number of simulations to conduct in order to compute p-values and
 simultaneous confidence bands for the meta-analytic fit. Defaults to
-\code{NULL}, which means that no simulations are performed.}
+\code{NULL}, which means that no simulations are performed. Only used if
+\code{type="iterms"}.}
 
 \item{ci_alpha}{Significance level for simultaneous confidence bands. Ignored
 if \code{nsim} is \code{NULL}, and defaults to 0.05.}
-
-\item{intercept}{Logical defining whether or not to include the intercept in
-each smooth term. Only applies when \code{type = "iterms"}.}
 
 \item{restrict_range}{Character vector of explanatory variables to restrict
 such that only values within the range for each cohort contribute to the
