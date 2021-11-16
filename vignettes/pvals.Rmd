@@ -12,7 +12,6 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  dev = "svg", 
   fig.width = 4
 )
 ```
@@ -193,7 +192,7 @@ meta_analysis <- metagam(models, terms = "s(x2)", grid_size = 100,
 ```
 
 
-```{r, dev='svg', fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6}
 plot(meta_analysis, ci = "both")
 ```
 
