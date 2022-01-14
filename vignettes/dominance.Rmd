@@ -62,6 +62,13 @@ models <- lapply(datasets, function(dat){
 })
 ```
 
+If we also add names to the list of models, they will pop up as labels in dominance plots.
+
+```{r}
+names(models) <- c("A", "B", "C", "D", "E")
+```
+
+
 ## Meta-Analysis
 
 Then, we analyze the term `s(x2)`. You can increase the resolution of the next plot by increasing `grid_size`, but we keep it low here to reduce the build time of the package.

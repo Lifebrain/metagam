@@ -26,11 +26,12 @@ plot_dominance <- function(x, term = NULL, relative = TRUE, width = NULL)
 {
   term <- find_plot_term(x, term)
   xvar <- x$term_list[[term]]$xvars
+  if(is.null(names(x$cohort_estimates))) names(x$cohort_estimates) <- seq_along(x$cohort_estimates)
 
   dat <- do.call(rbind, lapply(seq_along(x$cohort_estimates), function(ind) {
     dd <- x$cohort_estimates[[ind]][[term]]
     dd$influence <- dd$se^(-2)
-    dd$cohort <- ind
+    dd$cohort <- names(x$cohort_estimates)[ind]
     dd <- dd[, c(xvar, "influence", "cohort")]
     names(dd)[names(dd) == xvar] <- "x"
     dd
