@@ -30,9 +30,15 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
   if(is.null(term)){
     term <- names(x$term_list)[[1]]
   }
-  stopifnot(x$type == "iterms")
 
-  metadat <- x$meta_models[[term]]$predictions
+  stopifnot(x$type == "iterms" | length(x$term_list) == 1)
+
+  if(x$type == "iterms"){
+    metadat <- x$meta_models[[term]]$predictions
+  } else {
+    metadat <- x$meta_models$predictions
+  }
+
 
   xvars <- x$term_list[[term]]$xvars
   metadat <- metadat[, c(xvars, "estimate", "se")]
@@ -91,11 +97,11 @@ plot_bivariate_smooth <- function(metadat, xvars, term){
 
   names(metadat)[names(metadat) %in% xvars] <- c("xxxaaa", "xxxbbb")
 
-  ggplot2::ggplot(metadat, ggplot2::aes(x = xxxaaa, y = xxxbbb,
+  ggplot2::ggplot(metadat, ggplot2::aes(x = .data$xxxaaa, y = .data$xxxbbb,
                                         z = .data$estimate)) +
     ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
     ggplot2::geom_contour() +
-    ggplot2::labs(terms) +
+    ggplot2::labs(term) +
     ggplot2::theme_minimal() +
     ggplot2::scale_fill_distiller(palette = "RdBu", type = "div") +
     ggplot2::xlab(xvars[[1]]) +
@@ -106,10 +112,10 @@ plot_univariate_smooth <- function(metadat, dat, xvars, term, ci, legend){
 
   names(metadat)[names(metadat) == xvars] <- names(dat)[names(dat) == xvars] <- "xxxaaa"
 
-  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = xxxaaa, y = fit)) +
-    ggplot2::geom_line(ggplot2::aes(group = factor(model), color = factor(model)),
+  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = .data$xxxaaa, y = .data$fit)) +
+    ggplot2::geom_line(ggplot2::aes(group = factor(.data$model), color = factor(.data$model)),
                        linetype = "dashed") +
-    ggplot2::geom_line(data = metadat, ggplot2::aes(y = estimate)) +
+    ggplot2::geom_line(data = metadat, ggplot2::aes(y = .data$estimate)) +
     ggplot2::ylab(term) +
     ggplot2::theme_minimal() +
     ggplot2::labs(color = "Dataset") +
@@ -117,11 +123,11 @@ plot_univariate_smooth <- function(metadat, dat, xvars, term, ci, legend){
 
   if(ci %in% c("pointwise", "both")){
     gp <- gp +
-      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = estimate, ymin = ci.lb, ymax = ci.ub), alpha = .3)
+      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = .data$estimate, ymin = .data$ci.lb, ymax = .data$ci.ub), alpha = .3)
   }
   if(ci %in% c("simultaneous", "both")){
     gp <- gp +
-      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = estimate, ymin = ci.sim.lb, ymax = ci.sim.ub), alpha = .3)
+      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = .data$estimate, ymin = .data$ci.sim.lb, ymax = .data$ci.sim.ub), alpha = .3)
   }
   if(!legend){
     gp <- gp +
