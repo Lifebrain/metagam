@@ -186,6 +186,7 @@ models <- lapply(datasets, function(dat){
   model <- gam(y ~ s(x2, bs = "cr"), data = dat)
   strip_rawdata(model)
 })
+names(models) <- paste("Model", letters[1:5])
 
 meta_analysis <- metagam(models, terms = "s(x2)", grid_size = 100,
                          nsim = 10000, ci_alpha = .05)
@@ -193,7 +194,7 @@ meta_analysis <- metagam(models, terms = "s(x2)", grid_size = 100,
 
 
 ```{r, fig.height=6, fig.width=6}
-plot(meta_analysis, ci = "both")
+plot(meta_analysis, ci = "both", legend = TRUE)
 ```
 
 

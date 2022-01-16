@@ -38,17 +38,25 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
   metadat <- metadat[, c(xvars, "estimate", "se")]
 
   if(length(xvars) == 1){
+    nms <- if(is.null(names(x$cohort_estimates))){
+      seq_along(x$cohort_estimates)
+    } else {
+      names(x$cohort_estimates)
+    }
+
     dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
       if(x$type %in% c("iterms", "terms")){
         ret <- x$cohort_estimates[[ind]][[term]]
       } else {
         ret <- x$cohort_estimates[[ind]]
       }
-      ret$model <- ind
+
+      ret$model <- nms[[ind]]
       ret
     })
     dat <- do.call(rbind, dat)
     dat <- dat[, c(xvars, "fit", "se.fit", "model")]
+
 
     if(ci %in% c("pointwise", "both")){
       alpha_quantiles = stats::qnorm(c(ci.lb = x$ci_alpha / 2, ci.ub = 1 - x$ci_alpha / 2))
@@ -68,29 +76,33 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
         x$simulation_results[[term]]$meta_sim_ci$se
     }
 
-    plot_univariate_smooth(metadat, dat, xvars, x$type, term, ci, legend)
+    plot_univariate_smooth(metadat, dat, xvars, term, ci, legend)
   } else if(length(xvars) == 2){
-    gp <- plot_bivariate_smooth(metadat, xvars, x$type, term)
+    metadat <- metadat[, c(xvars, "estimate", "se")]
+
+    plot_bivariate_smooth(metadat, xvars, term)
   } else {
     stop("plot.metagam currently only works for univariate or bivariate terms.")
   }
 
 }
 
-plot_bivariate_smooth <- function(metadat, xvars, type, term, ci){
+plot_bivariate_smooth <- function(metadat, xvars, term){
 
-  var1 <- sym(xvars[[1]])
-  var2 <- sym(xvars[[2]])
-  ggplot2::ggplot(metadat, ggplot2::aes(x = !!var1, y = !!var2,
+  names(metadat)[names(metadat) %in% xvars] <- c("xxxaaa", "xxxbbb")
+
+  ggplot2::ggplot(metadat, ggplot2::aes(x = xxxaaa, y = xxxbbb,
                                         z = .data$estimate)) +
     ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
     ggplot2::geom_contour() +
-    ggplot2::labs(fill = if(type == "iterms") terms else type) +
+    ggplot2::labs(terms) +
     ggplot2::theme_minimal() +
-    ggplot2::scale_fill_distiller(palette = "RdBu", type = "div")
+    ggplot2::scale_fill_distiller(palette = "RdBu", type = "div") +
+    ggplot2::xlab(xvars[[1]]) +
+    ggplot2::ylab(xvars[[2]])
 }
 
-plot_univariate_smooth <- function(metadat, dat, xvars, type, term, ci, legend){
+plot_univariate_smooth <- function(metadat, dat, xvars, term, ci, legend){
 
   names(metadat)[names(metadat) == xvars] <- names(dat)[names(dat) == xvars] <- "xxxaaa"
 
@@ -98,7 +110,7 @@ plot_univariate_smooth <- function(metadat, dat, xvars, type, term, ci, legend){
     ggplot2::geom_line(ggplot2::aes(group = factor(model), color = factor(model)),
                        linetype = "dashed") +
     ggplot2::geom_line(data = metadat, ggplot2::aes(y = estimate)) +
-    ggplot2::ylab(if(type == "iterms") term else type) +
+    ggplot2::ylab(term) +
     ggplot2::theme_minimal() +
     ggplot2::labs(color = "Dataset") +
     ggplot2::xlab(xvars)
