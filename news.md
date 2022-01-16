@@ -1,3 +1,7 @@
+# metagam version 0.3.1.9003
+
+- Bug fix in plots.
+
 # metagam version 0.3.1.9002
 
 - Added back label option for plot_dominance.
