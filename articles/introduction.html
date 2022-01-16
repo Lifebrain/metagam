@@ -187,6 +187,10 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">metafit</span><span class="op">)</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p>We can add confidence intervals. The <span class="math inline">\(\alpha\)</span> is set in the call to <code>metagam</code>, defaulting to <code>0.05</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">metafit</span>, ci <span class="op">=</span> <span class="st">"pointwise"</span><span class="op">)</span></code></pre></div>
+<p><img src="introduction_files/figure-html/unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;"></p>
 <p>Dominance plots and heterogeneity plots can also be created. These are described in separate vignettes.</p>
 </div>
 <div class="section level2">
