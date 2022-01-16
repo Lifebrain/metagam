@@ -98,6 +98,12 @@ The default plotting function shows the fits on the separate datasets together w
 plot(metafit)
 ```
 
+We can add confidence intervals. The $\alpha$ is set in the call to `metagam`, defaulting to `0.05`.
+
+```{r out.width="60%", fig.align="center"}
+plot(metafit, ci = "pointwise")
+```
+
 Dominance plots and heterogeneity plots can also be created. These are described in separate vignettes.
 
 # References
