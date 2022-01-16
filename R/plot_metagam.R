@@ -30,22 +30,25 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
   if(is.null(term)){
     term <- names(x$term_list)[[1]]
   }
+  stopifnot(x$type == "iterms")
 
-  metadat <- if(x$type %in% c("iterms", "terms")){
-    x$meta_models[[term]]$predictions
-  } else {
-    x$meta_models$predictions
-  }
+  metadat <- x$meta_models[[term]]$predictions
 
   xvars <- x$term_list[[term]]$xvars
+  metadat <- metadat[, c(xvars, "estimate", "se")]
+
   if(length(xvars) == 1){
     dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
       if(x$type %in% c("iterms", "terms")){
-        x$cohort_estimates[[ind]][[term]]
+        ret <- x$cohort_estimates[[ind]][[term]]
       } else {
-        x$cohort_estimates[[ind]]
+        ret <- x$cohort_estimates[[ind]]
       }
+      ret$model <- ind
+      ret
     })
+    dat <- do.call(rbind, dat)
+    dat <- dat[, c(xvars, "fit", "se.fit", "model")]
 
     if(ci %in% c("pointwise", "both")){
       alpha_quantiles = stats::qnorm(c(ci.lb = x$ci_alpha / 2, ci.ub = 1 - x$ci_alpha / 2))
@@ -76,51 +79,41 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
 
 plot_bivariate_smooth <- function(metadat, xvars, type, term, ci){
 
-  xl <- lapply(xvars, function(x) sort(unique(metadat[[x]])))
-  names(xl) <- c("x", "y")
-  zl <- matrix(metadat$estimate, nrow = length(unique(metadat$x)))
-  graphics::image(x = xl, z = zl,
-                  xlab = xvars[[1]], ylab = xvars[[2]])
-  graphics::contour(x = xl, z = zl, col = "blue", lwd = 2,
-                    add = TRUE, method = "edge",
-                    vfont = c("sans serif", "plain"))
-  graphics::title(ifelse(type == "iterms", term, type))
-
+  var1 <- sym(xvars[[1]])
+  var2 <- sym(xvars[[2]])
+  ggplot2::ggplot(metadat, ggplot2::aes(x = !!var1, y = !!var2,
+                                        z = .data$estimate)) +
+    ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
+    ggplot2::geom_contour() +
+    ggplot2::labs(fill = if(type == "iterms") terms else type) +
+    ggplot2::theme_minimal() +
+    ggplot2::scale_fill_distiller(palette = "RdBu", type = "div")
 }
 
-plot_univariate_smooth <- function(metadat, dat, xvar, type, term, ci, legend){
+plot_univariate_smooth <- function(metadat, dat, xvars, type, term, ci, legend){
 
-  rd <- range(metadat[["estimate"]], unlist(lapply(dat, function(x) x[["fit"]])))
-  if(ci != "none"){
-    rd <- c(rd, range(metadat[, grep("^ci", names(metadat))]))
+  names(metadat)[names(metadat) == xvars] <- names(dat)[names(dat) == xvars] <- "xxxaaa"
+
+  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = xxxaaa, y = fit)) +
+    ggplot2::geom_line(ggplot2::aes(group = factor(model), color = factor(model)),
+                       linetype = "dashed") +
+    ggplot2::geom_line(data = metadat, ggplot2::aes(y = estimate)) +
+    ggplot2::ylab(if(type == "iterms") term else type) +
+    ggplot2::theme_minimal() +
+    ggplot2::labs(color = "Dataset") +
+    ggplot2::xlab(xvars)
+
+  if(ci %in% c("pointwise", "both")){
+    gp <- gp +
+      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = estimate, ymin = ci.lb, ymax = ci.ub), alpha = .3)
   }
-
-  plot(metadat[[xvar]], metadat[["estimate"]], type = "l",
-       xlab = xvar,
-       ylab = ifelse(type == "iterms", term, type),
-       xlim = range(metadat[[xvar]]),
-       ylim = range(rd))
-  if(ci %in% c("both", "simultaneous")){
-    graphics::polygon(x = c(rev(metadat$x), metadat$x),
-            y = c(rev(metadat[, "ci.sim.ub"]), metadat[, "ci.sim.lb"]),
-            col = "gray80", border = NA)
+  if(ci %in% c("simultaneous", "both")){
+    gp <- gp +
+      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = estimate, ymin = ci.sim.lb, ymax = ci.sim.ub), alpha = .3)
   }
-  if(ci %in% c("both", "pointwise")){
-    graphics::polygon(x = c(rev(metadat$x), metadat$x),
-            y = c(rev(metadat[, "ci.ub"]), metadat[, "ci.lb"]),
-            col = "gray60", border = NA)
+  if(!legend){
+    gp <- gp +
+      ggplot2::theme(legend.position = "none")
   }
-  graphics::lines(metadat[[xvar]], metadat[["estimate"]])
-  iter <- seq_along(dat)
-  for(i in iter){
-    graphics::lines(dat[[i]][[xvar]], dat[[i]][["fit"]], lty = 2, col = i + 1L)
-  }
-
-  if(legend){
-    legend("topright", legend = seq_along(dat), col = iter + 1L, lty = 2,
-           title = "Dataset")
-  }
-
-
-
+  gp
 }

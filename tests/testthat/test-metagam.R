@@ -164,20 +164,14 @@ test_that("metagam accepts strange variable names", {
 
 test_that("plots work", {
   metafits <- metagam(fits, grid_size = 10, nsim = 3)
-  expect_invisible(plot(metafits))
-  expect_invisible(plot(metafits, ci = "both"))
-  expect_invisible(plot(metafits, ci = "simultaneous"))
-  expect_invisible(plot(metafits, ci = "pointwise"))
+  expect_s3_class(plot(metafits), "ggplot")
+  expect_s3_class(plot(metafits, ci = "both"), "ggplot")
+  expect_s3_class(plot(metafits, ci = "simultaneous"), "ggplot")
+  expect_s3_class(plot(metafits, ci = "pointwise"), "ggplot")
 
   metafits <- metagam(fits, grid_size = 10, nsim = 3, type = "link")
-  expect_invisible(plot(metafits))
-  expect_invisible(plot(metafits, ci = "both"))
-  expect_invisible(plot(metafits, ci = "simultaneous"))
-  expect_invisible(plot(metafits, ci = "pointwise"))
-
+  expect_error(plot(metafits))
   metafits <- metagam(fits, grid_size = 10, nsim = 3, type = "response")
-  expect_invisible(plot(metafits))
-  expect_invisible(plot(metafits, ci = "both"))
-  expect_invisible(plot(metafits, ci = "simultaneous"))
-  expect_invisible(plot(metafits, ci = "pointwise"))
+  expect_error(plot(metafits))
+
 })
