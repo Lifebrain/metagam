@@ -161,3 +161,31 @@ test_that("metagam accepts strange variable names", {
   expect_s3_class(metagam(fits, nsim = 3, grid_size = 5), "metagam")
 
 })
+
+test_that("plots work", {
+  metafits <- metagam(fits, grid_size = 10, nsim = 3)
+  expect_s3_class(plot(metafits), "ggplot")
+  expect_s3_class(plot(metafits, ci = "both"), "ggplot")
+  expect_s3_class(plot(metafits, ci = "simultaneous"), "ggplot")
+  expect_s3_class(plot(metafits, ci = "pointwise"), "ggplot")
+
+  metafits <- metagam(fits, grid_size = 10, nsim = 3, type = "link")
+  expect_error(plot(metafits))
+  metafits <- metagam(fits, grid_size = 10, nsim = 3, type = "response")
+  expect_error(plot(metafits))
+
+
+  set.seed(123)
+  # Generate some fits
+  ndat <- 3
+  n <- 100
+  fits <- lapply(1:ndat, function(x){
+    dat <- gamSim(n = n, verbose = FALSE)
+    b <- gam(y ~ s(x0, bs = "cr"), data = dat)
+    strip_rawdata(b)
+  })
+  metafits <- metagam(fits, grid_size = 10, nsim = 3, type = "link")
+  expect_s3_class(plot(metafits), "ggplot")
+  metafits <- metagam(fits, grid_size = 10, nsim = 3, type = "response")
+  expect_s3_class(plot(metafits), "ggplot")
+})
