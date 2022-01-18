@@ -1,3 +1,7 @@
+# metagam version 0.3.1.9004
+
+- Added a `meta_only` option to `plot.metagam()`.
+
 # metagam version 0.3.1.9003
 
 - Bug fix in plots.

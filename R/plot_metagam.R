@@ -13,6 +13,8 @@
 #'   \code{NULL}.
 #' @param legend Logical specifying whether or not to plot a legend. Defaults to
 #'   \code{FALSE}.
+#' @param only_meta Logical specifying whether to include the fits for each
+#'   study, or to only plot the meta-analytic fit. Defaults to \code{FALSE}.
 #' @param ... Other arguments to plot.
 #'
 #' @return The function is called for its side effect of producing a plot.
@@ -22,7 +24,8 @@
 #'
 #' @example /inst/examples/metagam_examples.R
 #'
-plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
+plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE,
+                         only_meta = FALSE, ...)
 {
   if(!is.null(term) && length(term) > 1){
     stop("plot.metagam currently only works for a single term.")
@@ -82,7 +85,7 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
         x$simulation_results[[term]]$meta_sim_ci$se
     }
 
-    plot_univariate_smooth(metadat, dat, xvars, term, ci, legend)
+    plot_univariate_smooth(metadat, dat, xvars, term, ci, legend, only_meta)
   } else if(length(xvars) == 2){
     metadat <- metadat[, c(xvars, "estimate", "se")]
 
@@ -108,18 +111,22 @@ plot_bivariate_smooth <- function(metadat, xvars, term){
     ggplot2::ylab(xvars[[2]])
 }
 
-plot_univariate_smooth <- function(metadat, dat, xvars, term, ci, legend){
+plot_univariate_smooth <- function(metadat, dat, xvars, term, ci, legend, only_meta){
 
   names(metadat)[names(metadat) == xvars] <- names(dat)[names(dat) == xvars] <- "xxxaaa"
 
   gp <- ggplot2::ggplot(dat, ggplot2::aes(x = .data$xxxaaa, y = .data$fit)) +
-    ggplot2::geom_line(ggplot2::aes(group = factor(.data$model), color = factor(.data$model)),
-                       linetype = "dashed") +
     ggplot2::geom_line(data = metadat, ggplot2::aes(y = .data$estimate)) +
     ggplot2::ylab(term) +
     ggplot2::theme_minimal() +
-    ggplot2::labs(color = "Dataset") +
     ggplot2::xlab(xvars)
+
+  if(!only_meta){
+    gp <- gp +
+      ggplot2::geom_line(ggplot2::aes(group = factor(.data$model), color = factor(.data$model)),
+                       linetype = "dashed") +
+      ggplot2::labs(color = "Dataset")
+  }
 
   if(ci %in% c("pointwise", "both")){
     gp <- gp +
