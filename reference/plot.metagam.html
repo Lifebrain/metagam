@@ -18,7 +18,7 @@ in each cohort."><meta property="og:image" content="/logo.png"><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metagam</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.9004</span>
       </span>
     </div>
 
@@ -75,7 +75,7 @@ in each cohort.</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for metagam</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, term <span class="op">=</span> <span class="cn">NULL</span>, ci <span class="op">=</span> <span class="st">"none"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, term <span class="op">=</span> <span class="cn">NULL</span>, ci <span class="op">=</span> <span class="st">"none"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, only_meta <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -94,6 +94,9 @@ require that <code><a href="metagam.html">metagam</a></code> was run with <code>
 <dt>legend</dt>
 <dd><p>Logical specifying whether or not to plot a legend. Defaults to
 <code>FALSE</code>.</p></dd>
+<dt>only_meta</dt>
+<dd><p>Logical specifying whether to include the fits for each
+study, or to only plot the meta-analytic fit. Defaults to <code>FALSE</code>.</p></dd>
 <dt>...</dt>
 <dd><p>Other arguments to plot.</p></dd>
 </dl></div>
