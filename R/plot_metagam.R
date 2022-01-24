@@ -13,6 +13,8 @@
 #'   \code{NULL}.
 #' @param legend Logical specifying whether or not to plot a legend. Defaults to
 #'   \code{FALSE}.
+#' @param only_meta Logical specifying whether to include the fits for each
+#'   study, or to only plot the meta-analytic fit. Defaults to \code{FALSE}.
 #' @param ... Other arguments to plot.
 #'
 #' @return The function is called for its side effect of producing a plot.
@@ -22,7 +24,8 @@
 #'
 #' @example /inst/examples/metagam_examples.R
 #'
-plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
+plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE,
+                         only_meta = FALSE, ...)
 {
   if(!is.null(term) && length(term) > 1){
     stop("plot.metagam currently only works for a single term.")
@@ -31,21 +34,38 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
     term <- names(x$term_list)[[1]]
   }
 
-  metadat <- if(x$type %in% c("iterms", "terms")){
-    x$meta_models[[term]]$predictions
+  stopifnot(x$type == "iterms" | length(x$term_list) == 1)
+
+  if(x$type == "iterms"){
+    metadat <- x$meta_models[[term]]$predictions
   } else {
-    x$meta_models$predictions
+    metadat <- x$meta_models$predictions
   }
 
+
   xvars <- x$term_list[[term]]$xvars
+  metadat <- metadat[, c(xvars, "estimate", "se")]
+
   if(length(xvars) == 1){
+    nms <- if(is.null(names(x$cohort_estimates))){
+      seq_along(x$cohort_estimates)
+    } else {
+      names(x$cohort_estimates)
+    }
+
     dat <- lapply(seq_along(x$cohort_estimates), function(ind) {
       if(x$type %in% c("iterms", "terms")){
-        x$cohort_estimates[[ind]][[term]]
+        ret <- x$cohort_estimates[[ind]][[term]]
       } else {
-        x$cohort_estimates[[ind]]
+        ret <- x$cohort_estimates[[ind]]
       }
+
+      ret$model <- nms[[ind]]
+      ret
     })
+    dat <- do.call(rbind, dat)
+    dat <- dat[, c(xvars, "fit", "se.fit", "model")]
+
 
     if(ci %in% c("pointwise", "both")){
       alpha_quantiles = stats::qnorm(c(ci.lb = x$ci_alpha / 2, ci.ub = 1 - x$ci_alpha / 2))
@@ -65,62 +85,60 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE, ...)
         x$simulation_results[[term]]$meta_sim_ci$se
     }
 
-    plot_univariate_smooth(metadat, dat, xvars, x$type, term, ci, legend)
+    plot_univariate_smooth(metadat, dat, xvars, term, ci, legend, only_meta)
   } else if(length(xvars) == 2){
-    gp <- plot_bivariate_smooth(metadat, xvars, x$type, term)
+    metadat <- metadat[, c(xvars, "estimate", "se")]
+
+    plot_bivariate_smooth(metadat, xvars, term)
   } else {
     stop("plot.metagam currently only works for univariate or bivariate terms.")
   }
 
 }
 
-plot_bivariate_smooth <- function(metadat, xvars, type, term, ci){
+plot_bivariate_smooth <- function(metadat, xvars, term){
 
-  xl <- lapply(xvars, function(x) sort(unique(metadat[[x]])))
-  names(xl) <- c("x", "y")
-  zl <- matrix(metadat$estimate, nrow = length(unique(metadat$x)))
-  graphics::image(x = xl, z = zl,
-                  xlab = xvars[[1]], ylab = xvars[[2]])
-  graphics::contour(x = xl, z = zl, col = "blue", lwd = 2,
-                    add = TRUE, method = "edge",
-                    vfont = c("sans serif", "plain"))
-  graphics::title(ifelse(type == "iterms", term, type))
+  names(metadat)[names(metadat) %in% xvars] <- c("xxxaaa", "xxxbbb")
 
+  ggplot2::ggplot(metadat, ggplot2::aes(x = .data$xxxaaa, y = .data$xxxbbb,
+                                        z = .data$estimate)) +
+    ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
+    ggplot2::geom_contour() +
+    ggplot2::labs(term) +
+    ggplot2::theme_minimal() +
+    ggplot2::scale_fill_distiller(palette = "RdBu", type = "div") +
+    ggplot2::xlab(xvars[[1]]) +
+    ggplot2::ylab(xvars[[2]])
 }
 
-plot_univariate_smooth <- function(metadat, dat, xvar, type, term, ci, legend){
+plot_univariate_smooth <- function(metadat, dat, xvars, term, ci, legend, only_meta){
 
-  rd <- range(metadat[["estimate"]], unlist(lapply(dat, function(x) x[["fit"]])))
-  if(ci != "none"){
-    rd <- c(rd, range(metadat[, grep("^ci", names(metadat))]))
+  names(metadat)[names(metadat) == xvars] <- names(dat)[names(dat) == xvars] <- "xxxaaa"
+
+  gp <- ggplot2::ggplot(dat, ggplot2::aes(x = .data$xxxaaa, y = .data$fit)) +
+    ggplot2::geom_line(data = metadat, ggplot2::aes(y = .data$estimate)) +
+    ggplot2::ylab(term) +
+    ggplot2::theme_minimal() +
+    ggplot2::xlab(xvars)
+
+  if(!only_meta){
+    gp <- gp +
+      ggplot2::geom_line(ggplot2::aes(group = factor(.data$model), color = factor(.data$model)),
+                       linetype = "dashed") +
+      ggplot2::labs(color = "Dataset")
   }
 
-  plot(metadat[[xvar]], metadat[["estimate"]], type = "l",
-       xlab = xvar,
-       ylab = ifelse(type == "iterms", term, type),
-       xlim = range(metadat[[xvar]]),
-       ylim = range(rd))
-  if(ci %in% c("both", "simultaneous")){
-    graphics::polygon(x = c(rev(metadat$x), metadat$x),
-            y = c(rev(metadat[, "ci.sim.ub"]), metadat[, "ci.sim.lb"]),
-            col = "gray80", border = NA)
+  if(ci %in% c("pointwise", "both")){
+    gp <- gp +
+      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = .data$estimate, ymin = .data$ci.lb, ymax = .data$ci.ub), alpha = .3)
   }
-  if(ci %in% c("both", "pointwise")){
-    graphics::polygon(x = c(rev(metadat$x), metadat$x),
-            y = c(rev(metadat[, "ci.ub"]), metadat[, "ci.lb"]),
-            col = "gray60", border = NA)
+  if(ci %in% c("simultaneous", "both")){
+    gp <- gp +
+      ggplot2::geom_ribbon(data = metadat, ggplot2::aes(y = .data$estimate, ymin = .data$ci.sim.lb, ymax = .data$ci.sim.ub), alpha = .3)
   }
-  graphics::lines(metadat[[xvar]], metadat[["estimate"]])
-  iter <- seq_along(dat)
-  for(i in iter){
-    graphics::lines(dat[[i]][[xvar]], dat[[i]][["fit"]], lty = 2, col = i + 1L)
+  if(!legend){
+    gp <- gp +
+      ggplot2::theme(legend.position = "none")
   }
-
-  if(legend){
-    legend("topright", legend = seq_along(dat), col = iter + 1L, lty = 2,
-           title = "Dataset")
-  }
-
-
-
+  gp
 }

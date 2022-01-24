@@ -17,7 +17,7 @@
 #' @docType package
 #' @name metagam-package
 #'
-#'
+#' @importFrom rlang .data
 NULL
 
 

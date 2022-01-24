@@ -23,10 +23,13 @@ summary(meta_analysis)
 
 ## We can plot the meta-analytic fit together with the individual fits
 plot(meta_analysis)
+plot(meta_analysis, ci = "pointwise")
 
 ## We can also compute p-values and simultaneous confidence intervals, by setting the nsim argument.
 ## For details, see the separate vignette.
 \dontrun{
   meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
   summary(meta_analysis)
+  plot(meta_analysis, ci = "both")
+  plot(meta_analysis, ci = "simultaneous")
 }

@@ -4,7 +4,7 @@
 \alias{plot.metagam}
 \title{Plot estimated smooth terms}
 \usage{
-\method{plot}{metagam}(x, term = NULL, ci = "none", legend = FALSE, ...)
+\method{plot}{metagam}(x, term = NULL, ci = "none", legend = FALSE, only_meta = FALSE, ...)
 }
 \arguments{
 \item{x}{Object returned by \code{\link{metagam}}.}
@@ -20,6 +20,9 @@ require that \code{\link{metagam}} was run with \code{nsim} not equal to
 
 \item{legend}{Logical specifying whether or not to plot a legend. Defaults to
 \code{FALSE}.}
+
+\item{only_meta}{Logical specifying whether to include the fits for each
+study, or to only plot the meta-analytic fit. Defaults to \code{FALSE}.}
 
 \item{...}{Other arguments to plot.}
 }
@@ -56,11 +59,14 @@ summary(meta_analysis)
 
 ## We can plot the meta-analytic fit together with the individual fits
 plot(meta_analysis)
+plot(meta_analysis, ci = "pointwise")
 
 ## We can also compute p-values and simultaneous confidence intervals, by setting the nsim argument.
 ## For details, see the separate vignette.
 \dontrun{
   meta_analysis <- metagam(models, terms = "s(x0)", grid_size = 30, nsim = 1000)
   summary(meta_analysis)
+  plot(meta_analysis, ci = "both")
+  plot(meta_analysis, ci = "simultaneous")
 }
 }

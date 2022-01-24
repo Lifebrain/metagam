@@ -1,3 +1,15 @@
+# metagam version 0.3.1.9004
+
+- Added a `meta_only` option to `plot.metagam()`.
+
+# metagam version 0.3.1.9003
+
+- Bug fix in plots.
+
+# metagam version 0.3.1.9002
+
+- Added back label option for plot_dominance.
+
 # metagam version 0.3.1.9001
 
 - A large number of internal changes which make package maintenance easier and the package more stable.
