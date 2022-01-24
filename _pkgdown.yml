@@ -16,6 +16,7 @@ reference:
   - plot.metagam
   - plot_dominance
   - plot_heterogeneity
+  - plot_between_study_sd
   - print.metagam
   - print.summary.metagam
   - summary.metagam
