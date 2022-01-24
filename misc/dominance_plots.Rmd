@@ -1,0 +1,73 @@
+---
+title: "Variable names in dominance plots"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("metagam")
+```
+
+```{r}
+## simulate datasets, with noise level increasing with number,
+## so dataset 1 has least noise and dataset 3 has most
+set.seed(123)
+num.datasets <- 3
+datasets <- lapply(
+  seq_len(num.datasets), 
+  function(x) mgcv::gamSim(scale = x, verbose = FALSE))
+
+# Then delete all rows of dataset 1 for which x<0.2
+df <- datasets[[1]]
+df[df$x2<0.2,] <- NA
+datasets[[1]] <- df
+
+## fit a generalized additive model to each dataset separately
+models <- lapply(datasets, function(dat){
+  ## Full fit using mgcv
+  gamfit <- mgcv::gam(y ~ s(x0, bs = "cr") + s(x1, bs = "cr") + s(x2, bs = "cr"), data = dat)
+  ## Extract the necessary components for performing a meta-analysis
+  ## This removes all subject-specific data
+  strip_rawdata(gamfit)
+})
+
+```
+
+Running without specifying names. Looks correct.
+
+```{r}
+meta_analysis <- metagam(models, grid_size = 50, terms = "s(x2)")
+plot_dominance(meta_analysis)
+```
+
+Set the names. 
+
+```{r}
+names(models) <- c("bb 1", "aa 2", "cc 3")
+meta_analysis <- metagam(models, grid_size = 50, terms = "s(x2)")
+plot_dominance(meta_analysis)
+```
+
+Change names in the returned object.
+
+```{r}
+names(models) <- NULL
+meta_analysis <- metagam(models, grid_size = 50, terms = "s(x2)")
+names(meta_analysis$cohort_estimates) <- c("B1", "C2", "A3")
+plot_dominance(meta_analysis)
+```
+
+Set labels manually. Still looks correct.
+
+```{r}
+names(models) <- NULL
+meta_analysis <- metagam(models, grid_size = 50, terms = "s(x2)")
+plot_dominance(meta_analysis) + 
+  ggplot2::scale_fill_discrete(labels = c("Data 1", "Data 2", "Data 3"))
+```
+
