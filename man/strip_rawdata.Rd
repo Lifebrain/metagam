@@ -47,15 +47,15 @@ method to work. Future updates to this package will fix this.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: Strip rawdata from list object returned by gamm4
+\item \code{strip_rawdata(list)}: Strip rawdata from list object returned by gamm4
 
-\item \code{gamm}: Strip rawdata from gamm object
+\item \code{strip_rawdata(gamm)}: Strip rawdata from gamm object
 
-\item \code{bam}: Strip rawdata from gam object
+\item \code{strip_rawdata(bam)}: Strip rawdata from gam object
 
-\item \code{gam}: Strip rawdata from gam object
+\item \code{strip_rawdata(gam)}: Strip rawdata from gam object
+
 }}
-
 \examples{
 library(metagam)
 library(mgcv)

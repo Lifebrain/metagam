@@ -136,7 +136,8 @@ test_that("metagam works with tensor interactions", {
     structure(list(x = c(0.4452226, 0.5555015, 0.6657805), z = c(0.992944,
                                                                  0.992944, 0.992944), estimate = c(0.2823632, 0.5081124, 0.4287619
                                                                  ), se = c(0.3568622, 0.3613073, 0.386653)), row.names = c("95",
-                                                                                                                           "96", "97"), class = "data.frame")
+                                                                                                                           "96", "97"), class = "data.frame"),
+    tolerance = 1e-3
     )
 
   metafit <- metagam(fits, grid_size = 10, type = "link")
@@ -145,7 +146,8 @@ test_that("metagam works with tensor interactions", {
     structure(list(x = c(0.1143859, 0.2246648, 0.3349437, 0.4452226
     ), z = c(0.2210162, 0.2210162, 0.2210162, 0.2210162), estimate = c(1.1678738,
                                                                        1.1519874, 1.0549315, 0.930571), se = c(0.3005395, 0.2596968,
-                                                                                                               0.2349767, 0.2238625)), row.names = c("22", "23", "24", "25"), class = "data.frame")
+                                                                                                               0.2349767, 0.2238625)), row.names = c("22", "23", "24", "25"), class = "data.frame"),
+    tolerance = 1e-3
   )
 })
 

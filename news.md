@@ -1,21 +1,9 @@
-# metagam version 0.3.1.9004
+# metagam version 0.4.0
 
 - Added a `meta_only` option to `plot.metagam()`.
-
-# metagam version 0.3.1.9003
-
 - Bug fix in plots.
-
-# metagam version 0.3.1.9002
-
 - Added back label option for plot_dominance.
-
-# metagam version 0.3.1.9001
-
 - A large number of internal changes which make package maintenance easier and the package more stable.
-
-# metagam version 0.3.1.9000
-
 - Standard error of intercept is now included in simulations for p-values and simultaneous confidence intervals when type="iterms".
 
 # metagam version 0.3.1
