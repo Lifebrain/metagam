@@ -1,21 +1,20 @@
-citHeader("To cite metagam in publications use:")
+note <- sprintf("R package version %s", meta$Version)
 
-citEntry(
-  entry    = "Article",
-  title    = "Meta-analysis of generalized additive models in neuroimaging studies",
-  author   = "{\\O}ystein S{\\o}rensen and Andreas M. Brandmaier and D{\\'{\\i}}dac Maci{\\`{a}} and Klaus Ebmeier and Paolo Ghisletta and Rogier A. Kievit and Athanasia M. Mowinckel and Kristine B. Walhovd and Rene Westerhausen and Anders Fjell",
-  journal  = "NeuroImage",
-  year     = "2021",
-  volume   = "224",
-  pages    = "117416",
-  doi      = "10.1016/j.neuroimage.2020.117416",
-  url      = "https://doi.org/10.1016/j.neuroimage.2020.117416",
-  textVersion = paste(
-    "Sorensen, Oystein, Andreas M. Brandmaier, Didac Macia, Klaus Ebmeier, Paolo Ghisletta, Rogier A. Kievit, Athanasia M. Mowinckel, Kristine B. Walhovd, Rene Westerhausen, and Anders Fjell.",
-    "2021",
-    'Meta-Analysis of Generalized Additive Models in Neuroimaging Studies."',
-    "NeuroImage",
-    "(January): 117416.",
-    "https://doi.org/10.1016/j.neuroimage.2020.117416."
-  )
-)
+bibentry(bibtype = "Article",
+         author = c(person("{\\O}ystein", "S{\\o}rensen"),
+                    person("Andreas M.", "Brandmaier"),
+                    person("D{\\'{\\i}}dac", "Maci{\\`{a}}"),
+                    person("Klaus", "Ebmeier"),
+                    person("Paolo", "Ghisletta"),
+                    person("Rogier A.", "Kievit"),
+                    person("Athanasia M.", "Mowinckel"),
+                    person("Kristine B.", "Walhovd"),
+                    person("Rene", "Westerhausen"),
+                    person("Anders M.", "Fjell")
+                    ),
+         doi = "10.1016/j.neuroimage.2020.117416",
+         title = "Meta-Analysis of Generalized Additive Models in Neuroimaging Studies",
+         journal = "NeuroImage",
+         pages = "117416",
+         volume = "224",
+         year = "2021")

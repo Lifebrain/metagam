@@ -16,3 +16,4 @@ Makefile
 ^CRAN-RELEASE$
 ^news\.md$
 ^\.github$
+^CRAN-SUBMISSION$
