@@ -19,5 +19,3 @@
 #'
 #' @importFrom rlang .data
 NULL
-
-

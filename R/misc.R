@@ -88,6 +88,12 @@ extract_model_fits <- function(model, term_list, grid, type){
     Map(function(term, xvar){
       newdat <- create_newdat(xvar = xvar, grid = grid, type = type)
 
+      missing_vars <- setdiff(names(model$var.summary), colnames(newdat))
+      for(mv in missing_vars) {
+        eval(parse(text = paste0("newdat$", mv, "<- rep(model$var.summary[['",
+                                 mv, "']][[1]], nrow(newdat))")))
+      }
+
       pred <- stats::predict(model, newdata = newdat, type = type,
                              se.fit = TRUE, terms = term)
 

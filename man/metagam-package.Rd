@@ -25,3 +25,22 @@ The main functions in the metagam package are described below.
   computed by \code{\link{strip_rawdata}}.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://lifebrain.github.io/metagam/}
+  \item \url{https://github.com/Lifebrain/metagam}
+  \item Report bugs at \url{https://github.com/Lifebrain/metagam/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Oystein Sorensen \email{oystein.sorensen@psykologi.uio.no} (\href{https://orcid.org/0000-0003-0724-3542}{ORCID})
+
+Authors:
+\itemize{
+  \item Andreas M. Brandmaier \email{brandmaier@mpib-berlin.mpg.de} (\href{https://orcid.org/0000-0001-8765-6982}{ORCID})
+  \item Athanasia Mo Mowinckel \email{a.m.mowinckel@psykologi.uio.no} (\href{https://orcid.org/0000-0002-5756-0223}{ORCID})
+}
+
+}
