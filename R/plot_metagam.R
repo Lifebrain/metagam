@@ -42,7 +42,6 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE,
     metadat <- x$meta_models$predictions
   }
 
-
   xvars <- x$term_list[[term]]$xvars
   metadat <- metadat[, c(xvars, "estimate", "se")]
 
@@ -63,6 +62,10 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE,
       ret$model <- nms[[ind]]
       ret
     })
+
+    common_cols <- Reduce(intersect, lapply(dat, colnames))
+    dat <- lapply(dat, function(df) df[, common_cols, drop = FALSE])
+
     dat <- do.call(rbind, dat)
     dat <- dat[, c(xvars, "fit", "se.fit", "model")]
 

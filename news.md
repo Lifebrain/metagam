@@ -1,3 +1,8 @@
+# metagam (development versions)
+
+- Added a workaround which allows not providing the unused variables when the
+  terms argument is used.
+
 # metagam version 0.4.0
 
 - Added a `meta_only` option to `plot.metagam()`.

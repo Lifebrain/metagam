@@ -14,10 +14,9 @@
 #'   \code{\link{plot_heterogeneity}} can be used to study the meta-analytic fit
 #'   computed by \code{\link{strip_rawdata}}.
 #'
-#' @docType package
 #' @name metagam-package
 #'
 #' @importFrom rlang .data
-NULL
+_PACKAGE
 
 
