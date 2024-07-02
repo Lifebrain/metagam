@@ -12,6 +12,7 @@ status](https://www.r-pkg.org/badges/version/metagam)](https://CRAN.R-project.or
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Codecov test
 coverage](https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Lifebrain/metagam?branch=master)
+[![R-CMD-check](https://github.com/Lifebrain/metagam/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Lifebrain/metagam/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
@@ -31,10 +32,10 @@ Zanobetti (2000) and Crippa, Thomas, and Orsini (2018).
 Currently, GAMs objects created with the following functions are
 supported:
 
--   From package [mgcv](https://cran.r-project.org/package=mgcv):
-    `bam()`, `gam()` and `gamm()`.
--   From package [gamm4](https://cran.r-project.org/package=gamm4):
-    `gamm4()`.
+- From package [mgcv](https://cran.r-project.org/package=mgcv): `bam()`,
+  `gam()` and `gamm()`.
+- From package [gamm4](https://cran.r-project.org/package=gamm4):
+  `gamm4()`.
 
 This package is under development, so changes to the interface can be
 expected. Suggestions for improvements and bug reports are warmly
@@ -65,7 +66,7 @@ remotes::install_github("lifebrain/metagam")
 library("metagam")
 library("mgcv")
 #> Loading required package: nlme
-#> This is mgcv 1.8-38. For overview type 'help("mgcv-package")'.
+#> This is mgcv 1.9-1. For overview type 'help("mgcv-package")'.
 ```
 
 Simulate three datasets and fit a GAM to each of them. Then use
@@ -91,7 +92,7 @@ participant data. We can then meta-analyze them using `metagam()`.
 ``` r
 meta_analysis <- metagam(models)
 summary(meta_analysis)
-#> Meta-analysis of GAMs from 3 cohorts, using method FE.
+#> Meta-analysis of GAMs from  cohorts, using method FE.
 #> 
 #> Smooth terms analyzed: s(x2).
 ```
@@ -108,7 +109,8 @@ By contributing to this project, you agree to abide by its terms.
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-Crippa2018" class="csl-entry">
 
