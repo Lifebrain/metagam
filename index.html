@@ -110,7 +110,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://lifebrain.github.io/metagam/">"metagam"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"mgcv"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: nlme</span></span>
-<span><span class="co">#&gt; This is mgcv 1.8-38. For overview type 'help("mgcv-package")'.</span></span></code></pre></div>
+<span><span class="co">#&gt; This is mgcv 1.9-1. For overview type 'help("mgcv-package")'.</span></span></code></pre></div>
 <p>Simulate three datasets and fit a GAM to each of them. Then use <code><a href="reference/strip_rawdata.html">strip_rawdata()</a></code> from metagam to remove individual participant data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Set seed for reproducible random numbers</span></span>
@@ -128,7 +128,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">meta_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/metagam.html">metagam</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">meta_analysis</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Meta-analysis of GAMs from 3 cohorts, using method FE.</span></span>
+<span><span class="co">#&gt; Meta-analysis of GAMs from  cohorts, using method FE.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Smooth terms analyzed: s(x2).</span></span></code></pre></div>
 <p>For further documentation and vignettes, please visit the <a href="https://lifebrain.github.io/metagam/">package website</a>.</p>
@@ -141,7 +141,7 @@
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Crippa2018" class="csl-entry">
 Crippa, Alessio, Ilias Thomas, and Nicola Orsini. 2018. “A Pointwise Approach to Dose-Response Meta-Analysis of Aggregated Data.” <em>International Journal of Statistics in Medical Research</em> 7 (May): 25–32. <a href="https://doi.org/10.6000/1929-6029.2018.07.02.1" class="external-link uri">https://doi.org/10.6000/1929-6029.2018.07.02.1</a>.
 </div>
@@ -200,6 +200,7 @@ Sorensen, Oystein, Andreas M. Brandmaier, Didac Macia, Klaus Ebmeier, Paolo Ghis
 <li><a href="https://github.com/Lifebrain/metagam/actions" class="external-link"><img src="https://github.com/Lifebrain/metagam/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://app.codecov.io/gh/Lifebrain/metagam?branch=master" class="external-link"><img src="https://codecov.io/gh/Lifebrain/metagam/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/Lifebrain/metagam/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Lifebrain/metagam/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
