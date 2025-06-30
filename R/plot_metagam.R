@@ -92,14 +92,14 @@ plot.metagam <- function(x, term = NULL, ci = "none", legend = FALSE,
   } else if(length(xvars) == 2){
     metadat <- metadat[, c(xvars, "estimate", "se")]
 
-    plot_bivariate_smooth(metadat, xvars, term)
+    plot_bivariate_smooth(metadat, xvars)
   } else {
     stop("plot.metagam currently only works for univariate or bivariate terms.")
   }
 
 }
 
-plot_bivariate_smooth <- function(metadat, xvars, term){
+plot_bivariate_smooth <- function(metadat, xvars){
 
   names(metadat)[names(metadat) %in% xvars] <- c("xxxaaa", "xxxbbb")
 
@@ -107,7 +107,6 @@ plot_bivariate_smooth <- function(metadat, xvars, term){
                                         z = .data$estimate)) +
     ggplot2::geom_raster(ggplot2::aes(fill = .data$estimate)) +
     ggplot2::geom_contour() +
-    ggplot2::labs(term) +
     ggplot2::theme_minimal() +
     ggplot2::scale_fill_distiller(palette = "RdBu", type = "div") +
     ggplot2::xlab(xvars[[1]]) +
