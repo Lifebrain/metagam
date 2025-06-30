@@ -1,5 +1,6 @@
 # metagam (development versions)
 
+- Small internal fix for consistency with newest ggplot2 version.
 - Added a workaround which allows not providing the unused variables when the
   terms argument is used.
 

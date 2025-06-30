@@ -1,9 +1,9 @@
 ## Comments
 
-This is a resubmission which contains several improvements and bug fixes. We changed from using citEntry() to bibentry() after previous submission.
+This is a resubmission which ensures consistency with the upcoming release of ggplot2.
 
 ## Test environments
-* local OS X install, R 4.2.2
+* local OS X install, R 4.5.1
 * os X, Windows, and Linux on GitHub Actions.
 * R win-devel
 
